@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Pixelfork VFX + Super Casual UI Kit — demo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/advme/mobile-game-ui-library@v0.44.1-A/super-casual/dist/kit.css">
+<script src="https://cdn.jsdelivr.net/gh/advme/mobile-game-ui-library@v0.44.1-A/super-casual/dist/kit.js"></script>
+<script src="../dist/vfx.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #7ec8ff; }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div class="sc-screen" id="hud">
+  <div class="sc-screen-top">
+    <div class="sc-counter" id="coins" data-icon="coin" data-value="0"></div>
+    <div class="sc-progress" id="hp" data-value="100" data-color="green" data-label="percent"></div>
+  </div>
+  <div class="sc-screen-bottom">
+    <button class="sc-button" data-color="green" id="heal">Heal</button>
+    <button class="sc-button" data-color="purple" id="stun">Stun</button>
+    <button class="sc-button" data-color="yellow" id="win">Win</button>
+  </div>
+</div>
+
+<div class="sc-screen" id="success" data-backdrop="dim" data-vfx="reward.confetti" hidden>
+  <div class="sc-screen-middle">
+    <h1 class="sc-title" data-color="gold" data-animate="drop">CLEAR!</h1>
+    <div class="sc-stars" id="stars" data-value="0" data-layout="arc" data-size="lg" data-animate></div>
+  </div>
+  <div class="sc-screen-bottom">
+    <button class="sc-button" data-color="green" data-size="lg" id="next">NEXT</button>
+  </div>
+</div>
+
+<script>
+  // A stand-in game: tap the sky to hit, tap coins to collect, tap the hero to jump.
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const hero = { x: 0.5, y: 0.78, w: 60, h: 84, vy: 0, jumping: false };
+  const coins = [];
+  let W, H, coinCount = 0, stunHandle = null;
+  function resize() { W = canvas.width = innerWidth * devicePixelRatio; H = canvas.height = innerHeight * devicePixelRatio; }
+  addEventListener('resize', resize); resize();
+  for (let i = 0; i < 6; i++) coins.push({ x: 0.15 + i * 0.14, y: 0.35 + (i % 2) * 0.12, r: 16, alive: true });
+
+  const px = (nx) => nx * innerWidth, py = (ny) => ny * innerHeight;
+  function draw() {
+    const d = devicePixelRatio; ctx.setTransform(d, 0, 0, d, 0, 0);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    ctx.fillStyle = '#5db85a'; ctx.fillRect(0, py(0.8), innerWidth, innerHeight);
+    ctx.fillStyle = '#ffd23f';
+    coins.forEach(c => { if (!c.alive) return; ctx.beginPath(); ctx.arc(px(c.x), py(c.y), c.r, 0, 7); ctx.fill(); });
+    if (hero.jumping) { hero.vy += 0.0025; hero.y += hero.vy; if (hero.y >= 0.78) { hero.y = 0.78; hero.jumping = false; VFX.play('move.jump', { x: px(hero.x), y: py(0.8) }); } }
+    ctx.fillStyle = '#ff8c42'; ctx.beginPath(); ctx.roundRect(px(hero.x) - hero.w / 2, py(hero.y) - hero.h, hero.w, hero.h, 14); ctx.fill();
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  canvas.addEventListener('pointerdown', e => {
+    const c = coins.find(c => c.alive && Math.hypot(px(c.x) - e.clientX, py(c.y) - e.clientY) < 30);
+    if (c) { c.alive = false; coinCount += 10; SC.setValue(document.getElementById('coins'), coinCount, { animate: true }); VFX.play('pickup.sparkle', { event: e }); SC.float('+10', e); return; }
+    if (Math.abs(px(hero.x) - e.clientX) < 40 && e.clientY > py(hero.y) - hero.h && e.clientY < py(0.8)) { if (!hero.jumping) { hero.jumping = true; hero.vy = -0.032; VFX.play('move.jump', { x: px(hero.x), y: py(0.8) }); } return; }
+    if (e.clientY > py(0.8)) VFX.play('explosion.small', { event: e });
+    else VFX.play('hit.impact', { event: e });
+  });
+
+  document.getElementById('heal').onclick = () => { VFX.play('magic.heal', { x: px(hero.x), y: py(hero.y) - 40 }); SC.setValue(document.getElementById('hp'), 100); };
+  document.getElementById('stun').onclick = () => {
+    if (stunHandle) { stunHandle.stop(); stunHandle = null; return; }
+    stunHandle = VFX.play('state.stun', { follow: () => [px(hero.x), py(hero.y) - hero.h - 20] });
+  };
+  document.getElementById('win').onclick = () => {
+    VFX.play('reward.levelup', { x: px(hero.x), y: py(hero.y) - hero.h / 2 });
+    setTimeout(() => { SC.screen.hide('hud'); SC.screen.show('success'); SC.setValue(document.getElementById('stars'), 3); }, 500);
+  };
+  document.getElementById('next').onclick = () => { SC.screen.hide('success'); SC.screen.show('hud'); SC.setValue(document.getElementById('stars'), 0); coins.forEach(c => c.alive = true); };
+
+  VFX.attach();   // confetti when the success screen shows, sparkles on each star
+</script>
+</body>
+</html>

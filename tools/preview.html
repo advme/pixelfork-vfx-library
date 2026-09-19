@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pixelfork VFX — preview</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 -apple-system, system-ui, sans-serif; color: #eee; background: #1b1e2b; overflow: hidden; }
+  #stage { position: fixed; inset: 0; background:
+      radial-gradient(1200px 600px at 70% 110%, #3a2f5a 0%, transparent 60%),
+      radial-gradient(800px 500px at 20% -10%, #244c6a 0%, transparent 60%),
+      linear-gradient(#1b1e2b, #12141c); }
+  #ground { position: fixed; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(#2c3550, #202741); border-top: 3px solid #3d4a70; }
+  #hero { position: fixed; z-index: 2; left: 0; top: 0; width: 60px; height: 84px; background: #ff8c42; border-radius: 18px 18px 8px 8px; box-shadow: inset -8px -8px 0 #d96a25; cursor: grab; touch-action: none; will-change: transform; }
+  #hero.drag { cursor: grabbing; }
+  #hero::after { content: ""; position: absolute; left: 14px; top: 20px; width: 10px; height: 10px; border-radius: 50%; background: #222; box-shadow: 22px 0 0 #222; }
+  #panel { position: fixed; left: 0; top: 0; bottom: 0; width: 300px; background: rgba(16,18,26,.92); backdrop-filter: blur(8px); border-right: 1px solid #2c3145; padding: 14px; overflow: auto; z-index: 10; }
+  h1 { font-size: 16px; margin: 0 0 4px; }
+  .muted { color: #8b93b0; font-size: 12px; }
+  .row { display: flex; gap: 8px; align-items: center; margin: 10px 0; }
+  label { font-size: 12px; color: #aab; }
+  input[type=range] { flex: 1; }
+  input[type=color] { width: 36px; height: 28px; border: 0; background: none; padding: 0; }
+  button { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid #3a4160; background: #262c42; color: #fff; cursor: pointer; }
+  button:hover { background: #333b5c; }
+  button.on { background: #ffc93c; color: #221; border-color: #ffc93c; }
+  .fx { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px; margin: 3px 0; }
+  .fx:hover { background: #222840; }
+  .fx.sel { background: #2b3352; outline: 1px solid #4a5786; }
+  .fx code { flex: 1; font-size: 13px; }
+  .fx .loop { font-size: 10px; color: #ffc93c; border: 1px solid #665a2a; border-radius: 4px; padding: 1px 4px; }
+  .fx button { padding: 4px 8px; font-size: 12px; }
+  #hint { position: fixed; right: 16px; top: 12px; color: #9aa3c7; font-size: 12px; z-index: 5; text-align: right; }
+  #stats { position: fixed; right: 16px; bottom: 12px; color: #9aa3c7; font-size: 12px; z-index: 5; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="ground"></div>
+<div id="hero"></div>
+<div id="hint">Click anywhere on the stage to play the selected effect there.<br>Move the character: drag it, or arrow keys / WASD, space to jump.<br>Loops follow the character.</div>
+<div id="stats"></div>
+
+<div id="panel">
+  <h1>Pixelfork VFX <span class="muted" id="ver"></span></h1>
+  <div class="muted">Casual pack · every effect, at any size and tint.</div>
+  <div class="row" style="margin:8px 0 0"><button class="on">2D player</button><button onclick="location.href='preview3d.html'">3D player</button></div>
+
+  <div class="row"><label style="width:40px">Size</label><input id="size" type="range" min="0.3" max="2.5" step="0.1" value="1"><span id="sizeVal" style="width:32px">1.0</span></div>
+  <div class="row"><label style="width:40px">Tint</label><input id="tint" type="color" value="#ffd54a"><button id="tintOn">Use tint</button><button id="stopAll">Stop all</button></div>
+  <div class="row"><button id="playAll">Play every one-shot</button><button id="slow">Slow motion</button></div>
+  <div class="row"><button id="behind">Behind character</button><span class="muted" id="behindHint">effects play in front</span></div>
+
+  <div id="list"></div>
+</div>
+
+<script src="../dist/vfx.js"></script>
+<script>
+  const list = document.getElementById('list');
+  const sizeEl = document.getElementById('size'), sizeVal = document.getElementById('sizeVal');
+  const tintEl = document.getElementById('tint'), tintOn = document.getElementById('tintOn');
+  const hero = document.getElementById('hero');
+  let useTint = false, behind = false, selected = VFX.list()[0];
+  const loops = {};
+
+  document.getElementById('ver').textContent = 'v' + VFX.VERSION;
+  sizeEl.oninput = () => (sizeVal.textContent = Number(sizeEl.value).toFixed(1));
+  tintOn.onclick = () => { useTint = !useTint; tintOn.classList.toggle('on', useTint); };
+  document.getElementById('behind').onclick = (e) => { behind = !behind; e.target.classList.toggle('on', behind); document.getElementById('behindHint').textContent = behind ? 'effects play behind the character (layer: back)' : 'effects play in front'; };
+  document.getElementById('slow').onclick = (e) => { VFX.timeScale = VFX.timeScale === 1 ? 0.2 : 1; e.target.classList.toggle('on', VFX.timeScale !== 1); };
+  document.getElementById('stopAll').onclick = () => { VFX.stopAll(); Object.keys(loops).forEach(k => delete loops[k]); refresh(); };
+
+  function opts(extra) {
+    const o = Object.assign({ size: Number(sizeEl.value) }, extra || {});
+    if (useTint) o.tint = tintEl.value;
+    if (behind) o.layer = 'back';
+    return o;
+  }
+  function heroTop() { const r = hero.getBoundingClientRect(); return [r.left + r.width / 2, r.top - 24]; }
+  function heroFeet() { const r = hero.getBoundingClientRect(); return [r.left + r.width / 2, r.bottom - 4]; }
+  function heroMid() { const r = hero.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+
+  // ---- a movable character: drag it, arrow keys / WASD, space to jump ----
+  const H = { x: 0, y: 0, vx: 0, vy: 0, onGround: true, drag: null };
+  const groundY = () => window.innerHeight * 0.78;            // top of the ground strip
+  const keys = {};
+  H.x = window.innerWidth / 2 + 150; H.y = groundY() - 84;
+  function placeHero() { hero.style.transform = `translate(${H.x - 30}px, ${H.y}px)`; }
+  placeHero();
+  hero.addEventListener('pointerdown', e => { H.drag = { dx: e.clientX - H.x, dy: e.clientY - H.y }; hero.classList.add('drag'); hero.setPointerCapture(e.pointerId); e.stopPropagation(); });
+  hero.addEventListener('pointermove', e => { if (!H.drag) return; H.x = e.clientX - H.drag.dx; H.y = e.clientY - H.drag.dy; H.vy = 0; H.onGround = false; });
+  hero.addEventListener('pointerup', e => { H.drag = null; hero.classList.remove('drag'); });
+  addEventListener('keydown', e => {
+    if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    keys[e.key.toLowerCase()] = true;
+    if ((e.key === ' ' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') && H.onGround) { H.vy = -820; H.onGround = false; VFX.play('move.jump', { at: heroFeet(), size: 0.8 }); }
+    if ([' ', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) e.preventDefault();
+  });
+  addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+  let heroLast = performance.now();
+  (function moveHero(now) {
+    const dt = Math.min((now - heroLast) / 1000, 0.05); heroLast = now;
+    if (!H.drag) {
+      const dir = (keys['arrowright'] || keys['d'] ? 1 : 0) - (keys['arrowleft'] || keys['a'] ? 1 : 0);
+      H.vx += (dir * 520 - H.vx) * Math.min(1, dt * 12);
+      const minX = (document.getElementById('panel').offsetWidth || 0) + 30;
+      H.x = Math.max(minX, Math.min(window.innerWidth - 30, H.x + H.vx * dt));
+      H.vy += 2400 * dt; H.y += H.vy * dt;
+      const floor = groundY() - 84;
+      if (H.y >= floor) { if (!H.onGround && H.vy > 300) VFX.play('move.jump', { at: heroFeet() }); H.y = floor; H.vy = 0; H.onGround = true; }
+    }
+    placeHero();
+    requestAnimationFrame(moveHero);
+  })(performance.now());
+
+  function playSelected(where) {
+    const meta = VFX.registry.find(e => e.name === selected);
+    if (meta.loop) {
+      if (loops[selected]) { loops[selected].stop(); delete loops[selected]; refresh(); return; }
+      const o = opts();
+      if (meta.name.startsWith('env.')) loops[selected] = VFX.play(selected, o);
+      else loops[selected] = VFX.play(selected, Object.assign(o, { follow: selected === 'state.stun' ? heroTop : heroMid }));
+      refresh();
+      return;
+    }
+    if (where) VFX.play(selected, opts({ at: where }));
+    else if (selected === 'move.jump') VFX.play(selected, opts({ at: heroFeet() }));
+    else VFX.play(selected, opts({ el: hero }));
+  }
+
+  function refresh() {
+    list.innerHTML = '';
+    let lastCat = null;
+    VFX.registry.forEach(e => {
+      if (e.category !== lastCat) { lastCat = e.category; const h = document.createElement('div'); h.className = 'muted'; h.style.margin = '12px 0 4px'; h.textContent = e.category + '.*'; list.appendChild(h); }
+      const row = document.createElement('div');
+      row.className = 'fx' + (e.name === selected ? ' sel' : '');
+      row.innerHTML = `<code>${e.name}</code>${e.loop ? '<span class="loop">LOOP</span>' : ''}<button>${e.loop ? (loops[e.name] ? 'Stop' : 'Start') : 'Play'}</button>`;
+      row.title = e.whenToUse;
+      row.onclick = () => { selected = e.name; refresh(); };
+      row.querySelector('button').onclick = (ev) => { ev.stopPropagation(); selected = e.name; playSelected(); refresh(); };
+      list.appendChild(row);
+    });
+  }
+  refresh();
+
+  document.getElementById('playAll').onclick = async () => {
+    for (const e of VFX.registry.filter(e => !e.loop)) {
+      selected = e.name; refresh(); playSelected();
+      await new Promise(r => setTimeout(r, (e.duration + 0.4) * 1000));
+    }
+  };
+
+  document.getElementById('stage').addEventListener('pointerdown', e => playSelected([e.clientX, e.clientY]));
+  document.getElementById('ground').addEventListener('pointerdown', e => playSelected([e.clientX, e.clientY]));
+
+  // stats
+  let frames = 0, last = performance.now(), fps = 0;
+  (function loop(now) { frames++; if (now - last > 500) { fps = Math.round(frames * 1000 / (now - last)); frames = 0; last = now; }
+    let particles = 0; VFX._state.active.forEach(h => h.systems.forEach(s => particles += s.particleNum));
+    document.getElementById('stats').textContent = `${fps} fps · ${VFX.active} effects · ${particles} particles`;
+    requestAnimationFrame(loop); })(performance.now());
+</script>
+</body>
+</html>

@@ -1,0 +1,1650 @@
+{
+  "name": "casual",
+  "version": "0.8.0",
+  "style": "Modern mobile casual: chunky, bright, glossy, cartoon. Bold shapes, saturated colours, short and punchy. Not realistic, not gritty.",
+  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.js",
+  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.module.js",
+  "moduleNeeds": "three >= 0.182 provided by the page through an import map",
+  "effects": [
+    {
+      "name": "hit.impact",
+      "category": "hit",
+      "whenToUse": "Something gets hit: a punch, a sword slash landing, a ball striking a block, a bullet hitting a wall.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#ffdd55",
+      "anchor": "center",
+      "tags": [
+        "hit",
+        "punch",
+        "impact",
+        "damage",
+        "slash"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.slash",
+      "category": "hit",
+      "whenToUse": "A sword, claw or blade slash hits. Aim it along the swing: in 2D set dir (degrees, default down-right); in 3D pass direction: [x, y, z].",
+      "duration": 0.4,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "slash",
+        "sword",
+        "blade",
+        "swoosh",
+        "cut",
+        "claw"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.punch",
+      "category": "hit",
+      "whenToUse": "A punch, kick, headbutt or blunt hit lands. Bigger and rounder than hit.impact; good for boxing, brawlers, cartoon fights.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#ffe66d",
+      "anchor": "center",
+      "tags": [
+        "punch",
+        "kick",
+        "pow",
+        "blunt",
+        "comic",
+        "fight"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.bullet",
+      "category": "hit",
+      "whenToUse": "A bullet, arrow, laser bolt or thrown pebble hits a surface or an enemy. Small and fast; can fire many times a second.",
+      "duration": 0.3,
+      "loop": false,
+      "tint": "#ffd580",
+      "anchor": "center",
+      "tags": [
+        "bullet",
+        "arrow",
+        "shot",
+        "ricochet",
+        "laser",
+        "small"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.crit",
+      "category": "hit",
+      "whenToUse": "A critical hit, a super move landing, a weak-point strike, a headshot. Louder than hit.impact.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#ff5a4a",
+      "anchor": "center",
+      "tags": [
+        "critical",
+        "crit",
+        "big hit",
+        "super",
+        "headshot",
+        "combo"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.block",
+      "category": "hit",
+      "whenToUse": "A crate, brick, wall, rock or block is hit or breaks. Tint it the colour of the material (wood, stone, ice).",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#c68a4b",
+      "anchor": "center",
+      "tags": [
+        "block",
+        "crate",
+        "break",
+        "debris",
+        "wood",
+        "stone",
+        "destroy"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.blood",
+      "category": "hit",
+      "whenToUse": "A creature takes a bloody hit in an action game. Aim it: in 2D set dir (degrees, default up); in 3D pass direction: [x, y, z], the way the blood flies (away from the weapon). Tint green for slime or zombies, black for oil or ink, purple for aliens.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#c8102e",
+      "anchor": "center",
+      "tags": [
+        "blood",
+        "splat",
+        "gore",
+        "damage",
+        "slime",
+        "ink",
+        "squish",
+        "spray"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.shieldbreak",
+      "category": "hit",
+      "whenToUse": "A shield, barrier, bubble or armour breaks. Play where the shield was, then stop its state.shield loop.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#6fc3ff",
+      "anchor": "center",
+      "tags": [
+        "shield",
+        "break",
+        "shatter",
+        "barrier",
+        "glass",
+        "armor"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.parry",
+      "category": "hit",
+      "whenToUse": "A parry, a perfect block, a deflected bullet, swords clashing, a counter. Sharp and bright. Aim the spark spray: dir (degrees) in 2D, direction: [x, y, z] in 3D (default up).",
+      "duration": 0.45,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "parry",
+        "block",
+        "clang",
+        "counter",
+        "deflect",
+        "clash"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.small",
+      "category": "explosion",
+      "whenToUse": "A small thing blows up: a barrel, an enemy, a car crash, a bomb, a rocket landing. About 150px wide.",
+      "duration": 1,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "explosion",
+        "blast",
+        "boom",
+        "bomb",
+        "destroy"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.big",
+      "category": "explosion",
+      "whenToUse": "A boss dies, a building or tank blows up, a big bomb goes off, a level-ending blast. Twice the size of explosion.small.",
+      "duration": 1.5,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "explosion",
+        "big",
+        "boss",
+        "blast",
+        "nuke",
+        "boom"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.puff",
+      "category": "explosion",
+      "whenToUse": "Something vanishes, pops or gets squashed without fire: an enemy poofing away, a balloon, a magic disappearance, a cartoon collision.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "poof",
+        "puff",
+        "smoke",
+        "vanish",
+        "pop",
+        "cartoon"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.fireball",
+      "category": "explosion",
+      "whenToUse": "A fire spell lands, a fuel can ignites, a dragon breath hits, a torch bursts. Fire without the smoke of an explosion.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "fire",
+        "fireball",
+        "flame",
+        "burn",
+        "ignite",
+        "dragon"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.firework",
+      "category": "explosion",
+      "whenToUse": "Celebrations and fun blasts: fireworks on a win screen, a party popper, a magic burst. Tint it or leave it multicolour.",
+      "duration": 1.6,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "firework",
+        "celebrate",
+        "sparks",
+        "party",
+        "burst",
+        "colour"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.nuke",
+      "category": "explosion",
+      "whenToUse": "A bomb power-up clears the board, a super attack wipes every enemy, the final boss dies. Covers the whole screen; play once.",
+      "duration": 2,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "nuke",
+        "screen clear",
+        "bomb",
+        "wipe",
+        "super",
+        "flash"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.sparkle",
+      "category": "pickup",
+      "whenToUse": "The player collects a coin, gem, star, key, heart or any small item. Also for a star earned on a result screen.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#ffd54a",
+      "anchor": "center",
+      "tags": [
+        "pickup",
+        "collect",
+        "coin",
+        "gem",
+        "star",
+        "sparkle",
+        "twinkle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.coin",
+      "category": "pickup",
+      "whenToUse": "A coin or money is collected. More \"coin\" than pickup.sparkle: a little coin pops up and fades. Also for a cash reward.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#ffcf3f",
+      "anchor": "center",
+      "tags": [
+        "coin",
+        "money",
+        "cash",
+        "gold",
+        "collect",
+        "pickup"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.gem",
+      "category": "pickup",
+      "whenToUse": "A gem, diamond, crystal or premium currency is collected. Tint it to the gem colour (purple, green, red).",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#4fd1ff",
+      "anchor": "center",
+      "tags": [
+        "gem",
+        "diamond",
+        "crystal",
+        "premium",
+        "collect",
+        "shard"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.heart",
+      "category": "pickup",
+      "whenToUse": "A heart, life or health item is collected, a pet is petted, a character is happy or in love.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ff5c8a",
+      "anchor": "center",
+      "tags": [
+        "heart",
+        "love",
+        "life",
+        "health",
+        "happy",
+        "pet"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.powerup",
+      "category": "pickup",
+      "whenToUse": "A power-up, booster, mushroom, shield or weapon upgrade is collected. Bigger and louder than a coin.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "powerup",
+        "booster",
+        "upgrade",
+        "rainbow",
+        "collect",
+        "buff"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.xp",
+      "category": "pickup",
+      "whenToUse": "Experience, mana, energy or souls are gained. Soft orbs float up from the point. Tint to the resource colour.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#a06bff",
+      "anchor": "center",
+      "tags": [
+        "xp",
+        "experience",
+        "mana",
+        "energy",
+        "orb",
+        "soul",
+        "gain"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.key",
+      "category": "pickup",
+      "whenToUse": "A key, a pass, a ticket or an access card is collected; a door unlocks.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#ffcf3f",
+      "anchor": "center",
+      "tags": [
+        "key",
+        "unlock",
+        "door",
+        "ticket",
+        "pass",
+        "collect"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.food",
+      "category": "pickup",
+      "whenToUse": "A character eats food, a pet is fed, a potion of stamina is drunk, a snack is collected. Tint to the food colour.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#ffa34d",
+      "anchor": "center",
+      "tags": [
+        "food",
+        "eat",
+        "yum",
+        "feed",
+        "snack",
+        "stamina",
+        "collect"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.confetti",
+      "category": "reward",
+      "whenToUse": "A win: level complete, new record, chest opened, prize claimed. Fire it from the bottom or the middle of the screen; in 3D from the ground or a cannon, with direction: [x, y, z] to aim it (default straight up).",
+      "duration": 3.5,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "confetti",
+        "win",
+        "celebrate",
+        "success",
+        "party",
+        "victory"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.levelup",
+      "category": "reward",
+      "whenToUse": "The player levels up, upgrades an item, unlocks something, or completes a big milestone. Play on the character or the item.",
+      "duration": 1.2,
+      "loop": false,
+      "tint": "#ffc93c",
+      "anchor": "center",
+      "tags": [
+        "level up",
+        "upgrade",
+        "unlock",
+        "milestone",
+        "reward",
+        "gold"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.starburst",
+      "category": "reward",
+      "whenToUse": "A star is earned, a perfect score, a combo milestone, a badge unlocked. Punchier than pickup.sparkle.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ffd23f",
+      "anchor": "center",
+      "tags": [
+        "star",
+        "burst",
+        "perfect",
+        "badge",
+        "score",
+        "reward"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.combo",
+      "category": "reward",
+      "whenToUse": "A combo counter goes up, a chain reaction step, a rapid hit streak. Short enough to fire several times a second. Tint by combo level.",
+      "duration": 0.45,
+      "loop": false,
+      "tint": "#ff9f43",
+      "anchor": "center",
+      "tags": [
+        "combo",
+        "chain",
+        "streak",
+        "multiplier",
+        "pop",
+        "fast"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.chest",
+      "category": "reward",
+      "whenToUse": "A chest, crate, gift box, egg or loot bag opens. Play on the box; the rays shine upward.",
+      "duration": 1.4,
+      "loop": false,
+      "tint": "#ffc93c",
+      "anchor": "center",
+      "tags": [
+        "chest",
+        "loot",
+        "gift",
+        "open",
+        "rays",
+        "box",
+        "egg"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.coinshower",
+      "category": "reward",
+      "whenToUse": "A big money reward: jackpot, chest of coins, level payout, daily bonus. Covers the whole screen from the top.",
+      "duration": 3,
+      "loop": false,
+      "tint": "#ffcf3f",
+      "anchor": "top",
+      "tags": [
+        "coins",
+        "shower",
+        "jackpot",
+        "rain",
+        "money",
+        "reward",
+        "payout"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.clear",
+      "category": "reward",
+      "whenToUse": "Level complete, stage clear, game won. A whole-screen celebration. Play once when the result screen appears.",
+      "duration": 4,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "clear",
+        "win",
+        "level complete",
+        "fireworks",
+        "celebration",
+        "victory"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.jump",
+      "category": "move",
+      "whenToUse": "A character jumps, lands, or starts running. Play at the feet. Also a soft landing for a dropped object.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#e9dcc7",
+      "anchor": "center",
+      "tags": [
+        "jump",
+        "land",
+        "dust",
+        "feet",
+        "run",
+        "puff"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.footstep",
+      "category": "move",
+      "whenToUse": "Each footstep of a walking character, a hoof, a paw; tiny and quick. For continuous running use move.dust instead.",
+      "duration": 0.4,
+      "loop": false,
+      "tint": "#e9dcc7",
+      "anchor": "center",
+      "tags": [
+        "footstep",
+        "step",
+        "walk",
+        "puff",
+        "tiny",
+        "paw"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.land",
+      "category": "move",
+      "whenToUse": "A big landing, a ground pound, a heavy object dropped, a stomp. Wider and flatter than move.jump.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#e9dcc7",
+      "anchor": "center",
+      "tags": [
+        "land",
+        "stomp",
+        "ground pound",
+        "heavy",
+        "drop",
+        "shockwave"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.dash",
+      "category": "move",
+      "whenToUse": "A dodge, a dash, a blink or a sudden burst of speed. The streaks fly BACKWARD, opposite to the dash: in 2D set dir (degrees, default left = dashing right); in 3D pass direction: [x, y, z] (the opposite of the movement).",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "dash",
+        "dodge",
+        "burst",
+        "blink",
+        "sprint",
+        "streak"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.splash",
+      "category": "move",
+      "whenToUse": "Something falls into or jumps out of water, a puddle is stepped in, a boat hits a wave. Play at the water surface.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#7fd4ff",
+      "anchor": "center",
+      "tags": [
+        "splash",
+        "water",
+        "drops",
+        "puddle",
+        "wave",
+        "swim"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.teleport",
+      "category": "move",
+      "whenToUse": "A character teleports, blinks, warps in or out, or is summoned. Play at both the start and the end point.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#b56bff",
+      "anchor": "center",
+      "tags": [
+        "teleport",
+        "warp",
+        "blink",
+        "summon",
+        "vanish",
+        "appear"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.spawn",
+      "category": "move",
+      "whenToUse": "An enemy, item or character appears or respawns, a block is placed, a building finishes. Gentle and quick.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "spawn",
+        "appear",
+        "respawn",
+        "place",
+        "pop in",
+        "new"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.trail",
+      "category": "move",
+      "whenToUse": "A dash, a speeding car, a thrown ball, a flying character or a dragged item. Start it with follow, stop it when the move ends.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#7fd4ff",
+      "anchor": "center",
+      "tags": [
+        "trail",
+        "dash",
+        "speed",
+        "follow",
+        "motion",
+        "glow"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.dust",
+      "category": "move",
+      "whenToUse": "A character or vehicle is running or driving on the ground. Follow the feet or wheels; stop when they stop.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#e9dcc7",
+      "anchor": "center",
+      "tags": [
+        "dust",
+        "run",
+        "drive",
+        "trail",
+        "ground",
+        "wheels"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.speed",
+      "category": "move",
+      "whenToUse": "Something is moving very fast: a sprint, a boost, a falling player, a racing car. Lines stream backward: in 2D set dir (degrees, default left); in 3D pass direction: [x, y, z] (opposite to the movement) and keep it current with handle.aim(v) while the character turns.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "speed",
+        "lines",
+        "boost",
+        "fast",
+        "sprint",
+        "wind"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.swim",
+      "category": "move",
+      "whenToUse": "A character or fish is swimming or diving. Follow the body; stop when it leaves the water.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#bfefff",
+      "anchor": "center",
+      "tags": [
+        "swim",
+        "dive",
+        "underwater",
+        "bubbles",
+        "fish",
+        "water"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.fly",
+      "category": "move",
+      "whenToUse": "A bird, bee, dragon or winged character is flying or hovering. Follow the body; stop on landing.",
+      "duration": 0.45,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "fly",
+        "wings",
+        "flap",
+        "hover",
+        "bird",
+        "gust"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.skid",
+      "category": "move",
+      "whenToUse": "A car drifts or brakes hard, a character slides to a stop, a cart skids. Follow the wheels; stop when grip returns.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#e6e6e6",
+      "anchor": "center",
+      "tags": [
+        "skid",
+        "drift",
+        "tyre",
+        "smoke",
+        "brake",
+        "slide"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.heal",
+      "category": "magic",
+      "whenToUse": "Health restored, a potion drunk, a shrine touched, a buff applied. Play on the character.",
+      "duration": 1.1,
+      "loop": false,
+      "tint": "#7cf07c",
+      "anchor": "center",
+      "tags": [
+        "heal",
+        "health",
+        "potion",
+        "buff",
+        "restore",
+        "plus"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.ice",
+      "category": "magic",
+      "whenToUse": "An ice spell hits, something freezes or shatters, a frost trap triggers, an ice block breaks.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#8fe3ff",
+      "anchor": "center",
+      "tags": [
+        "ice",
+        "frost",
+        "freeze",
+        "shatter",
+        "cold",
+        "crystal"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.lightning",
+      "category": "magic",
+      "whenToUse": "A lightning spell, a thunder strike, an electric trap or a shock hit. The bolt comes down from above the point.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#9fd8ff",
+      "anchor": "center",
+      "tags": [
+        "lightning",
+        "thunder",
+        "electric",
+        "shock",
+        "bolt",
+        "zap"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.shield",
+      "category": "magic",
+      "whenToUse": "A shield, barrier or block activates, an attack is deflected, armour absorbs a hit. For a lasting bubble use state.shield.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#6fc3ff",
+      "anchor": "center",
+      "tags": [
+        "shield",
+        "block",
+        "barrier",
+        "deflect",
+        "armor",
+        "parry"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.poison",
+      "category": "magic",
+      "whenToUse": "A poison attack, an acid splash, a toxic barrel breaks, a swamp bubble pops. For an ongoing poisoned status use state.poison.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#7ee83a",
+      "anchor": "center",
+      "tags": [
+        "poison",
+        "acid",
+        "toxic",
+        "bubbles",
+        "slime",
+        "gas"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.dark",
+      "category": "magic",
+      "whenToUse": "A curse, a shadow attack, a necromancer spell, a ghost appearing, something evil activating.",
+      "duration": 1.1,
+      "loop": false,
+      "tint": "#8a3fff",
+      "anchor": "center",
+      "tags": [
+        "dark",
+        "shadow",
+        "curse",
+        "evil",
+        "ghost",
+        "necro",
+        "purple"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.holy",
+      "category": "magic",
+      "whenToUse": "A blessing, a revive, an angel or shrine, a holy attack, a character ascending. Rays shine upward from the point.",
+      "duration": 1.3,
+      "loop": false,
+      "tint": "#fff1a8",
+      "anchor": "center",
+      "tags": [
+        "holy",
+        "light",
+        "bless",
+        "revive",
+        "angel",
+        "divine",
+        "rays"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.portal",
+      "category": "magic",
+      "whenToUse": "A portal, warp gate, level exit, summoning circle or teleporter that stays open. Stop it when it closes.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#b56bff",
+      "anchor": "center",
+      "tags": [
+        "portal",
+        "warp",
+        "gate",
+        "swirl",
+        "vortex",
+        "exit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.cast",
+      "category": "magic",
+      "whenToUse": "A character charges or casts a spell, an item is being crafted or upgraded, a machine powers up. Stop it when the spell fires.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffb84d",
+      "anchor": "center",
+      "tags": [
+        "cast",
+        "charge",
+        "channel",
+        "power up",
+        "converge",
+        "crafting"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.fire",
+      "category": "magic",
+      "whenToUse": "A fireball, a flaming arrow, a meteor or any burning projectile while it flies. Play with follow on the projectile; stop it on impact and play explosion.fireball.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "fireball",
+        "projectile",
+        "flame",
+        "meteor",
+        "trail",
+        "burning"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.summon",
+      "category": "magic",
+      "whenToUse": "A creature, ally or boss is summoned; a ritual completes; a big spell is cast from a circle. Play at the feet.",
+      "duration": 1.6,
+      "loop": false,
+      "tint": "#b56bff",
+      "anchor": "center",
+      "tags": [
+        "summon",
+        "ritual",
+        "circle",
+        "spawn",
+        "boss",
+        "columns"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.curse",
+      "category": "magic",
+      "whenToUse": "A curse, hex, debuff or drain lands on a character; a cursed item is picked up. Play on the body.",
+      "duration": 1.2,
+      "loop": false,
+      "tint": "#7a2cff",
+      "anchor": "center",
+      "tags": [
+        "curse",
+        "hex",
+        "debuff",
+        "drain",
+        "evil",
+        "spiral"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.stun",
+      "category": "state",
+      "whenToUse": "A character or enemy is stunned, dizzy or knocked out. Play above the head with follow, stop when they recover.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffe45c",
+      "anchor": "center",
+      "tags": [
+        "stun",
+        "dizzy",
+        "knocked out",
+        "status",
+        "stars"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.poison",
+      "category": "state",
+      "whenToUse": "A character or enemy is poisoned or sick. Play on the body with follow; stop when it wears off.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#7ee83a",
+      "anchor": "center",
+      "tags": [
+        "poison",
+        "status",
+        "sick",
+        "toxic",
+        "bubbles",
+        "debuff"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.burning",
+      "category": "state",
+      "whenToUse": "A character, enemy, torch, campfire or object is burning. Play on it with follow; stop when the fire goes out.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "burning",
+        "fire",
+        "flame",
+        "torch",
+        "campfire",
+        "status",
+        "lava"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.frozen",
+      "category": "state",
+      "whenToUse": "A character or enemy is frozen, slowed or chilled. Play on the body with follow; stop when it thaws.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#a8ecff",
+      "anchor": "center",
+      "tags": [
+        "frozen",
+        "ice",
+        "slow",
+        "chill",
+        "status",
+        "cold"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.shield",
+      "category": "state",
+      "whenToUse": "A character has an active shield, barrier, invincibility or bubble. Follow the character; stop when it breaks. Combine with magic.shield for the pop-on and hit.impact for hits.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#6fc3ff",
+      "anchor": "center",
+      "tags": [
+        "shield",
+        "bubble",
+        "barrier",
+        "invincible",
+        "status",
+        "protect"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.rage",
+      "category": "state",
+      "whenToUse": "A character is angry, enraged, berserk or powered up with a damage boost. Follow the head; stop when it ends.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff3b3b",
+      "anchor": "center",
+      "tags": [
+        "rage",
+        "angry",
+        "berserk",
+        "power",
+        "steam",
+        "status",
+        "buff"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.regen",
+      "category": "state",
+      "whenToUse": "Health regenerates over time, a healing zone is active, a medic aura. Follow the character; stop when healing ends. For a one-off heal use magic.heal.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#7cf07c",
+      "anchor": "center",
+      "tags": [
+        "regen",
+        "heal over time",
+        "aura",
+        "status",
+        "health",
+        "zone"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.sparkle",
+      "category": "state",
+      "whenToUse": "Something wants attention: a collectible on the map, a ready reward, a new item, a rare enemy, a clickable object. Follow it; stop when it is taken.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffe58a",
+      "anchor": "center",
+      "tags": [
+        "sparkle",
+        "glint",
+        "shiny",
+        "attention",
+        "rare",
+        "ready",
+        "idle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.smoke",
+      "category": "state",
+      "whenToUse": "A damaged vehicle, machine or building smokes; a chimney; a snuffed candle; something overheating. Follow it; stop when repaired.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#8a8a8a",
+      "anchor": "center",
+      "tags": [
+        "smoke",
+        "damaged",
+        "chimney",
+        "overheat",
+        "status",
+        "steam"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.love",
+      "category": "state",
+      "whenToUse": "A pet is happy, a character is in love or charmed, a customer is satisfied, a plant is thriving. Follow the head; stop when the mood ends.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff5c8a",
+      "anchor": "center",
+      "tags": [
+        "love",
+        "happy",
+        "hearts",
+        "charm",
+        "pet",
+        "mood",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.sleep",
+      "category": "state",
+      "whenToUse": "A character or pet is asleep, resting, idle for a long time, or knocked out cold. Follow the head; stop on waking.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#9fc5ff",
+      "anchor": "center",
+      "tags": [
+        "sleep",
+        "zzz",
+        "rest",
+        "idle",
+        "nap",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.invisible",
+      "category": "state",
+      "whenToUse": "A character is invisible, cloaked, a ghost, or phasing. Follow the body (draw the character at low opacity yourself); stop when visible again.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#cfe8ff",
+      "anchor": "center",
+      "tags": [
+        "invisible",
+        "cloak",
+        "ghost",
+        "phase",
+        "shimmer",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.charged",
+      "category": "state",
+      "whenToUse": "A character is electrified, stunned by a shock, or carrying a charged power. Also a live wire or a generator. Follow it; stop when it discharges.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#9fd8ff",
+      "anchor": "center",
+      "tags": [
+        "electric",
+        "charged",
+        "shock",
+        "sparks",
+        "static",
+        "status",
+        "energy"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.snow",
+      "category": "env",
+      "whenToUse": "A winter level, a Christmas event, a cold mountain scene. Start it once when the level begins; it covers the whole screen.",
+      "duration": 6,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "top",
+      "tags": [
+        "snow",
+        "winter",
+        "weather",
+        "ambient",
+        "christmas",
+        "cold"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.rain",
+      "category": "env",
+      "whenToUse": "A rainy level, a storm, a sad scene. Start it once when the level begins; it covers the whole screen.",
+      "duration": 4,
+      "loop": true,
+      "tint": "#bfe3ff",
+      "anchor": "top",
+      "tags": [
+        "rain",
+        "storm",
+        "weather",
+        "ambient",
+        "wet",
+        "sad"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.leaves",
+      "category": "env",
+      "whenToUse": "An autumn or forest level, a windy park, a garden. Tint pink for cherry blossom petals. Covers the whole screen from the top.",
+      "duration": 6,
+      "loop": true,
+      "tint": "#e0913a",
+      "anchor": "top",
+      "tags": [
+        "leaves",
+        "autumn",
+        "forest",
+        "wind",
+        "petals",
+        "ambient",
+        "garden"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.embers",
+      "category": "env",
+      "whenToUse": "A lava level, a burning city, a campfire scene, a volcano, a forge. Rises from the bottom of the screen.",
+      "duration": 6,
+      "loop": true,
+      "tint": "#ff8c2a",
+      "anchor": "bottom",
+      "tags": [
+        "embers",
+        "lava",
+        "fire",
+        "volcano",
+        "ambient",
+        "sparks",
+        "forge"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.bubbles",
+      "category": "env",
+      "whenToUse": "An underwater level, an aquarium, a soap or bath scene, a potion lab. Rises from the bottom of the screen.",
+      "duration": 6,
+      "loop": true,
+      "tint": "#bfefff",
+      "anchor": "bottom",
+      "tags": [
+        "bubbles",
+        "underwater",
+        "water",
+        "ambient",
+        "aquarium",
+        "soap"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.fog",
+      "category": "env",
+      "whenToUse": "A spooky graveyard, a swamp, a morning meadow, a haunted house. Sits along the bottom of the screen and drifts sideways.",
+      "duration": 8,
+      "loop": true,
+      "tint": "#c9d3e6",
+      "anchor": "bottom",
+      "tags": [
+        "fog",
+        "mist",
+        "spooky",
+        "swamp",
+        "ambient",
+        "haunted",
+        "morning"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.stars",
+      "category": "env",
+      "whenToUse": "A night sky, a space level, a dream sequence, a magic realm. Covers the whole screen; put it behind the game if you can (it is a background feel).",
+      "duration": 6,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "stars",
+        "night",
+        "space",
+        "twinkle",
+        "ambient",
+        "sky",
+        "dream"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.fireflies",
+      "category": "env",
+      "whenToUse": "A night forest, a fairy glade, a calm evening, a magical garden. Soft lights drifting everywhere.",
+      "duration": 8,
+      "loop": true,
+      "tint": "#d6ff6a",
+      "anchor": "center",
+      "tags": [
+        "fireflies",
+        "night",
+        "forest",
+        "fairy",
+        "ambient",
+        "glow",
+        "calm"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.dust",
+      "category": "env",
+      "whenToUse": "A sunlit room, an attic, a desert, a cave, an old library. Tiny motes drifting everywhere; very subtle.",
+      "duration": 8,
+      "loop": true,
+      "tint": "#fff2cc",
+      "anchor": "center",
+      "tags": [
+        "dust",
+        "motes",
+        "sunlight",
+        "attic",
+        "ambient",
+        "cave",
+        "subtle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.sandstorm",
+      "category": "env",
+      "whenToUse": "A desert level, a dust storm, a windy wasteland. In 2D it blows left to right (dir 180 reverses). In 3D it blows along the ground: direction: [x, y, z], or dir as a compass heading (0 = +X, 90 = -Z).",
+      "duration": 3,
+      "loop": true,
+      "tint": "#e2c58a",
+      "anchor": "center",
+      "tags": [
+        "sandstorm",
+        "desert",
+        "wind",
+        "dust",
+        "storm",
+        "ambient"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.clouds",
+      "category": "env",
+      "whenToUse": "A sky background, a flying level, a calm outdoor scene. Very slow; start it once. Play on the back layer if the game has a DOM scene.",
+      "duration": 12,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "top",
+      "tags": [
+        "clouds",
+        "sky",
+        "drift",
+        "ambient",
+        "calm",
+        "background"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.hearts",
+      "category": "env",
+      "whenToUse": "A love scene, a date, a pet-care screen, a valentine event. Rises from the bottom of the screen.",
+      "duration": 6,
+      "loop": true,
+      "tint": "#ff6b9d",
+      "anchor": "bottom",
+      "tags": [
+        "hearts",
+        "love",
+        "valentine",
+        "pets",
+        "ambient",
+        "cute"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.confetti",
+      "category": "env",
+      "whenToUse": "A celebration screen that stays open: a winner podium, a birthday event, a season end. For a one-off burst use reward.confetti or reward.clear.",
+      "duration": 4,
+      "loop": true,
+      "tint": null,
+      "anchor": "top",
+      "tags": [
+        "confetti",
+        "celebration",
+        "party",
+        "ambient",
+        "winner",
+        "event"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.pop",
+      "category": "ui",
+      "whenToUse": "A button, card or toggle is tapped. Small and quick; safe to fire on every tap. Play with { el }.",
+      "duration": 0.35,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "tap",
+        "button",
+        "pop",
+        "press",
+        "click"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.tap",
+      "category": "ui",
+      "whenToUse": "Feedback for a tap on the game itself: placing, selecting, moving to a point. Play with { event }.",
+      "duration": 0.4,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "tap",
+        "ripple",
+        "touch",
+        "select",
+        "point"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.star",
+      "category": "ui",
+      "whenToUse": "A star on a result screen is earned, a rating star fills, a favourite is marked. Play with { el } on the star.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#ffd23f",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "star",
+        "rating",
+        "result",
+        "earn",
+        "favourite"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.burst",
+      "category": "ui",
+      "whenToUse": "A reward is claimed, a task is checked off, a purchase completes, a gift is opened in the UI. Play with { el }.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "burst",
+        "claim",
+        "done",
+        "dots",
+        "confetti",
+        "purchase"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.unlock",
+      "category": "ui",
+      "whenToUse": "A level, skin, character or feature unlocks; a lock icon opens; a new area is revealed. Play with { el }.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ffe58a",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "unlock",
+        "reveal",
+        "new",
+        "open",
+        "available"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.flash",
+      "category": "ui",
+      "whenToUse": "A screen flash: a huge explosion, a lightning strike, a camera flash, a big hit on the player (tint red), a teleport. Covers the whole screen for a moment.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "flash",
+        "white-out",
+        "screen",
+        "lightning",
+        "damage",
+        "impact"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.glow",
+      "category": "ui",
+      "whenToUse": "Draw the eye to a button or card: Play, Claim, a ready chest, a new item. Play with { el, follow: true }; stop when tapped.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffd23f",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "glow",
+        "pulse",
+        "attention",
+        "highlight",
+        "cta"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.shine",
+      "category": "ui",
+      "whenToUse": "Draw attention to a button, card or banner with a passing shine: Play, Claim, a new offer. Play with { el }; the sweep fits the element width.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "shine",
+        "glint",
+        "sweep",
+        "highlight",
+        "attention"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "ui.countup",
+      "category": "ui",
+      "whenToUse": "A score, coin total or XP bar is counting up on a result screen. Play with { el, follow: true } on the counter; stop when the count finishes.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffd23f",
+      "anchor": "center",
+      "tags": [
+        "ui",
+        "count",
+        "score",
+        "counter",
+        "sparkle",
+        "result"
+      ],
+      "aliases": []
+    }
+  ]
+}

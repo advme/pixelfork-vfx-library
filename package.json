@@ -1,0 +1,22 @@
+{
+  "name": "pixelfork-vfx-library",
+  "version": "0.8.0",
+  "description": "Ready-made game visual effects for AI-generated web games (Pixelfork). One script, call a name.",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "serve": "python3 tools/serve.py 8767"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "three": "^0.186.0",
+    "three.quarks": "^0.17.1"
+  },
+  "devDependencies": {
+    "crashcat": "^0.0.5",
+    "esbuild": "^0.28.2"
+  },
+  "private": true
+}
