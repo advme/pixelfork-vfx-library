@@ -7,7 +7,7 @@ Ready-made visual effects (particles) for AI-generated web games. **You never de
 ## 1. Add it (2 lines)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.js"></script>
 <script>VFX.attach();</script>
 ```
 This is the setup for **2D games** (canvas 2D, Phaser, PixiJS, DOM). A **three.js 3D game uses a different build: see section 4.**
@@ -203,7 +203,7 @@ A 3D game must share **one copy of three.js** with this library. So 3D games do 
 { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
-    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.module.js"
+    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.module.js"
 } }
 </script>
 <script type="module">
@@ -244,6 +244,8 @@ lines.aim(car.velocity.clone().negate());
 - **Weather and ambience are real 3D too.** `env.*` (snow, rain, fog, embers, leaves, fireflies, clouds, stars…) fills a volume of the world around the spot the camera is looking at, and follows it. Flakes land on the floor, rain makes ripples, fog hugs the ground, everything passes behind walls. Call it exactly as in 2D: `VFX.play('env.snow')`. The big celebrations work the same way: `reward.clear` fires fireworks in the sky, `reward.coinshower` rains coins around the player, `explosion.nuke` is a giant blast in the world plus a white-out on the screen.
 - **Only `ui.*` stays on the screen** (button pops, glints, `ui.flash`), plus anything you play on an element with `{ el }`. A `ui.*` effect given a 3D `position` is projected to the screen for you. To force any effect onto the screen, pass `space: 'screen'`.
 - `VFX.toScreen(object3D)` gives the CSS pixel position of a 3D point, for your own HUD needs.
+- **Effects never hide inside the model they are played on.** You will naturally write `position: enemy.position`, which is the centre of a solid model. The library measures this with one ray and places the flash just in front of that model, on the same spot of the screen. Nothing to do. (`pull: false` turns it off, `pull: 1.5` sets it by hand in metres.)
+- **Nothing visible?** Set `VFX.debug = true` once: every `play` is logged with its layer and position, and unknown effect names are reported.
 - **Optional soft particles** (smoke fades where it meets the floor or a wall instead of being cut by a hard line): pass `soft: true` to `useScene` and call `VFX.prepass()` once per frame right before your `renderer.render(scene, camera)`. It costs one extra scene draw, so skip it for heavy scenes.
 - **Games with a physics engine can throw real debris.** Pass `debris: false` and the effect leaves out its particle chunks (planks, rubble, shards) but keeps the flash, smoke and sparks; spawn your own rigid bodies at the same point instead: `VFX.play('hit.block', { position: p, debris: false })`. The effects with chunks are `hit.block`, `hit.shieldbreak`, `magic.ice` and `explosion.small / big / nuke`.
 - Solid debris is lit by the game's lights. With no lights in the scene it falls back to flat colour automatically.
@@ -254,4 +256,4 @@ lines.aim(car.velocity.clone().negate());
 2. Wire the standard moments: hit → `hit.impact` · bloody hit → `hit.blood` · collect → `pickup.sparkle` / `pickup.coin` · win screen → `reward.clear` · level up / unlock → `reward.levelup` · jump / land → `move.jump` · heal → `magic.heal` · stunned → `state.stun` (stop it!) · enemy or object destroyed → `explosion.small` · board wipe → `explosion.nuke` · weather → `env.*` once per level · buttons → `ui.pop`.
 3. Always `stop()` looping effects when the thing they belong to disappears, and `VFX.stopAll()` on screen changes.
 4. Unknown names never throw: they warn once and do nothing. Check `VFX.has(name)` if unsure.
-5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/registry.json`
+5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/registry.json`

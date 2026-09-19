@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixelfork VFX — minimal three.js game</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#1d2740}canvas{display:block}#hint{position:fixed;left:12px;top:10px;color:#dfe6ff;font:13px system-ui;text-shadow:0 1px 2px #000}</style>
+<!-- The whole setup a 3D game needs: ONE three.js, shared with the VFX library. -->
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
+    "vfx": "../dist/vfx.module.js"
+} }
+</script>
+</head>
+<body>
+<div id="hint">WASD / arrows to move · click to punch the nearest cube · a minimal three.js game: three.js from the CDN, VFX as an ES module, one shared three.js</div>
+<script type="module">
+  import * as THREE from 'three';
+  import VFX from 'vfx';
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  document.body.appendChild(renderer.domElement);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color('#9fc4e8');
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#5a6a8a', 2.2));
+  const sun = new THREE.DirectionalLight('#fff', 2); sun.position.set(5, 10, 4); scene.add(sun);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshStandardMaterial({ color: '#8fa3bd' }));
+  floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+  const hero = new THREE.Mesh(new THREE.CapsuleGeometry(0.42, 0.86, 8, 16), new THREE.MeshStandardMaterial({ color: '#ff8c42' }));
+  hero.position.set(40, 0.85, -60);                       // deliberately far from the world origin
+  scene.add(hero);
+  const enemies = [];
+  for (let i = 0; i < 6; i++) { const e = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: '#e0263a' })); e.position.set(40 + (Math.random() - 0.5) * 14, 0.5, -60 - 3 - Math.random() * 10); scene.add(e); enemies.push(e); }
+
+  VFX.useScene({ scene, camera, renderer, characterHeight: 1.7, ground: 0 });
+  VFX.play('env.snow');
+
+  const keys = {}; addEventListener('keydown', e => keys[e.key.toLowerCase()] = true); addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+  addEventListener('pointerdown', () => {
+    const e = enemies.filter(x => x.visible).sort((a, b) => a.position.distanceTo(hero.position) - b.position.distanceTo(hero.position))[0];
+    if (!e) return;
+    VFX.play('hit.punch', { position: e.position });
+    e.userData.hp = (e.userData.hp || 2) - 1;
+    if (e.userData.hp <= 0) { e.visible = false; VFX.play('explosion.small', { position: e.position }); VFX.play('pickup.coin', { position: e.position.clone().setY(1.2) }); }
+  });
+  function resize() { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+  addEventListener('resize', resize); resize();
+
+  let last = performance.now();
+  renderer.setAnimationLoop((now) => {
+    const dt = Math.min((now - last) / 1000, 0.05); last = now;
+    const dx = (keys['d'] || keys['arrowright'] ? 1 : 0) - (keys['a'] || keys['arrowleft'] ? 1 : 0);
+    const dz = (keys['s'] || keys['arrowdown'] ? 1 : 0) - (keys['w'] || keys['arrowup'] ? 1 : 0);
+    hero.position.x += dx * 5 * dt; hero.position.z += dz * 5 * dt;
+    enemies.forEach(e => { if (e.visible) e.position.lerp(new THREE.Vector3(hero.position.x, 0.5, hero.position.z), dt * 0.12); });
+    camera.position.set(hero.position.x, 9, hero.position.z + 9); camera.lookAt(hero.position.x, 1, hero.position.z - 2);
+    renderer.render(scene, camera);
+  });
+  window.__demo = { VFX, THREE, hero, enemies, scene };
+</script>
+</body>
+</html>

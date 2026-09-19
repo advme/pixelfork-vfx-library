@@ -6,7 +6,7 @@ Ready-made game visual effects (particles) for AI-generated web games. An AI pic
 ## Use it in a game (no install)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.js"></script>
 <script>VFX.attach();</script>
 
 <script>VFX.play('hit.impact', { x: 120, y: 340 });</script>

@@ -52,7 +52,7 @@ const S = {
   raf: 0, last: 0,
   warned: {},
   attached: false,
-  ground: null, soft: false, lit: false, depthTarget: null, renderOrder: 1000,
+  ground: null, soft: false, lit: false, depthTarget: null, renderOrder: 1000, debug: false,
   size: 1,               // global size multiplier (VFX.size)
   timeScale: 1,          // 0.25 = slow motion (previews, debugging)
 };
@@ -302,6 +302,75 @@ function placeGroup(L, group, t) {
   else group.position.set(t.x, -t.y, 0);
 }
 
+const _box = new THREE.Box3();
+const _sphere = new THREE.Sphere();
+const _camP = new THREE.Vector3();
+/** How big is the thing an effect is played on? (0 for an empty anchor or a plain point.) */
+function objectRadius(obj) {
+  if (!obj || !obj.isObject3D) return 0;
+  _box.setFromObject(obj);
+  if (_box.isEmpty()) return 0;
+  const r = _box.getBoundingSphere(_sphere).radius;
+  return isFinite(r) ? r : 0;
+}
+
+const _ray = new THREE.Raycaster();
+const _dir = new THREE.Vector3();
+const _p = new THREE.Vector3();
+function isShown(o, stopAt) { for (let n = o; n && n !== stopAt; n = n.parent) if (!n.visible) return false; return true; }
+function isInside(o, root) { for (let n = o; n; n = n.parent) if (n === root) return true; return false; }
+
+/**
+ * Games play effects at `enemy.position`: the CENTRE of a solid model, which then hides the flash
+ * inside itself. This measures how far the camera-facing part must come toward the camera to sit
+ * just in front of that model's real surface. One ray, camera -> effect point:
+ *   - find the model the point is inside of (a visible mesh whose box contains the point, then up
+ *     its parents while they stay model-sized, so a hero built from body + arms counts as one);
+ *   - the pull clears that model's whole bounding box along the line of sight.
+ * A point that is not inside anything gets a hair of pull (avoids z-fighting on surfaces). Floors,
+ * walls and other huge meshes never count as "the model", so nothing is dragged through a wall.
+ */
+function autoPull(L, P, hint) {
+  // margin: a one-shot stays where it spawned, but its target keeps moving. An enemy walking toward
+  // the camera at 2 m/s covers 0.4 m during a hit flash, and would walk into it with a tight margin.
+  const k = L.unit / 0.02, tiny = 0.06 * k, margin = 0.45 * k, maxModel = 3 * 85 * L.unit;
+  if (!L.camera) return tiny;
+  L.camera.updateMatrixWorld();
+  L.camera.getWorldPosition(_camP);
+  const d = _dir.copy(P).sub(_camP).length();
+  if (d < 1e-4) return tiny;
+  _ray.set(_camP, _dir.divideScalar(d)); _ray.near = 0; _ray.far = d;
+  let model = hint && objectRadius(hint) > 0 && objectRadius(hint) <= maxModel ? hint : null;
+  if (!model) {
+    const hits = _ray.intersectObjects(L.scene.children, true);
+    for (let i = 0; i < hits.length && !model; i++) {
+      const o = hits[i].object;
+      if (!o.isMesh || isInside(o, L.batch) || !isShown(o, L.scene) || (o.userData && o.userData.vfxIgnore)) continue;
+      _box.setFromObject(o).expandByScalar(0.05 * k);
+      if (!_box.containsPoint(P) || _box.getBoundingSphere(_sphere).radius > maxModel) continue;
+      model = o;
+      while (model.parent && model.parent !== L.scene && objectRadius(model.parent) <= maxModel) model = model.parent;
+    }
+  }
+  if (!model) return tiny;
+  // Clear the model's WHOLE box along the line of sight, not just where the ray enters it: with a
+  // camera looking down at an angle, a cube's near top edge sticks out closer than the entry point
+  // and would slice a band through the flash.
+  // The flash is a flat sheet perpendicular to where the camera FACES (n), and it is moved along
+  // the line of sight to the point (_dir). Those differ for anything off-centre on screen, so:
+  // the sheet clears corner c when  dot(c - P, n) + pull * dot(_dir, n) >= 0.
+  _box.setFromObject(model);
+  L.camera.getWorldDirection(_fwd);
+  const along = Math.max(0.2, _dir.dot(_fwd));
+  let pull = 0;
+  for (let i = 0; i < 8; i++) {
+    _p.set(i & 1 ? _box.max.x : _box.min.x, i & 2 ? _box.max.y : _box.min.y, i & 4 ? _box.max.z : _box.min.z);
+    const need = -_p.sub(P).dot(_fwd) / along;
+    if (need > pull) pull = need;
+  }
+  return Math.max(tiny, Math.min(pull + margin, maxModel, d * 0.6));
+}
+
 /**
  * 3D only. Effects are authored in a flat plane (x right, y up). Turn that
  * plane to face the camera so a burst reads the same from any angle, then
@@ -313,6 +382,14 @@ function faceCamera(h) {
   if (!h._face || L.kind !== 'scene' || !L.camera) return;
   L.camera.getWorldQuaternion(_q);
   h.face.quaternion.copy(_q);
+  // Games play effects at `enemy.position`: the CENTRE of a solid model, which then hides the
+  // flash inside itself. So the camera-facing part is pulled toward the camera, along the line
+  // of sight: its place on screen does not move, it just ends up in front of the model.
+  if (h._pull) {
+    L.camera.getWorldPosition(_camP).sub(h.group.position);
+    const d = _camP.length();
+    if (d > 1e-4) h.face.position.copy(_camP.multiplyScalar(Math.min(h._pull, d * 0.5) / d));
+  }
   h.group.updateMatrixWorld(true);
   _right.set(1, 0, 0).applyQuaternion(_q);
   for (let i = 0; i < h.systems.length; i++) {
@@ -357,6 +434,8 @@ function inertHandle(name) {
  *       face (3D: 'spawn' | 'always' | false; default: loops 'always', one-shots 'spawn')
  *       debris (false = leave out the chunk / shard particles, for games that spawn real physics debris)
  *       direction (3D: world vector a spray / wind flies along; loops can be re-pointed later with handle.aim(v))
+ *       pull (3D: metres the flash is pulled toward the camera so the model it is played on cannot hide it.
+ *             Automatic by default: measured with one ray to sit just in front of that model. false = off)
  */
 function play(name, o) {
   o = o || {};
@@ -404,13 +483,23 @@ function play(name, o) {
   // `group` carries the position and stays world-aligned; `face` is its child
   // and turns to the camera in 3D. Flat-designed systems go in `face`, true-3D
   // systems (in3d) straight into `group`.
+  // Where it goes, and how far to pull the camera-facing part toward the camera so the model it
+  // is played on cannot hide it (see autoPull / faceCamera). Measured once, when it spawns.
+  const where = resolveTarget(L, effect, o);
+  let pull = 0;
+  if (L.kind === 'scene' && o.pull !== false && !(effect.area || effect.category === 'env')) {
+    const hint = o.position && o.position.isObject3D ? o.position : (o.follow && o.follow.isObject3D ? o.follow : null);
+    pull = typeof o.pull === 'number' ? o.pull : autoPull(L, where, hint);
+  }
+  if (S.debug) console.log('[VFX] play', name, 'layer:', L.name, 'pull:', +pull.toFixed(2), o.position && o.position.isObject3D ? 'on object ' + (o.position.name || o.position.type) : (o.position || o.follow || ''));
+
   const group = new THREE.Group();
   group.name = 'vfx:' + name;
   const face = new THREE.Group();
   group.add(face);
   const handle = {
     name, group, face, systems, layer: L.name, loop: !!effect.loop, alive: true, born: performance.now(),
-    _L: L, _follow: null, _left: systems.length,
+    _L: L, _follow: null, _left: systems.length, _pull: pull,
     // 3D: one-shots turn to the camera once, when they spawn, so their debris
     // never swings if the camera orbits mid-effect; loops keep turning with it.
     _face: L.kind === 'scene' && o.face !== false && effect.face !== false,
@@ -462,7 +551,7 @@ function play(name, o) {
     if (snaps.length) { snaps.forEach((s) => { s._baseY = s.emitter.position.y; }); handle._snaps = snaps; handle._ground = typeof o.ground === 'number' ? o.ground : S.ground; }
   }
   L.scene.add(group);
-  placeGroup(L, group, resolveTarget(L, effect, o));
+  placeGroup(L, group, where);
   snapToGround(handle);
   faceCamera(handle);
 
@@ -617,6 +706,9 @@ const VFX = {
   get active() { return S.active.length; },
   set size(v) { S.size = v; },
   get size() { return S.size; },
+  /** true: log every play() with its layer and position, and unknown names. For finding out why an effect is not visible. */
+  set debug(v) { S.debug = !!v; },
+  get debug() { return S.debug; },
   set timeScale(v) { S.timeScale = v; },
   get timeScale() { return S.timeScale; },
   THREE, Quarks: Q,

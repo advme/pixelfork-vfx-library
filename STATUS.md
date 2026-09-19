@@ -1,6 +1,6 @@
 # STATUS
 
-**Last updated:** 2026-09-19 · by **A (Claude)** · version **v0.8.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
+**Last updated:** 2026-09-19 · by **A (Claude)** · version **v0.8.1-A** · **published**: https://github.com/advme/pixelfork-vfx-library
 
 ## Next task
 **Owner review of the 3D effects** in http://localhost:8767/tools/preview3d.html — play through the
@@ -8,7 +8,7 @@ list from the front, Side view and Top-down, in Slow motion. Flag anything that 
 The two-copies-of-three.js question is settled (two builds, see below).
 
 **Published** on 2026-09-19 at the owner's request (this replaced their earlier "don't push yet"):
-`advme/pixelfork-vfx-library`, public, tag `v0.8.0-A`, served by jsDelivr. After every release:
+`advme/pixelfork-vfx-library`, public, first tag `v0.8.0-A`, served by jsDelivr. After every release:
 commit, tag `vX.Y.Z-<letter>`, push with tags, and check the jsDelivr URLs in `AI-GUIDE.md`,
 `llms.txt`, `README.md` and `dist/registry.json` load.
 Note: the sibling UI Kit now lives under a different GitHub account (`pixelfork-v1`); this repo is

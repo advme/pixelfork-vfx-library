@@ -1,9 +1,9 @@
 {
   "name": "casual",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "style": "Modern mobile casual: chunky, bright, glossy, cartoon. Bold shapes, saturated colours, short and punchy. Not realistic, not gritty.",
-  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.js",
-  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.0-A/dist/vfx.module.js",
+  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.js",
+  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.module.js",
   "moduleNeeds": "three >= 0.182 provided by the page through an import map",
   "effects": [
     {
