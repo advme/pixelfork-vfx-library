@@ -14,16 +14,15 @@ rollback); a real generation has still never run. If the first request fails wit
 correct itself.
 
 ## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
-`state.dome` (loop: ring lights up, energy rises, the dome inflates, then stands pulsing three times a
-cycle) + `state.domebreak` (flicker, hex tiles peel off and fly, sparks, ring fades last), the same
-picture in 2D and 3D. New machinery, all reusable: textures `hexdome` (projected 2D dome sprite,
-512 px), `hexgrid` (tileable, wraps the 3D mesh), `hexshard`, `ellipse`; `geometry('dome')` (hemisphere
-with the tiling baked into its UVs, because the particle mesh shader ignores `texture.repeat`) and
-`'hex'`; `shape: 'hemisphere'` (`c.vol` turns an upper half-circle into it); sys options `upright`
-(a mesh that does not tumble), `cut` (particles end at once on stop), `tex` on a mesh (textured unlit
-mesh), `blend: 'add'` on chunks (glowing glass); effect meta `ending` (a one-shot the runtime plays where
-a loop was when it is stopped) and `anchor: 'feet'`. The owner also added `hit.shieldzap` with the maker.
-Not yet done: the 3D dome has no bright rim (a fresnel) like the 2D sprite; it reads fine without it.
+`state.dome` (loop: ring lights up, energy rises, the dome builds itself tile by tile from the ground
+up, then stands pulsing three times a cycle) + `state.domebreak` (flicker, every tile lifts off and
+tumbles away, sparks, ring fades last). One recipe for both worlds: a geodesic hemisphere of 85 hex +
+6 pentagon mesh tiles laid by the new `tiles` emitter (`helpers.TilesEmitter`, `c.tiles(kind)` for the
+count); in 2D the overlay's ortho camera sees it from the front. New reusable machinery: textures
+`hexshard`, `penttile`, `ellipse`; geometries `hex`, `pent`; `shape: 'hemisphere'`; sys options
+`upright`, `cut`, `tex` on a mesh, `blend: 'add'` on chunks; effect meta `ending` and `anchor: 'feet'`.
+The owner also added `hit.shieldzap` with the maker. Owner feedback applied: no scaling while forming
+(tiles appear one by one), seamless tiling (no pole seam).
 
 ## VFX Maker (experiment, step 1 done 2026-09-21)
 The owner's test of a standalone "prompt in, effect out" tool. `tools/maker.html`: describe an effect,

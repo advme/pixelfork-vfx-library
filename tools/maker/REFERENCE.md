@@ -52,7 +52,7 @@ x is right, y is UP. Angles are radians, 0 = right, `Math.PI / 2` = up.
 
 | Option | Meaning | Default |
 |---|---|---|
-| `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` `ellipse` (a ground ring seen from the side) `hexdome` (a hex energy dome standing on its centre, 2D) `hexshard` (one hexagon tile) | `glow` |
+| `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` `ellipse` (a ground ring seen from the side) `hexshard` / `penttile` (one glowing hexagon / pentagon tile) | `glow` |
 | `blend` | `'add'` (light: glows, sparks, fire, magic) or `'normal'` (solid things: smoke, debris, coins, leaves, blood) | `'add'` |
 | `bursts` | `[{ count: 12 }, { time: 0.15, count: [4, 6] }]` particles fired at once | none |
 | `rate` | particles per second, continuously (needs `duration`, or `loop: true`) | 0 |
@@ -114,7 +114,7 @@ in 2D**, so they are always safe:
 
 - `c.sys(c.vol({...}))`: a burst in every direction (circle → sphere). Use for sparks, smoke, bubbles, debris dots: anything that flies outward.
 - `c.sys(c.chunks({...}, 'box'))`: solid tumbling 3D pieces instead of sprites (`'box'` `'shard'` `'plank'` `'ball'` `'hex'` = a flat hexagon tile). Give it `tex: 'square'` (or `'hexshard'`), gravity, and `blend: 'normal'` for solid debris or `'add'` for glowing glass, so 2D still looks right.
-- A true 3D shape as one particle: `c.is3d ? c.sys({ render: 'mesh', geo: 'dome', tex: 'hexgrid', upright: true, in3d: true, size: 200, ... }) : c.sys({ tex: 'hexdome', size: 217, ... })`. `geo: 'dome'` is a hemisphere standing on the effect's point, `upright` keeps it from tumbling, `tex: 'hexgrid'` wraps it in a glowing hex grid. This is how `state.dome` is built; use the same pair for any dome-shaped shield.
+- A dome made of tiles (a force field), the same in 2D and 3D: `c.sys({ render: 'mesh', geo: 'hex', tex: 'hexshard', upright: true, in3d: true, blend: 'add', shape: { type: 'tiles', radius: 100, kind: 'hex' }, bursts: [{ count: c.tiles('hex') }], life: 3, ... })` plus the same with `geo: 'pent'`, `tex: 'penttile'`, `kind: 'pent'`, `c.tiles('pent')`. The `tiles` emitter places, turns and sizes every tile of a geodesic hemisphere itself, in forming order from the ground up: use `rate: c.tiles('hex') / 0.55, duration: 0.6` to build it tile by tile, `shape: { ..., until: 0.76 }` to end every tile at one emitter time, `speed` to send tiles flying out along their normals, and leave out `upright` to let them tumble. `state.dome` / `state.domebreak` are the model.
 - `c.sys(c.flat({...}))`: the sprite lies flat on the floor (shockwave rings, magic circles, landing dust rings).
 - `c.sys(c.ground({...}))`: a circle/rect emitter laid on the ground plane (an aura rising around the feet, a ring of things).
 - `c.sys(c.spray({...}))`: a cone aimed along a real world direction (blood, slashes, a confetti cannon). `c.spray(p, 'up')` / `'down'` force it.

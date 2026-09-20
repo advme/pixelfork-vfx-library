@@ -18,17 +18,96 @@ export function geometry(name) {
   if (name === 'shard') { g = new THREE.OctahedronGeometry(0.5, 0); g.scale(0.55, 1.3, 0.35); }
   else if (name === 'ball') g = new THREE.IcosahedronGeometry(0.5, 1);
   else if (name === 'plank') g = new THREE.BoxGeometry(1.4, 0.35, 0.6);
-  // a hemisphere standing on the origin (energy domes); its UVs wrap the tileable 'hexgrid' texture
-  else if (name === 'dome') {
-    g = new THREE.SphereGeometry(0.5, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2);
-    // the particle shader ignores texture.repeat, so the tiling (7 tiles around, 1.75 up) is baked into the UVs
-    const uv = g.attributes.uv;
-    for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 7, uv.getY(i) * 1.75);
-  }
-  else if (name === 'hex') g = new THREE.CylinderGeometry(0.5, 0.5, 0.08, 6);      // a flat hexagon tile
+  // flat tiles for energy domes (see TilesEmitter); their top caps take a whole texture, vertex at +z = texture right
+  else if (name === 'hex') g = new THREE.CylinderGeometry(0.5, 0.5, 0.06, 6);
+  else if (name === 'pent') g = new THREE.CylinderGeometry(0.5, 0.5, 0.06, 5);
   else g = new THREE.BoxGeometry(0.8, 0.8, 0.8);            // 'box'
   geometries[name] = g;
   return g;
+}
+
+/* ---------- the geodesic dome: a hemisphere paved with hexagons (and a few pentagons) ---------- */
+
+const tileTables = {};
+/**
+ * Tiles of a geodesic dome: the vertices of an icosahedron subdivided `f` times, one tile per
+ * vertex (a pentagon at the 12 original corners, a hexagon everywhere else), each turned so a flat
+ * side faces its nearest neighbour. Unit radius, only the half above the ground (a little below
+ * it too, so the floor cuts the bottom row cleanly). Sorted bottom-up with a little scatter, which
+ * is the order the dome forms in.
+ */
+export function domeTiles(f) {
+  if (tileTables[f]) return tileTables[f];
+  const V = new THREE.Vector3;
+  const top = new THREE.Vector3(0, 1, 0), bottom = new THREE.Vector3(0, -1, 0);
+  const ring = (y, r, off) => Array.from({ length: 5 }, (_, k) => new THREE.Vector3(r * Math.cos(off + (k * 2 * Math.PI) / 5), y, r * Math.sin(off + (k * 2 * Math.PI) / 5)));
+  const up = ring(1 / Math.sqrt(5), 2 / Math.sqrt(5), 0), lo = ring(-1 / Math.sqrt(5), 2 / Math.sqrt(5), Math.PI / 5);
+  const faces = [];
+  for (let k = 0; k < 5; k++) {
+    const k1 = (k + 1) % 5;
+    faces.push([top, up[k], up[k1]], [up[k], lo[k], up[k1]], [up[k1], lo[k], lo[k1]], [lo[k], bottom, lo[k1]]);
+  }
+  const seen = new Map(), pts = [];
+  const key = (v) => v.x.toFixed(4) + ',' + v.y.toFixed(4) + ',' + v.z.toFixed(4);
+  faces.forEach(([a, b, c]) => {
+    for (let i = 0; i <= f; i++) for (let j = 0; j <= f - i; j++) {
+      const v = new THREE.Vector3().addScaledVector(a, i / f).addScaledVector(b, j / f).addScaledVector(c, (f - i - j) / f).normalize();
+      const k = key(v);
+      if (!seen.has(k)) { seen.set(k, pts.length); pts.push(v); }
+    }
+  });
+  const tiles = [];
+  pts.forEach((n, i) => {
+    if (n.y < -0.14) return;
+    let near = null, d = 9;
+    pts.forEach((m, j) => { if (j !== i) { const e = m.distanceTo(n); if (e < d) { d = e; near = m; } } });
+    const sides = pts.filter((m) => Math.abs(m.distanceTo(n) - d) < d * 0.12).length === 5 ? 5 : 6;
+    // circumradius so that flat sides just touch the neighbours' (then shrunk a little for the seams)
+    const size = (d / 2 / Math.cos(Math.PI / sides)) * 0.985;
+    // rotation: local +y -> the normal, then spin about it so a flat side points at the neighbour
+    const q = new THREE.Quaternion().setFromUnitVectors(top, n);
+    const mid = Math.PI / sides;
+    const e = new THREE.Vector3(Math.sin(mid), 0, Math.cos(mid)).applyQuaternion(q);
+    const t = V.copy(near).sub(n).addScaledVector(n, -V.dot(n)).normalize();
+    const ang = Math.atan2(new THREE.Vector3().crossVectors(e, t).dot(n), e.dot(t));
+    q.premultiply(new THREE.Quaternion().setFromAxisAngle(n, ang));
+    const jitter = ((i * 9301 + 49297) % 233280) / 233280;           // deterministic scatter
+    tiles.push({ n, q, sides, size, order: n.y + (jitter - 0.5) * 0.18 });
+  });
+  tiles.sort((a, b) => a.order - b.order);
+  const table = { hex: tiles.filter((t) => t.sides === 6), pent: tiles.filter((t) => t.sides === 5) };
+  tileTables[f] = table;
+  return table;
+}
+
+/**
+ * An emitter that places one particle per dome tile, in forming order. Use it with a mesh system
+ * (geo 'hex' or 'pent', matching `kind`). Sets position, orientation and size itself; a `speed`
+ * sends the tile straight out along its normal (the break-up). `until`: every particle dies at
+ * that emitter time, however early or late it was born (a forming dome hands over to the standing one).
+ */
+class TilesEmitter {
+  constructor(p) {
+    this.type = 'tiles';
+    this.radius = p.radius; this.kind = p.kind === 'pent' ? 'pent' : 'hex'; this.until = p.until; this.f = p.f || 4; this.minY = p.minY;
+    this.tiles = domeTiles(this.f)[this.kind].filter((t) => t.n.y >= this.minY);
+    this.i = 0;
+  }
+  initialize(p, es) {
+    const t = this.tiles[this.i++ % this.tiles.length];
+    p.position.set(t.n.x * this.radius, t.n.y * this.radius, t.n.z * this.radius);
+    p.velocity.set(t.n.x * p.startSpeed, t.n.y * p.startSpeed, t.n.z * p.startSpeed);
+    if (p.rotation && p.rotation.copy) p.rotation.copy(t.q);
+    const s = t.size * this.radius * 2;
+    p.size.set(s, s, s); p.startSize.set(s, s, s);
+    if (this.until !== undefined) p.life = Math.max(0.05, this.until - es.time);
+  }
+  update() { /* nothing moves */ }
+  toJSON() { return { type: 'tiles', radius: this.radius }; }
+  clone() { return new TilesEmitter(this); }
+}
+/** The bottom row of tiles sits on the ground: a 3D floor cuts it in half, so it is kept; in 2D it would hang below the ring, so it is dropped. */
+function tileFloor(is3d) { return is3d ? -0.14 : 0.02;
 }
 
 export function makeMaterialCache(textures) {
@@ -153,6 +232,7 @@ export function makeContext(opts) {
       case 'hemisphere': return new Q.HemisphereEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, mode, spread: 0 });
       case 'sphere': return new Q.SphereEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, mode, spread: 0 });
       case 'cone': return new Q.ConeEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, angle: s.angle === undefined ? 0.3 : s.angle, mode, spread: 0 });
+      case 'tiles': return new TilesEmitter({ radius: (s.radius === undefined ? 100 : s.radius) * u, kind: s.kind, until: s.until, f: s.f, minY: tileFloor(mode === 'scene') });
       case 'rect': return new Q.RectangleEmitter({ width: (s.w === undefined ? 10 : s.w) * u, height: (s.h === undefined ? 0 : s.h) * u, thickness: s.thickness === undefined ? 0 : s.thickness, mode, spread: 0 });
       default: throw new Error('VFX: unknown shape "' + s.type + '"');
     }
@@ -334,6 +414,8 @@ export function makeContext(opts) {
     val, curve, shrink, grow, pop, decel,
     colorOverLife, sizeOverLife, speedOverLife, gravity, force, spin, orbit, limitSpeed, noise,
     shape, sys, is3d, vol, ground, flat, chunks, ribbon, env3d, spray, heading, wind,
+    /** How many tiles a dome has of one kind ('hex' | 'pent'): the burst count that shows the whole dome. */
+    tiles: (kind) => domeTiles(4)[kind === 'pent' ? 'pent' : 'hex'].filter((t) => t.n.y >= tileFloor(is3d)).length,
     hasDirection: !!opts.direction,
     /** The tint the player asked for, or the effect's default. */
     color: (fallback) => (tint ? tint : rgb(fallback)),
