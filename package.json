@@ -4,7 +4,7 @@
   "description": "Ready-made game visual effects for AI-generated web games (Pixelfork). One script, call a name.",
   "scripts": {
     "build": "node tools/build.mjs",
-    "serve": "python3 tools/serve.py 8767"
+    "serve": "node tools/serve.mjs 8767"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "three.quarks": "^0.17.1"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
     "crashcat": "^0.0.5",
     "esbuild": "^0.28.2"
   },

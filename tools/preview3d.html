@@ -29,6 +29,8 @@
   .fx .scr { color: #7fd4ff; border: 1px solid #2a5566; }
   .fx button { padding: 4px 8px; font-size: 12px; }
   #hint { position: fixed; right: 16px; top: 12px; color: #c5cbe6; font-size: 12px; z-index: 5; text-align: right; text-shadow: 0 1px 2px #000; pointer-events: none; }
+  /* shown inside the VFX Maker: only the scene */
+  .maker #panel, .maker #hint { display: none; }
   #stats { position: fixed; right: 16px; bottom: 12px; color: #c5cbe6; font-size: 12px; z-index: 5; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #000; pointer-events: none; }
 </style>
 </head>
@@ -40,7 +42,7 @@
 <div id="panel">
   <h1>Pixelfork VFX <span class="muted" id="ver"></span></h1>
   <div class="muted">The same effects inside a three.js scene.</div>
-  <div class="row" style="margin:8px 0 0"><button onclick="location.href='preview.html'">2D player</button><button class="on">3D player</button></div>
+  <div class="row" style="margin:8px 0 0"><button onclick="location.href='preview.html'">2D player</button><button class="on">3D player</button><button onclick="location.href='maker.html'">Maker</button></div>
 
   <div class="row"><label style="width:40px">Size</label><input id="size" type="range" min="0.3" max="2.5" step="0.1" value="1"><span id="sizeVal" style="width:32px">1.0</span></div>
   <div class="row"><label style="width:40px">Tint</label><input id="tint" type="color" value="#ffd54a"><button id="tintOn">Use tint</button><button id="stopAll">Stop all</button></div>
@@ -60,6 +62,7 @@
     "vfx": "../dist/vfx.module.js"
 } }
 </script>
+<script src="maker/hook.js"></script>
 <script type="module" src="player3d.js"></script>
 </body>
 </html>

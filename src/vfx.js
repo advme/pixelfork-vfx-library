@@ -35,7 +35,23 @@ const MAX_DT = 1 / 20;          // clamp a hitch so effects never explode after 
 if (THREE.ShaderChunk.soft_fragment) THREE.ShaderChunk.soft_fragment = THREE.ShaderChunk.soft_fragment.replace('gl_FragColor *= softParticlesFade;', 'gl_FragColor.a *= softParticlesFade;');
 
 const registry = {};
+const ALL = EFFECTS.slice();    // the pack, plus anything added with VFX.register()
 EFFECTS.forEach((e) => { registry[e.name] = e; (e.aliases || []).forEach((a) => { registry[a] = e; }); });
+
+/**
+ * Add (or replace) one effect while the page runs: the same object an effect file exports.
+ * The VFX Maker previews generated effects this way; a game can use it for a one-off effect.
+ */
+function register(effect) {
+  if (!effect || typeof effect.name !== 'string' || typeof effect.build !== 'function') throw new Error('VFX.register: an effect needs a name and a build(c) function');
+  const i = ALL.findIndex((e) => e.name === effect.name);
+  if (i >= 0) ALL[i] = effect; else ALL.push(effect);
+  registry[effect.name] = effect;
+  (effect.aliases || []).forEach((a) => { registry[a] = effect; });
+  delete S.warned['build:' + effect.name];
+  return VFX;
+}
+const describe = (e) => ({ name: e.name, category: e.category, whenToUse: e.whenToUse, duration: e.duration, loop: !!e.loop, tint: e.tint, tags: e.tags || [] });
 
 const S = {
   mode: null,            // null | 'overlay' | 'scene' (a 3D scene is attached; overlays may exist too)
@@ -476,7 +492,8 @@ function play(name, o) {
   try {
     systems = effect.build(ctx, o).filter(Boolean);        // 3D-only parts are null in 2D
   } catch (err) {
-    warnOnce('build:' + name, 'effect "' + name + '" failed to build: ' + (err && err.message));
+    S.lastError = 'effect "' + name + '" failed to build: ' + (err && err.message);
+    warnOnce('build:' + name, S.lastError);
     return inertHandle(name);
   }
 
@@ -606,6 +623,17 @@ function applyFollow(h) {
 }
 
 function update(dt) {
+  try {
+    step(dt);
+  } catch (err) {
+    // a broken effect must never stop the game or the effects after it: drop what is playing and carry on
+    S.lastError = 'an effect failed while playing: ' + (err && err.message);
+    warnOnce('update:' + S.lastError, S.lastError);
+    S.active.slice().forEach((h) => { try { h.kill(); } catch (e) { /* already gone */ } retire(h); });
+  }
+}
+
+function step(dt) {
   if (!S.mode) return;
   if (typeof dt !== 'number') dt = 1 / 60;
   if (dt > MAX_DT) dt = MAX_DT;
@@ -689,7 +717,7 @@ function attach(root) {
 
 const VFX = {
   VERSION,
-  play, stop, stopAll, update, attach, useScene, leaveScene, toScreen, prepass, focusPoint,
+  play, stop, stopAll, update, attach, useScene, leaveScene, toScreen, prepass, focusPoint, register,
   init(o) {
     o = o || {};
     if (typeof o.zIndex === 'number') S.zIndex.front = o.zIndex;
@@ -701,8 +729,11 @@ const VFX = {
   },
   setZIndex,
   has: (name) => !!registry[name],
-  list: () => EFFECTS.map((e) => e.name),
-  registry: EFFECTS.map((e) => ({ name: e.name, category: e.category, whenToUse: e.whenToUse, duration: e.duration, loop: !!e.loop, tint: e.tint, tags: e.tags || [] })),
+  list: () => ALL.map((e) => e.name),
+  get registry() { return ALL.map(describe); },
+  /** The last build / playback failure as text, or null. The VFX Maker reads it; set it to null to clear. */
+  get lastError() { return S.lastError || null; },
+  set lastError(v) { S.lastError = v || null; },
   get active() { return S.active.length; },
   set size(v) { S.size = v; },
   get size() { return S.size; },

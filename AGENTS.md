@@ -35,7 +35,11 @@ tools/preview.html               2D player: every effect, size, tint, slow motio
 tools/preview3d.html             3D player page (HTML + panel). Its code is tools/player3d/main.js:
                                    walled arena, crashcat physics, pushable crates, see-through walls.
                                    tools/player3d.js is the GENERATED bundle — edit main.js, then build.
-tools/serve.py                   local no-cache preview server (port 8767)
+tools/serve.mjs                  local no-cache preview server (port 8767) + the VFX Maker's API (Claude call, save)
+tools/serve.py                   the old static-only server: a fallback for the players when Node is missing
+tools/maker.html                 VFX MAKER: prompt -> AI writes an effect -> live preview -> Add to library on confirm
+tools/maker/REFERENCE.md         what the maker's AI is taught. CHANGE IT WHENEVER helpers.js CHANGES.
+tools/maker/hook.js              lets the maker drive either player page inside a frame (?maker=1)
 demo/game.html                   the library + the Super Casual UI Kit in a working game screen
 demo/three-cdn.html              a minimal three.js game written the way an AI writes one (import map,
                                    effects at object centres, camera far from the origin): the 3D smoke test
@@ -51,7 +55,7 @@ those files, not from memory.
 2. Write `build(c)` with `c.sys({...})`. Units are **design pixels at size 1** on a ~400px-wide phone. Use `c.color('#hex')` for the main colour so `tint` works.
 3. Import it in `packs/casual/index.js`.
 4. `node tools/build.mjs` — validates names, bundles, writes the registry and the AI-guide table.
-5. Look at it: `python3 tools/serve.py 8767` → `tools/preview.html`. Use **Slow motion**. Check it at size 0.5 and 2, and with a tint.
+5. Look at it: `node tools/serve.mjs 8767` → `tools/preview.html`. Use **Slow motion**. Check it at size 0.5 and 2, and with a tint.
 6. If it is a UI-kit moment, wire it in `attach()` in `src/vfx.js` and check it in `demo/game.html`.
 7. Update **`STATUS.md`** and **`CHANGELOG.md`** (see §7).
 

@@ -490,4 +490,13 @@ function advance(sec) {
 
 // for debugging from the console
 function teleport(x, z) { rigidBody.setPosition(world, heroBody, [x, HERO_C + 0.02, z], true); rigidBody.setLinearVelocity(world, heroBody, [0, 0, 0]); }
+// the VFX Maker drives this page when it is shown inside it (tools/maker/hook.js)
+if (window.vfxMakerHook) window.vfxMakerHook({
+  VFX,
+  select: (name) => { selected = name; refresh(); },
+  play: () => playSelected(),
+  stopAll: () => { VFX.stopAll(); Object.keys(loops).forEach((k) => delete loops[k]); },
+  onCategory: (e) => { if (e.category === 'move' && !FEET.includes(e.name)) FEET.push(e.name); },
+});
+
 window.player3d = { world, heroBody, hero, cam, dynamics, scene, camera, renderer, anchors: { aHead, aChest, aFeet }, blast, resetObjects, placeCamera, hole, teleport, rigidBody, advance, keys, debris, spawnDebris, playAt: (name, pt, n) => { selected = name; playSelected(pt, n); }, loops, select: (name) => { selected = name; }, playSelected };

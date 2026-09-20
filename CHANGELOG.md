@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased — VFX Maker, step 1 (committed locally, not published)
+- Agent: A (Claude) · Date: 2026-09-21
+- Why: the owner wants to test whether a standalone "write a prompt, get a quarks effect" tool is viable, for 2D and 3D, with nothing added to the library until they confirm.
+- Done: `tools/maker.html` (prompt, 2D/3D switch, generate, live preview inside the real players, refine in words, version undo, rename, hand-edit, Add to library with confirm and replace). `tools/serve.mjs` (Node) replaces `serve.py` as the preview server and carries the maker API: `generate` (Claude `claude-opus-5` through `@anthropic-ai/sdk`, adaptive thinking, cached system prompt = `tools/maker/REFERENCE.md` + ten library effects, server-side refusal fallback with a plain retry if the API rejects that parameter) and `save` (writes the file, lists it inside its own group in the pack index, builds, rolls back on failure). Runtime: `VFX.register()`, `VFX.lastError`, live `VFX.registry`, and `update()` survives an effect that throws mid-play. Both players load `tools/maker/hook.js` and hide their panel when framed with `?maker=1`; both got a Maker button.
+- Tested: in the browser with a hand-written effect: plays in the 2D and the 3D frame, particle counter, a broken helper name is reported in plain words and "Previous version" recovers; save → 91 effects, listed after `magic.curse`, present in registry and AI guide; saving it again → "already in the library"; an effect missing `whenToUse` → refused with the build's own message and nothing left behind. API: key file and dot-files are never served, path traversal 404, a foreign `Origin` is refused.
+- NOT tested: the AI call itself. There was no API key on the machine, so the request to Claude has never run. Everything after it (parsing, preview, save) was exercised with pasted code.
+- Notes for next agent: generated code runs in the owner's browser and `save` writes into the repo, which is why the API is loopback + same-origin only; do not loosen that, and never host this server publicly as it is. `inspect()` in `serve.mjs` is a sanity fence, not a sandbox.
+
 ## v0.8.1-A — fix: effects were hidden inside the model they were played on
 - Agent: A (Claude) · Date: 2026-09-19
 - Report: in the owner's first Pixelfork-generated 3D game only a debug explosion (big, in open air above the hero) was visible; every real effect was invisible. The setup was fine. Generated games call `VFX.play(name, { position: enemy.position })`, the CENTRE of a solid model, so the camera-facing flash sat inside the mesh and the mesh hid it. My own player never showed this because I click on surfaces and use anchors outside the body.

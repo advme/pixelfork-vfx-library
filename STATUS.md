@@ -1,8 +1,32 @@
 # STATUS
 
-**Last updated:** 2026-09-19 · by **A (Claude)** · version **v0.8.1-A** · **published**: https://github.com/advme/pixelfork-vfx-library
+**Last updated:** 2026-09-21 · by **A (Claude)** · version **v0.8.1-A** published (https://github.com/advme/pixelfork-vfx-library) · the VFX Maker is committed locally, NOT published yet
 
 ## Next task
+**Owner tries the VFX Maker with a real API key** (http://localhost:8767/tools/maker.html). Everything
+around the AI call is tested (preview in 2D and 3D, broken-effect handling, add to library, rollback);
+the AI call itself has never run because no key was on the machine. If the first request fails with an
+"AI service answered with an error" message, read it: the request shape is in `generate()` in
+`tools/serve.mjs`. Then **step 2**: send a snapshot of the playing effect back to the AI so it can
+correct itself.
+
+## VFX Maker (experiment, step 1 done 2026-09-21)
+The owner's test of a standalone "prompt in, effect out" tool. `tools/maker.html`: describe an effect,
+pick 2D or 3D, Generate; it plays on the character in the real 2D / 3D player (shown in a frame);
+refine it in words; **Add to library** only on confirm. Publishing stays a separate, manual step.
+- `tools/serve.mjs` replaces `serve.py` as the preview server (`.claude/launch.json`, `npm run serve`).
+  It serves the files and the maker's API: `generate` calls Claude (`claude-opus-5`, official SDK,
+  key from `ANTHROPIC_API_KEY` or the git-ignored `.anthropic.key`), `save` writes the effect file,
+  lists it in `packs/casual/index.js` after the last effect of its group, runs the build and rolls
+  everything back if the build refuses it. The API answers only this computer and only this origin.
+- `tools/maker/REFERENCE.md` is what the AI is taught (the `c.*` vocabulary, style, traps) plus ten
+  real effects as examples. **Keep it in step with `src/helpers.js`.**
+- `tools/maker/hook.js` lets the maker drive either player (`?maker=1`): load code, replay, slow motion.
+- Runtime: new `VFX.register(effect)`, `VFX.lastError`; `VFX.update()` no longer dies when one effect
+  throws while playing (it drops the playing effects and carries on). `VFX.registry` is now live.
+- `serve.py` is kept as a no-Node fallback for the players only.
+
+## Earlier next task (still open)
 **Owner review of the 3D effects** in http://localhost:8767/tools/preview3d.html — play through the
 list from the front, Side view and Top-down, in Slow motion. Flag anything that reads wrong.
 The two-copies-of-three.js question is settled (two builds, see below).

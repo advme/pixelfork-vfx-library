@@ -15,7 +15,7 @@ Ready-made game visual effects (particles) for AI-generated web games. An AI pic
 **3D (three.js) games** load the module build instead, sharing one three.js through an import map (69 KB gzipped, three.js not included): `dist/vfx.module.js`. See section 4 of the AI guide.
 
 - **AI guide (give this to your AI):** [AI-GUIDE.md](AI-GUIDE.md)
-- **See every effect (2D player):** `python3 tools/serve.py 8767` → http://localhost:8767/tools/preview.html
+- **See every effect (2D player):** `node tools/serve.mjs 8767` → http://localhost:8767/tools/preview.html (3D: `preview3d.html`, make new effects with AI: `maker.html`)
 - **3D player (three.js scene):** http://localhost:8767/tools/preview3d.html
 - **Demo with the UI kit:** http://localhost:8767/demo/game.html
 
