@@ -67,7 +67,7 @@
   const hero = document.getElementById('hero');
   let useTint = false, behind = false, selected = VFX.list()[0];
   const loops = {};
-  const feet = {};            // effects from the VFX Maker that belong at the character's feet
+  const feet = { 'state.dome': true, 'state.domebreak': true };            // effects that belong at the character's feet (the VFX Maker adds move.* here)
 
   document.getElementById('ver').textContent = 'v' + VFX.VERSION;
   sizeEl.oninput = () => (sizeVal.textContent = Number(sizeEl.value).toFixed(1));
@@ -125,7 +125,7 @@
       if (loops[selected]) { loops[selected].stop(); delete loops[selected]; refresh(); return; }
       const o = opts();
       if (meta.name.startsWith('env.')) loops[selected] = VFX.play(selected, o);
-      else loops[selected] = VFX.play(selected, Object.assign(o, { follow: selected === 'state.stun' ? heroTop : heroMid }));
+      else loops[selected] = VFX.play(selected, Object.assign(o, { follow: selected === 'state.stun' ? heroTop : feet[selected] ? heroFeet : heroMid }));
       refresh();
       return;
     }

@@ -92,6 +92,8 @@ import envConfetti from './effects/env.confetti.js';
 import uiShine from './effects/ui.shine.js';
 import uiCountup from './effects/ui.countup.js';
 import uiFlash from './effects/ui.flash.js';
+import stateDome from './effects/state.dome.js';
+import stateDomebreak from './effects/state.domebreak.js';
 import hitShieldzap from './effects/hit.shieldzap.js';
 
 export const PACK = {
@@ -169,6 +171,8 @@ export const EFFECTS = [
   stateSleep,
   stateInvisible,
   stateCharged,
+  stateDome,
+  stateDomebreak,
   envSnow,
   envRain,
   envLeaves,

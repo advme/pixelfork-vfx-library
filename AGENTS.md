@@ -87,6 +87,7 @@ those files, not from memory.
 9. **Colour spaces.** Sprite and trail shaders in three.quarks write colour RAW (no output conversion); only the lit mesh shader (`particle_physics_frag`) converts linear→sRGB. So hex colours are used as written everywhere, and `colorGen(c, true)` feeds linear values only to lit debris. Do not "fix" sprite colours with a linear conversion — that was tried and made smoke black.
 10. **One effect file, two worlds.** 3D upgrades are wrappers that return their input unchanged in 2D: `c.vol`, `c.chunks`, `c.flat`, `c.ground`, `c.spray`, `c.env3d` (and `c.heading()` + `c.wind()` for 3D-only wind); `c.ribbon` returns null in 2D (the runtime filters nulls). Systems they mark `in3d` go in the handle's world-aligned `group`; everything else goes in the camera-facing `face` child.
 8. **3D facing.** In a scene, `faceCamera()` turns each effect's flat design plane to the camera and re-aims every `ApplyForce` from its recorded design direction (`b._design`, set in `helpers.sys`). If you add a new force-like behaviour, record its design direction the same way or it will tilt with the camera.
+15. **Mesh particles ignore `texture.repeat`.** The unlit mesh path samples `map` with the raw `vUv`, not the map transform. To tile a texture over a mesh (the hex dome) scale the geometry's UVs (`helpers.geometry('dome')`).
 7. **Stretched particles map their texture along the motion.** Use round textures (`glow`, `disc`) with `stretch`; the `line` texture turns into an invisible sliver (it is for un-stretched use only).
 
 ## 7. Git workflow

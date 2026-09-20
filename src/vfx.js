@@ -526,9 +526,16 @@ function play(name, o) {
     stop() {
       systems.forEach((s) => {
         s.looping = false; s.endEmit();
-        // a ribbon is one immortal particle: let it die so the trail can shrink away
-        if (s._ribbon) for (let i = 0; i < s.particleNum; i++) s.particles[i].life = s.particles[i].age;
+        // a ribbon is one immortal particle: let it die so the trail can shrink away; `cut` parts end now too
+        if (s._ribbon || s._cut) for (let i = 0; i < s.particleNum; i++) s.particles[i].life = s.particles[i].age;
       });
+      // an effect with an `ending` (a shield's break-up) plays it where the loop was, same size and tint
+      if (effect.ending && !handle._ended && handle.alive) {
+        handle._ended = true;
+        const g = group.position;
+        const at = L.kind === 'scene' ? { position: g.clone() } : { x: g.x, y: -g.y };
+        play(effect.ending, Object.assign({ size: o.size, tint: o.tint, layer: o.layer, direction: o.direction, ground: handle._ground }, at));
+      }
       return handle;
     },
     kill() { systems.forEach((s) => { try { s.dispose(); } catch (e) { /* already gone */ } }); return handle; },

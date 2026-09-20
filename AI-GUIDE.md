@@ -2,7 +2,7 @@
 
 Ready-made visual effects (particles) for AI-generated web games. **You never design or draw an effect — you call a name from the list below.**
 
-**91 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
+**93 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
 
 ## 1. Add it (2 lines)
 
@@ -40,6 +40,7 @@ stun.stop();                                          // particles finish natura
 ```
 
 Every `play` returns a handle: `handle.stop()`, `handle.kill()` (instant), `handle.moveTo(x, y)`, `handle.follow(el | () => [x, y])`.
+Some loops have an ending built in: `state.dome` (a hexagon force-field dome) breaks apart on its own when you call `stop()`, so never play `state.domebreak` yourself after it. Play `state.dome` at the feet / on the ground, not at the chest.
 `VFX.stopAll()` stops everything (screen change, game over). `VFX.size = 0.8` scales every effect (small screens).
 
 **Options:** `x, y` · `at: [x, y]` · `el` · `event` · `size` (1) · `tint` (`'#hex'`) · `dir` (degrees, 90 = up, for cones like confetti) · `follow` · `layer` · `width, height`.
@@ -160,6 +161,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `state.sleep` | A character or pet is asleep, resting, idle for a long time, or knocked out cold. Follow the head; stop on waking. | yes, call stop() | yes, default `#9fc5ff` |
 | `state.invisible` | A character is invisible, cloaked, a ghost, or phasing. Follow the body (draw the character at low opacity yourself); stop when visible again. | yes, call stop() | yes, default `#cfe8ff` |
 | `state.charged` | A character is electrified, stunned by a shock, or carrying a charged power. Also a live wire or a generator. Follow it; stop when it discharges. | yes, call stop() | yes, default `#9fd8ff` |
+| `state.dome` | A force field, energy dome or barrier shield goes up around a character, a base or an object and stays until it is switched off. Play it at the feet / on the ground; call stop() and the dome breaks apart on its own (state.domebreak). | yes, call stop() | yes, default `#4fb8ff` |
+| `state.domebreak` | An energy dome or force field is switched off or destroyed. Played automatically when state.dome is stopped; play it yourself only for a dome the game drew itself. | no (1.7s) | yes, default `#4fb8ff` |
 
 **`env.*`**
 

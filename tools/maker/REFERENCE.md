@@ -18,6 +18,8 @@ export default {
   loop: false,                   // true = runs until the game calls stop()
   tint: '#7ee83a',               // the default main colour; play(name, { tint }) replaces it
   tags: ['poison', 'acid'],      // 4-8 search words
+  // optional: ending: 'state.domebreak'  a one-shot the runtime plays where a LOOP was when the game stops it
+  // optional: anchor: 'feet'   the effect belongs at the character's feet / on the ground
   build(c) {
     const col = c.color('#7ee83a');          // ALWAYS take the main colour this way, so tint works
     return [ c.sys({ ... }), c.sys({ ... }) ];   // 2-5 particle systems, drawn in `order`
@@ -50,7 +52,7 @@ x is right, y is UP. Angles are radians, 0 = right, `Math.PI / 2` = up.
 
 | Option | Meaning | Default |
 |---|---|---|
-| `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` | `glow` |
+| `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` `ellipse` (a ground ring seen from the side) `hexdome` (a hex energy dome standing on its centre, 2D) `hexshard` (one hexagon tile) | `glow` |
 | `blend` | `'add'` (light: glows, sparks, fire, magic) or `'normal'` (solid things: smoke, debris, coins, leaves, blood) | `'add'` |
 | `bursts` | `[{ count: 12 }, { time: 0.15, count: [4, 6] }]` particles fired at once | none |
 | `rate` | particles per second, continuously (needs `duration`, or `loop: true`) | 0 |
@@ -69,12 +71,13 @@ x is right, y is UP. Angles are radians, 0 = right, `Math.PI / 2` = up.
 | `world` | `true`: particles stay where they were born when the effect moves (trails) | false |
 | `behaviors` | list, see below | none |
 | `order` | draw order inside the effect, 0 = back. Keep 0-5 | 0 |
+| `cut` | `true`: when the game stops a loop, this system's particles vanish at once instead of living out (a standing dome, an aura) | false |
 
 Any number may be written `[min, max]` for a random value per particle.
 
 ### Shapes
 - `{ type: 'point' }`: no direction, so give no `speed` (use it for single flashes and rings).
-- `{ type: 'circle', radius: 14 }`: starts inside a circle and flies **outward** in the screen plane. The standard burst. `thickness: 0` = only on the rim. `arc` = part of the circle.
+- `{ type: 'circle', radius: 14 }`: starts inside a circle and flies **outward** in the screen plane. The standard burst. `thickness: 0` = only on the rim. `arc` = part of the circle (`Math.PI` = the upper half; with `c.vol` that becomes a hemisphere in 3D).
 - `{ type: 'sphere', radius }`: the same in every direction.
 - `{ type: 'cone', angle: 0.4, radius: 4 }`: a directed spray; `angle` is the half-spread in radians. Aims up unless `dir` is set.
 - `{ type: 'rect', w: 400, h: 0 }`: a line or box. **Rect emitters push particles sideways, not forward**: always use `speed: 0` with them and move the particles with `c.gravity` / `c.force` plus `c.limitSpeed`.
@@ -110,7 +113,8 @@ Wrap a system's options to make that part truly 3D. **Every wrapper returns its 
 in 2D**, so they are always safe:
 
 - `c.sys(c.vol({...}))`: a burst in every direction (circle → sphere). Use for sparks, smoke, bubbles, debris dots: anything that flies outward.
-- `c.sys(c.chunks({...}, 'box'))`: solid tumbling 3D pieces instead of sprites (`'box'` `'shard'` `'plank'` `'ball'`). Give it `tex: 'square'`, `blend: 'normal'` and gravity so 2D still looks right.
+- `c.sys(c.chunks({...}, 'box'))`: solid tumbling 3D pieces instead of sprites (`'box'` `'shard'` `'plank'` `'ball'` `'hex'` = a flat hexagon tile). Give it `tex: 'square'` (or `'hexshard'`), gravity, and `blend: 'normal'` for solid debris or `'add'` for glowing glass, so 2D still looks right.
+- A true 3D shape as one particle: `c.is3d ? c.sys({ render: 'mesh', geo: 'dome', tex: 'hexgrid', upright: true, in3d: true, size: 200, ... }) : c.sys({ tex: 'hexdome', size: 217, ... })`. `geo: 'dome'` is a hemisphere standing on the effect's point, `upright` keeps it from tumbling, `tex: 'hexgrid'` wraps it in a glowing hex grid. This is how `state.dome` is built; use the same pair for any dome-shaped shield.
 - `c.sys(c.flat({...}))`: the sprite lies flat on the floor (shockwave rings, magic circles, landing dust rings).
 - `c.sys(c.ground({...}))`: a circle/rect emitter laid on the ground plane (an aura rising around the feet, a ring of things).
 - `c.sys(c.spray({...}))`: a cone aimed along a real world direction (blood, slashes, a confetti cannon). `c.spray(p, 'up')` / `'down'` force it.

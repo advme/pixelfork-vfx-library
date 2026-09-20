@@ -18,6 +18,14 @@ export function geometry(name) {
   if (name === 'shard') { g = new THREE.OctahedronGeometry(0.5, 0); g.scale(0.55, 1.3, 0.35); }
   else if (name === 'ball') g = new THREE.IcosahedronGeometry(0.5, 1);
   else if (name === 'plank') g = new THREE.BoxGeometry(1.4, 0.35, 0.6);
+  // a hemisphere standing on the origin (energy domes); its UVs wrap the tileable 'hexgrid' texture
+  else if (name === 'dome') {
+    g = new THREE.SphereGeometry(0.5, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+    // the particle shader ignores texture.repeat, so the tiling (7 tiles around, 1.75 up) is baked into the UVs
+    const uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 7, uv.getY(i) * 1.75);
+  }
+  else if (name === 'hex') g = new THREE.CylinderGeometry(0.5, 0.5, 0.08, 6);      // a flat hexagon tile
   else g = new THREE.BoxGeometry(0.8, 0.8, 0.8);            // 'box'
   geometries[name] = g;
   return g;
@@ -29,8 +37,9 @@ export function makeMaterialCache(textures) {
     const key = tex + '|' + blend;
     let m = cache.get(key);
     if (!m && tex === '#solid') {
-      // lit, for mesh debris; falls back to unlit when the game has no lights
+      // lit, for mesh debris; falls back to unlit when the game has no lights; 'add' = glowing glass chunks
       m = blend === 'lit' ? new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.85, metalness: 0 })
+        : blend === 'add' ? new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
                           : new THREE.MeshBasicMaterial({ color: 0xffffff });
       cache.set(key, m);
     }
@@ -141,6 +150,7 @@ export function makeContext(opts) {
     switch (s.type) {
       case 'point': return new Q.PointEmitter();
       case 'circle': return new Q.CircleEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, mode, spread: 0 });
+      case 'hemisphere': return new Q.HemisphereEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, mode, spread: 0 });
       case 'sphere': return new Q.SphereEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, mode, spread: 0 });
       case 'cone': return new Q.ConeEmitter({ radius: (s.radius === undefined ? 1 : s.radius) * u, arc: s.arc === undefined ? TAU : s.arc, thickness: s.thickness === undefined ? 1 : s.thickness, angle: s.angle === undefined ? 0.3 : s.angle, mode, spread: 0 });
       case 'rect': return new Q.RectangleEmitter({ width: (s.w === undefined ? 10 : s.w) * u, height: (s.h === undefined ? 0 : s.h) * u, thickness: s.thickness === undefined ? 0 : s.thickness, mode, spread: 0 });
@@ -150,11 +160,14 @@ export function makeContext(opts) {
 
   /* ---------- 2D -> 3D upgrades (all are no-ops outside a 3D scene) ---------- */
   const is3d = mode === 'scene';
-  /** A burst in every direction: a circle emitter becomes a sphere, in world space. */
+  /** A burst in every direction: a circle emitter becomes a sphere (an upper half-circle a hemisphere), in world space. */
   function vol(p) {
     if (!is3d) return p;
     const q = Object.assign({}, p, { in3d: true });
-    if (q.shape && q.shape.type === 'circle' && q.shape.arc === undefined) q.shape = Object.assign({}, q.shape, { type: 'sphere' });
+    if (q.shape && q.shape.type === 'circle') {
+      if (q.shape.arc === undefined) q.shape = Object.assign({}, q.shape, { type: 'sphere' });
+      else if (Math.abs(q.shape.arc - Math.PI) < 1e-6) q.shape = Object.assign({}, q.shape, { type: 'hemisphere', arc: undefined });
+    }
     return q;
   }
   /** Lay a circle / rect emitter down on the ground plane (auras, halos, rings of things). */
@@ -165,9 +178,7 @@ export function makeContext(opts) {
   function chunks(p, geo) {
     if (opts.noDebris) return null;           // the game spawns real physics debris instead (play(name, { debris: false }))
     if (!is3d) return p;
-    const q = Object.assign({}, p, { in3d: true, render: 'mesh', geo: geo || 'box' });
-    if (q.shape && q.shape.type === 'circle' && q.shape.arc === undefined) q.shape = Object.assign({}, q.shape, { type: 'sphere' });
-    return q;
+    return vol(Object.assign({}, p, { render: 'mesh', geo: geo || 'box' }));
   }
   /**
    * A directional spray as a real 3D cone (blood, a slash, a confetti cannon). In 2D this is a
@@ -236,15 +247,16 @@ export function makeContext(opts) {
   function sys(p) {
     if (!p) return null;                      // a helper opted this part out
     const render = p.render || (p.stretch ? 'stretch' : 'billboard');
-    const lit = render === 'mesh';
-    const mat = lit ? material('#solid', opts.lit ? 'lit' : 'unlit')
+    // a mesh is lit solid debris, unless it glows (blend 'add') or wears a texture (a hexgrid dome)
+    const lit = render === 'mesh' && !p.tex && p.blend !== 'add' && !!opts.lit;
+    const mat = render === 'mesh' && !p.tex ? material('#solid', p.blend === 'add' ? 'add' : (lit ? 'lit' : 'unlit'))
       : material(render === 'trail' ? 'ribbon' : (p.tex || 'glow'), p.blend || 'add');
     const renderMode = { billboard: Q.RenderMode.BillBoard, stretch: Q.RenderMode.StretchedBillBoard, flat: Q.RenderMode.HorizontalBillBoard, mesh: Q.RenderMode.Mesh, trail: Q.RenderMode.Trail }[render];
     let emitterSettings = {};
     if (render === 'stretch') emitterSettings = { speedFactor: (p.stretch.speed || 0) / (u || 1), lengthFactor: p.stretch.length === undefined ? 2 : p.stretch.length };
     if (render === 'trail') emitterSettings = { startLength: val((p.trail && p.trail.length) || 24), followLocalOrigin: true };
     const behaviors = (p.behaviors || []).slice();
-    if (render === 'mesh') behaviors.push(new Q.Rotation3DOverLife(new Q.AxisAngleGenerator(new Q.Vector3(0.62, 0.7, 0.35).normalize(), new Q.IntervalValue(-9, 9))));
+    if (render === 'mesh' && !p.upright) behaviors.push(new Q.Rotation3DOverLife(new Q.AxisAngleGenerator(new Q.Vector3(0.62, 0.7, 0.35).normalize(), new Q.IntervalValue(-9, 9))));
     const soft = !!opts.soft && render !== 'mesh' && render !== 'trail' && p.soft !== false;
     const system = new Q.ParticleSystem({
       duration: p.duration === undefined ? 1 : p.duration,
@@ -255,8 +267,8 @@ export function makeContext(opts) {
       startLife: val(p.life === undefined ? 1 : p.life),
       startSpeed: val(p.speed || 0, u),
       startSize: val(p.size === undefined ? 10 : p.size, u),
-      startRotation: render === 'mesh' ? new Q.RandomQuatGenerator() : val(p.rotation || 0),
-      startColor: colorGen(p.color, lit && !!opts.lit),
+      startRotation: render === 'mesh' ? (p.upright ? new Q.AxisAngleGenerator(new Q.Vector3(0, 1, 0), new Q.ConstantValue(0)) : new Q.RandomQuatGenerator()) : val(p.rotation || 0),
+      startColor: colorGen(p.color, lit),
       emissionOverTime: val(p.rate || 0),
       emissionBursts: (p.bursts || []).map((b) => ({
         time: b.time || 0,
@@ -284,6 +296,7 @@ export function makeContext(opts) {
     system._in3d = !!p.in3d;          // lives in the world-aligned group, not the camera-facing one
     system._snap = !!p.snap;          // flat sprite that should sit on the ground
     system._ribbon = render === 'trail';
+    system._cut = !!p.cut;             // handle.stop() removes its particles at once instead of letting them live out
     system._aimable = !!p.dir3 && p.aimable !== false;   // handle.aim(v) can re-point it while it runs
     system._forces = (p.behaviors || []).filter((b) => b && b.type === 'ApplyForce' && b.direction);
     system._forces.forEach((b) => { if (!b._design) b._design = { x: b.direction.x, y: b.direction.y }; });

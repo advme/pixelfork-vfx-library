@@ -1263,6 +1263,47 @@
       "aliases": []
     },
     {
+      "name": "state.dome",
+      "category": "state",
+      "whenToUse": "A force field, energy dome or barrier shield goes up around a character, a base or an object and stays until it is switched off. Play it at the feet / on the ground; call stop() and the dome breaks apart on its own (state.domebreak).",
+      "duration": 3,
+      "loop": true,
+      "tint": "#4fb8ff",
+      "anchor": "feet",
+      "tags": [
+        "shield",
+        "dome",
+        "force field",
+        "barrier",
+        "hexagon",
+        "energy",
+        "bubble",
+        "protect",
+        "sci-fi"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.domebreak",
+      "category": "state",
+      "whenToUse": "An energy dome or force field is switched off or destroyed. Played automatically when state.dome is stopped; play it yourself only for a dome the game drew itself.",
+      "duration": 1.7,
+      "loop": false,
+      "tint": "#4fb8ff",
+      "anchor": "feet",
+      "tags": [
+        "shield",
+        "dome",
+        "break",
+        "shatter",
+        "force field",
+        "hexagon",
+        "off",
+        "destroyed"
+      ],
+      "aliases": []
+    },
+    {
       "name": "env.snow",
       "category": "env",
       "whenToUse": "A winter level, a Christmas event, a cold mountain scene. Start it once when the level begins; it covers the whole screen.",

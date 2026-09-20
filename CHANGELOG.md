@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased — state.dome + state.domebreak: the hexagon force field, 2D and 3D
+- Agent: A (Claude) · Date: 2026-09-21
+- Why: the owner brought a 15-frame reference sheet (ring → energy rising → dome forming → active with three pulses → dissipating → breaking into hex tiles → last particles → end) and wants exactly that in both worlds.
+- Done: two effects, and the library machinery a real dome needs. 2D: a 512 px `hexdome` sprite (hex tiles laid out in longitude/latitude and projected, brighter toward the rim) standing on the effect point, an `ellipse` ring for the ground. 3D: a real hemisphere mesh (`geometry('dome')`) wrapped in a tileable `hexgrid` texture, upright, world-aligned, plus `hex` tiles as glowing additive chunks off a `hemisphere` emitter. Runtime: effect meta `ending` (stop() on the loop plays the one-shot at the same place, size and tint, on either layer), sys `cut` (the standing dome vanishes the moment the loop is stopped instead of living out its 3 s cycle), `upright`, textured unlit meshes, additive solid meshes. `c.vol` maps an upper half-circle to a hemisphere, so one recipe serves both worlds.
+- Tested: 2D and 3D players, forming / idle / pulse / break frames captured; no build or playback errors; the break is triggered by stop() in both players (their Stop buttons) and by handle.stop() from code. Hex tiling in 3D first came out 3× too big (the mesh particle shader reads `vUv`, not the map transform, so `texture.repeat` does nothing) — fixed by scaling the dome's UVs.
+- Notes for next agent: `hexgrid` is drawn front and back (DoubleSide), so its fill alpha is deliberately faint (0.09). The 3D dome has no rim brightening; a fresnel would need a custom shader chunk. `hit.shieldzap` in this commit was generated and added by the owner through the VFX Maker.
+
 ## Unreleased — VFX Maker, step 1 (committed locally, not published)
 - Agent: A (Claude) · Date: 2026-09-21
 - Why: the owner wants to test whether a standalone "write a prompt, get a quarks effect" tool is viable, for 2D and 3D, with nothing added to the library until they confirm.

@@ -13,6 +13,18 @@ rollback); a real generation has still never run. If the first request fails wit
 `tools/serve.mjs`. Then **step 2**: send a snapshot of the playing effect back to the AI so it can
 correct itself.
 
+## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
+`state.dome` (loop: ring lights up, energy rises, the dome inflates, then stands pulsing three times a
+cycle) + `state.domebreak` (flicker, hex tiles peel off and fly, sparks, ring fades last), the same
+picture in 2D and 3D. New machinery, all reusable: textures `hexdome` (projected 2D dome sprite,
+512 px), `hexgrid` (tileable, wraps the 3D mesh), `hexshard`, `ellipse`; `geometry('dome')` (hemisphere
+with the tiling baked into its UVs, because the particle mesh shader ignores `texture.repeat`) and
+`'hex'`; `shape: 'hemisphere'` (`c.vol` turns an upper half-circle into it); sys options `upright`
+(a mesh that does not tumble), `cut` (particles end at once on stop), `tex` on a mesh (textured unlit
+mesh), `blend: 'add'` on chunks (glowing glass); effect meta `ending` (a one-shot the runtime plays where
+a loop was when it is stopped) and `anchor: 'feet'`. The owner also added `hit.shieldzap` with the maker.
+Not yet done: the 3D dome has no bright rim (a fresnel) like the 2D sprite; it reads fine without it.
+
 ## VFX Maker (experiment, step 1 done 2026-09-21)
 The owner's test of a standalone "prompt in, effect out" tool. `tools/maker.html`: describe an effect,
 pick 2D or 3D, Generate; it plays on the character in the real 2D / 3D player (shown in a frame);
@@ -45,16 +57,16 @@ under `advme` because that is the account logged in on the owner's Mac. Moving i
 ## In progress
 _Nothing._
 
-## The pack — 90 effects, all playable
+## The pack — 93 effects, all playable
 | Group | Effects |
 |---|---|
-| `hit.*` (9) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry |
+| `hit.*` (10) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap (made with the maker) |
 | `explosion.*` (6) | small, big, puff, fireball, firework, nuke (full screen) |
 | `pickup.*` (8) | sparkle, coin, gem, heart, powerup, xp, key, food |
 | `reward.*` (7) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen) |
 | `move.*` (13) | jump, footstep, land, dash, splash, teleport, spawn · loops: trail, dust, speed, swim, fly, skid |
 | `magic.*` (12) | heal, ice, lightning, shield, poison, dark, holy, summon, curse · loops: portal, cast, fire (projectile) |
-| `state.*` (13, all loops) | stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged |
+| `state.*` (15) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, dome (ends with the one-shot domebreak) |
 | `env.*` (13, all loops, full screen) | snow, rain, leaves, confetti, clouds (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm (everywhere) |
 | `ui.*` (9) | pop, tap, star, burst, unlock, flash (full-screen), shine · loops: glow, countup |
 

@@ -21,6 +21,10 @@
  *   line    thin soft vertical line (rain, speed lines)
  *   z       a bold letter Z (sleep)
  *   key     a simple key, bow at the top (pickups)
+ *   ellipse a ring seen at a low angle (a base ring on the ground, 2D)
+ *   hexdome a hexagon-tiled energy dome standing on the sprite's centre (2D shields)
+ *   hexgrid a tileable glowing hexagon wireframe, for the 3D dome mesh (repeats set here)
+ *   hexshard one glowing hexagon tile (shield fragments)
  */
 export function makeTextures(THREE) {
   const S = 128;
@@ -32,18 +36,19 @@ export function makeTextures(THREE) {
   // per-channel colour noise when the texture is uploaded, and additive
   // blending stacks it into visible red/green grain. White + clean alpha has
   // no colour to be noisy.
-  function make(draw) {
+  function make(draw, w, h) {
+    w = w || S; h = h || w;
     const c = document.createElement('canvas');
-    c.width = c.height = S;
+    c.width = w; c.height = h;
     const g = c.getContext('2d');
-    draw(g, S, S / 2);
-    const src = g.getImageData(0, 0, S, S).data;
-    const data = new Uint8Array(S * S * 4);
+    draw(g, w, w / 2, h);
+    const src = g.getImageData(0, 0, w, h).data;
+    const data = new Uint8Array(w * h * 4);
     for (let i = 0; i < data.length; i += 4) {
       data[i] = data[i + 1] = data[i + 2] = 255;
       data[i + 3] = src[i + 3];
     }
-    const t = new THREE.DataTexture(data, S, S, THREE.RGBAFormat, THREE.UnsignedByteType);
+    const t = new THREE.DataTexture(data, w, h, THREE.RGBAFormat, THREE.UnsignedByteType);
     t.flipY = true;
     t.minFilter = THREE.LinearMipmapLinearFilter;
     t.magFilter = THREE.LinearFilter;
@@ -76,7 +81,14 @@ export function makeTextures(THREE) {
     g.shadowBlur = s * 0.04;
   }
 
-  return {
+  /** A flat-top hexagon path. */
+  function hexPath(g, x, y, r) {
+    g.beginPath();
+    for (let i = 0; i < 6; i++) { const a = (i * Math.PI) / 3; const px = x + Math.cos(a) * r, py = y + Math.sin(a) * r; if (i === 0) g.moveTo(px, py); else g.lineTo(px, py); }
+    g.closePath();
+  }
+
+  const textures = {
     glow: make((g, s, c) => radial(g, s, c, [[0, 1], [0.25, 0.85], [0.6, 0.25], [1, 0]])),
 
     disc: make((g, s, c) => radial(g, s, c, [[0, 1], [0.82, 1], [0.95, 0.6], [1, 0]])),
@@ -240,5 +252,81 @@ export function makeTextures(THREE) {
       g.roundRect(c - l / 2, c - w / 2, l, w, r);
       g.fill(); g.fill();
     }),
+
+    ellipse: make((g, s, c) => {
+      // a ring lying on the ground, seen from a low camera: squashed to a fifth of its width
+      g.save(); g.translate(c, c); g.scale(1, 0.2);
+      const r = g.createRadialGradient(0, 0, c * 0.7, 0, 0, c * 0.98);
+      r.addColorStop(0, W(0)); r.addColorStop(0.45, W(1)); r.addColorStop(0.7, W(1)); r.addColorStop(1, W(0));
+      g.fillStyle = r; g.beginPath(); g.arc(0, 0, c, 0, Math.PI * 2); g.fill();
+      g.restore();
+    }),
+
+    // The 2D dome: a hexagon-tiled hemisphere seen from the front, standing on the sprite's
+    // centre (so the effect's point is the ground under the character). The tiles are laid out
+    // in longitude / latitude and projected, so they squeeze toward the rim like a real dome.
+    hexdome: make((g, s, c) => {
+      const R = s * 0.46;
+      const P = (lon, lat) => [c + R * Math.cos(lat) * Math.sin(lon), c - R * Math.sin(lat)];
+      // translucent body, brighter toward the rim
+      g.save();
+      g.beginPath(); g.arc(c, c, R, Math.PI, 0); g.closePath(); g.clip();
+      const body = g.createRadialGradient(c, c, 0, c, c, R);
+      body.addColorStop(0, W(0.12)); body.addColorStop(0.75, W(0.2)); body.addColorStop(0.93, W(0.45)); body.addColorStop(1, W(0.7));
+      g.fillStyle = body; g.fillRect(0, 0, s, s);
+      // hex tiles: 24° wide, rows every 21°, offset every other row; two passes (glow, crisp)
+      const step = (24 * Math.PI) / 180, rowStep = (20.8 * Math.PI) / 180;
+      const edges = [];
+      for (let row = 0; row * rowStep < Math.PI / 2 + rowStep; row++) {
+        const lat = row * rowStep, off = row % 2 ? step / 2 : 0;
+        for (let lon = -Math.PI / 2 - step + off; lon < Math.PI / 2 + step; lon += step) {
+          const r = step * 0.5 / Math.cos(Math.PI / 6);
+          const pts = [];
+          for (let i = 0; i < 6; i++) { const a = (i * Math.PI) / 3 + Math.PI / 6; pts.push([lon + Math.cos(a) * r, lat + Math.sin(a) * r * 0.87]); }
+          edges.push({ pts, lon, lat });
+        }
+      }
+      const draw = (width, alpha, blur) => {
+        g.lineWidth = width; g.lineJoin = 'round'; g.shadowBlur = blur; g.shadowColor = W(1);
+        edges.forEach(({ pts, lon, lat }) => {
+          g.beginPath();
+          pts.forEach(([a, b], i) => { const q = P(a, Math.max(b, 0)); if (i === 0) g.moveTo(q[0], q[1]); else g.lineTo(q[0], q[1]); });
+          g.closePath();
+          const [mx, my] = P(lon, Math.max(lat, 0));
+          const d = Math.min(1, Math.hypot(mx - c, my - c) / R);
+          g.strokeStyle = W(alpha * (0.55 + 0.45 * d * d));
+          g.stroke();
+        });
+      };
+      draw(s * 0.014, 0.5, s * 0.02);
+      draw(s * 0.006, 1, 0);
+      g.restore();
+      // rim glow
+      g.shadowBlur = s * 0.03; g.shadowColor = W(1);
+      g.lineWidth = s * 0.012; g.strokeStyle = W(1);
+      g.beginPath(); g.arc(c, c, R, Math.PI, 0); g.stroke();
+      g.shadowBlur = 0;
+    }, 512),
+
+    // Tileable hexagon wireframe for the 3D dome mesh. One tile = 2 hexagons across, 2 rows.
+    hexgrid: make((g, s, c, h) => {
+      const r = s / 6, px = 3 * r, py = Math.sqrt(3) * r;
+      const fill = () => { for (let j = -1; j <= 3; j++) for (let i = -1; i <= 2; i++) { hexPath(g, i * px, j * py, r); g.fill(); hexPath(g, i * px + 1.5 * r, (j + 0.5) * py, r); g.fill(); } };
+      const stroke = () => { for (let j = -1; j <= 3; j++) for (let i = -1; i <= 2; i++) { hexPath(g, i * px, j * py, r); g.stroke(); hexPath(g, i * px + 1.5 * r, (j + 0.5) * py, r); g.stroke(); } };
+      g.fillStyle = W(0.09); fill();          // faint: the dome is drawn front and back
+      g.lineJoin = 'round';
+      g.shadowBlur = s * 0.03; g.shadowColor = W(1); g.lineWidth = s * 0.03; g.strokeStyle = W(0.5); stroke();
+      g.shadowBlur = 0; g.lineWidth = s * 0.012; g.strokeStyle = W(1); stroke();
+    }, 256, Math.round(2 * Math.sqrt(3) * (256 / 6))),
+
+    hexshard: make((g, s, c) => {
+      soft(g, s);
+      hexPath(g, c, c, c * 0.8);
+      g.fillStyle = W(0.45); g.fill();
+      g.lineWidth = s * 0.07; g.lineJoin = 'round'; g.strokeStyle = W(1); g.stroke(); g.stroke();
+    }),
   };
+  // the grid wraps around the dome (the tiling itself is baked into helpers.geometry('dome'))
+  textures.hexgrid.wrapS = textures.hexgrid.wrapT = THREE.RepeatWrapping;
+  return textures;
 }
