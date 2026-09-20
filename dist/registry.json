@@ -171,6 +171,26 @@
       "aliases": []
     },
     {
+      "name": "hit.shieldzap",
+      "category": "hit",
+      "whenToUse": "A shield, force field or energy barrier takes a hit: an energy bolt striking a shield, a shocking blow blocked, an electric barrier zapped.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#3fb8ff",
+      "anchor": "center",
+      "tags": [
+        "shield",
+        "electric",
+        "zap",
+        "spark",
+        "barrier",
+        "energy",
+        "block",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
       "name": "explosion.small",
       "category": "explosion",
       "whenToUse": "A small thing blows up: a barrel, an enemy, a car crash, a bomb, a rocket landing. About 150px wide.",

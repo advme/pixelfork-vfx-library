@@ -2,7 +2,7 @@
 
 Ready-made visual effects (particles) for AI-generated web games. **You never design or draw an effect — you call a name from the list below.**
 
-**90 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
+**91 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
 
 ## 1. Add it (2 lines)
 
@@ -70,6 +70,7 @@ For this to work the character or UI must be a positioned element with a z-index
 | `hit.blood` | A creature takes a bloody hit in an action game. Aim it: in 2D set dir (degrees, default up); in 3D pass direction: [x, y, z], the way the blood flies (away from the weapon). Tint green for slime or zombies, black for oil or ink, purple for aliens. | no (0.9s) | yes, default `#c8102e` |
 | `hit.shieldbreak` | A shield, barrier, bubble or armour breaks. Play where the shield was, then stop its state.shield loop. | no (0.8s) | yes, default `#6fc3ff` |
 | `hit.parry` | A parry, a perfect block, a deflected bullet, swords clashing, a counter. Sharp and bright. Aim the spark spray: dir (degrees) in 2D, direction: [x, y, z] in 3D (default up). | no (0.45s) | yes, default `#ffffff` |
+| `hit.shieldzap` | A shield, force field or energy barrier takes a hit: an energy bolt striking a shield, a shocking blow blocked, an electric barrier zapped. | no (0.7s) | yes, default `#3fb8ff` |
 
 **`explosion.*`**
 

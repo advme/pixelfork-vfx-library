@@ -92,6 +92,7 @@ import envConfetti from './effects/env.confetti.js';
 import uiShine from './effects/ui.shine.js';
 import uiCountup from './effects/ui.countup.js';
 import uiFlash from './effects/ui.flash.js';
+import hitShieldzap from './effects/hit.shieldzap.js';
 
 export const PACK = {
   name: 'casual',
@@ -108,6 +109,7 @@ export const EFFECTS = [
   hitBlood,
   hitShieldbreak,
   hitParry,
+  hitShieldzap,
   explosionSmall,
   explosionBig,
   explosionPuff,

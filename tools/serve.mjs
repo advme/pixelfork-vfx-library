@@ -85,7 +85,10 @@ function askClaudeCode(system, user) {
         if (/limit/i.test(msg)) return reject(Object.assign(new Error('Your Claude subscription limit is used up for now: ' + msg), { status: 429 }));
         return reject(Object.assign(new Error('Claude Code answered with an error: ' + msg.slice(0, 300)), { status: 502 }));
       }
-      resolve({ text: String(r.result || ''), model: Object.keys(r.modelUsage || {})[0] || MODEL });
+      // Claude Code makes small side calls to Haiku; the model that wrote the answer is the one with the most output
+      const mu = r.modelUsage || {};
+      const model = Object.keys(mu).sort((a, b) => (mu[b].outputTokens || 0) - (mu[a].outputTokens || 0))[0] || MODEL;
+      resolve({ text: String(r.result || ''), model });
     });
     child.stdin.end(user);
   });
