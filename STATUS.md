@@ -3,9 +3,12 @@
 **Last updated:** 2026-09-21 · by **A (Claude)** · version **v0.8.1-A** published (https://github.com/advme/pixelfork-vfx-library) · the VFX Maker is committed locally, NOT published yet
 
 ## Next task
-**Owner tries the VFX Maker with a real API key** (http://localhost:8767/tools/maker.html). Everything
-around the AI call is tested (preview in 2D and 3D, broken-effect handling, add to library, rollback);
-the AI call itself has never run because no key was on the machine. If the first request fails with an
+**Owner logs Claude Code in, then tries the VFX Maker** (http://localhost:8767/tools/maker.html). It now
+runs on the owner's Claude subscription with Sonnet 5 (their request): `serve.mjs` calls the installed
+`claude` CLI in print mode (no tools, temp folder) when there is no API key. On 2026-09-21 the CLI's
+login was expired ("OAuth session expired"), so the owner must run `claude` → `/login` in Terminal once.
+Everything around the AI call is tested (preview in 2D and 3D, broken-effect handling, add to library,
+rollback); a real generation has still never run. If the first request fails with an
 "AI service answered with an error" message, read it: the request shape is in `generate()` in
 `tools/serve.mjs`. Then **step 2**: send a snapshot of the playing effect back to the AI so it can
 correct itself.
@@ -15,8 +18,9 @@ The owner's test of a standalone "prompt in, effect out" tool. `tools/maker.html
 pick 2D or 3D, Generate; it plays on the character in the real 2D / 3D player (shown in a frame);
 refine it in words; **Add to library** only on confirm. Publishing stays a separate, manual step.
 - `tools/serve.mjs` replaces `serve.py` as the preview server (`.claude/launch.json`, `npm run serve`).
-  It serves the files and the maker's API: `generate` calls Claude (`claude-opus-5`, official SDK,
-  key from `ANTHROPIC_API_KEY` or the git-ignored `.anthropic.key`), `save` writes the effect file,
+  It serves the files and the maker's API: `generate` calls Claude (`claude-sonnet-5`; override with
+  `VFX_MAKER_MODEL`) either through the official SDK with a key (`ANTHROPIC_API_KEY` or the git-ignored
+  `.anthropic.key`) or, without a key, through the local Claude Code CLI on the owner's subscription, `save` writes the effect file,
   lists it in `packs/casual/index.js` after the last effect of its group, runs the build and rolls
   everything back if the build refuses it. The API answers only this computer and only this origin.
 - `tools/maker/REFERENCE.md` is what the AI is taught (the `c.*` vocabulary, style, traps) plus ten

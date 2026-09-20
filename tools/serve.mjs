@@ -13,15 +13,17 @@
  * The /api routes only answer this computer (loopback) and only same-origin requests.
  */
 import http from 'node:http';
-import { readFileSync, writeFileSync, existsSync, statSync, unlinkSync, createReadStream } from 'node:fs';
-import { execFile } from 'node:child_process';
+import { readFileSync, writeFileSync, existsSync, statSync, unlinkSync, createReadStream, mkdtempSync, rmSync } from 'node:fs';
+import { execFile, spawn } from 'node:child_process';
+import { tmpdir, homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, normalize, extname, sep } from 'node:path';
 import Anthropic from '@anthropic-ai/sdk';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const PORT = Number(process.argv[2]) || 8767;
-const MODEL = process.env.VFX_MAKER_MODEL || 'claude-opus-5';
+// the owner asked for Sonnet 5 (2026-09-21). Any model id works: VFX_MAKER_MODEL=claude-opus-5 node tools/serve.mjs
+const MODEL = process.env.VFX_MAKER_MODEL || 'claude-sonnet-5';
 const KEY_FILE = join(ROOT, '.anthropic.key');
 const EFFECTS_DIR = join(ROOT, 'packs/casual/effects');
 const INDEX = join(ROOT, 'packs/casual/index.js');
@@ -36,6 +38,57 @@ function apiKey() {
   if (process.env.ANTHROPIC_API_KEY) return process.env.ANTHROPIC_API_KEY.trim();
   if (existsSync(KEY_FILE)) { const k = readFileSync(KEY_FILE, 'utf8').trim(); if (k) return k; }
   return null;
+}
+
+/**
+ * Two ways to reach Claude:
+ *  - 'api':          an Anthropic API key (pay per use), through the official SDK;
+ *  - 'subscription': the Claude Code command-line tool installed on this computer, which runs on
+ *                    the owner's own Claude subscription login. No key, no extra bill.
+ * A key wins when there is one; VFX_MAKER_BACKEND=subscription|api forces a choice.
+ */
+function claudeCli() {
+  const names = [process.env.CLAUDE_CLI, join(homedir(), '.local/bin/claude'), join(homedir(), '.claude/local/claude'), '/opt/homebrew/bin/claude', '/usr/local/bin/claude'];
+  return names.find((f) => f && existsSync(f)) || null;
+}
+function backend() {
+  const want = process.env.VFX_MAKER_BACKEND;
+  if (want === 'api') return apiKey() ? 'api' : null;
+  if (want === 'subscription') return claudeCli() ? 'subscription' : null;
+  return apiKey() ? 'api' : (claudeCli() ? 'subscription' : null);
+}
+
+/** One request through Claude Code in print mode: no tools, no project files, just text in and text out. */
+function askClaudeCode(system, user) {
+  return new Promise((resolve, reject) => {
+    const dir = mkdtempSync(join(tmpdir(), 'vfx-maker-'));
+    const sysFile = join(dir, 'system.md');
+    writeFileSync(sysFile, system);
+    const env = Object.assign({}, process.env);
+    delete env.ANTHROPIC_API_KEY;                     // make sure it is the subscription that answers
+    const child = spawn(claudeCli(), ['-p', '--model', MODEL, '--tools', '', '--strict-mcp-config', '--system-prompt-file', sysFile, '--output-format', 'json'], { cwd: dir, env });
+    let out = '', errOut = '';
+    const timer = setTimeout(() => child.kill(), 300000);
+    child.stdout.on('data', (d) => { out += d; });
+    child.stderr.on('data', (d) => { errOut += d; });
+    child.on('error', (e) => { clearTimeout(timer); rmSync(dir, { recursive: true, force: true }); reject(e); });
+    child.on('close', () => {
+      clearTimeout(timer);
+      rmSync(dir, { recursive: true, force: true });
+      let r = null;
+      try { r = JSON.parse(out); } catch (e) { /* not json */ }
+      if (Array.isArray(r)) r = r.find((x) => x && x.type === 'result') || null;
+      if (!r) return reject(Object.assign(new Error('Claude Code did not answer: ' + (errOut || out).trim().slice(0, 300)), { status: 502 }));
+      if (r.is_error) {
+        const msg = String(r.result || '');
+        if (/authenticat|OAuth|log ?in/i.test(msg)) return reject(Object.assign(new Error('Claude Code on this computer is not logged in. Open the Terminal app, type  claude  and press Enter, then type  /login  and sign in with your Claude account. Then try again.'), { status: 401 }));
+        if (/limit/i.test(msg)) return reject(Object.assign(new Error('Your Claude subscription limit is used up for now: ' + msg), { status: 429 }));
+        return reject(Object.assign(new Error('Claude Code answered with an error: ' + msg.slice(0, 300)), { status: 502 }));
+      }
+      resolve({ text: String(r.result || ''), model: Object.keys(r.modelUsage || {})[0] || MODEL });
+    });
+    child.stdin.end(user);
+  });
 }
 
 // The examples the AI learns the house style from: one per technique.
@@ -77,36 +130,44 @@ function takenNames() {
 }
 
 async function generate(body) {
-  const key = apiKey();
-  if (!key) throw Object.assign(new Error('No API key yet. Put your Anthropic API key in the file .anthropic.key in the project folder.'), { status: 401 });
-  const client = new Anthropic({ apiKey: key });
-  const request = {
-    model: MODEL,
-    max_tokens: 32000,
-    thinking: { type: 'adaptive' },
-    output_config: { effort: 'high' },
-    // the reference and examples are identical on every request: cache them
-    system: [{ type: 'text', text: systemPrompt(), cache_control: { type: 'ephemeral' } }],
-    messages: [{ role: 'user', content: userMessage(body, takenNames()) }],
-  };
-  let message;
-  try {
-    // if a safety classifier declines, let the API re-run it on its recommended fallback model
-    message = await client.beta.messages.stream({ ...request, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }).finalMessage();
-  } catch (err) {
-    if (!(err instanceof Anthropic.BadRequestError)) throw err;
-    message = await client.messages.stream(request).finalMessage();
+  const how = backend();
+  if (!how) throw Object.assign(new Error('The maker has no way to reach Claude yet. See the box at the top.'), { status: 401 });
+  const system = systemPrompt(), user = userMessage(body, takenNames());
+  let text, model, usage = null;
+  if (how === 'subscription') {
+    ({ text, model } = await askClaudeCode(system, user));
+  } else {
+    const client = new Anthropic({ apiKey: apiKey() });
+    const request = {
+      model: MODEL,
+      max_tokens: 32000,
+      thinking: { type: 'adaptive' },
+      output_config: { effort: 'high' },
+      // the reference and examples are identical on every request: cache them
+      system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+      messages: [{ role: 'user', content: user }],
+    };
+    let message;
+    try {
+      // if a safety classifier declines, let the API re-run it on its recommended fallback model
+      message = await client.beta.messages.stream({ ...request, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }).finalMessage();
+    } catch (err) {
+      if (!(err instanceof Anthropic.BadRequestError)) throw err;
+      message = await client.messages.stream(request).finalMessage();
+    }
+    if (message.stop_reason === 'refusal') throw Object.assign(new Error('The AI declined this request. Try describing the effect differently.'), { status: 422 });
+    if (message.stop_reason === 'max_tokens') throw Object.assign(new Error('The AI ran out of room before finishing. Try a simpler description.'), { status: 422 });
+    text = message.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
+    model = message.model;
+    const u = message.usage || {};
+    usage = { input: (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0), cached: u.cache_read_input_tokens || 0, output: u.output_tokens || 0 };
   }
-  if (message.stop_reason === 'refusal') throw Object.assign(new Error('The AI declined this request. Try describing the effect differently.'), { status: 422 });
-  if (message.stop_reason === 'max_tokens') throw Object.assign(new Error('The AI ran out of room before finishing. Try a simpler description.'), { status: 422 });
-  const text = message.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
   const m = text.match(/```(?:js|javascript)?\s*\n([\s\S]*?)```/);
   if (!m) throw Object.assign(new Error('The AI did not return an effect file. Try again.'), { status: 502 });
   const code = m[1].trim() + '\n';
   inspect(code);
   const note = text.slice(m.index + m[0].length).trim().split('\n')[0] || '';
-  const u = message.usage || {};
-  return { code, note, model: message.model, usage: { input: (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0), cached: u.cache_read_input_tokens || 0, output: u.output_tokens || 0 } };
+  return { code, note, model, backend: how, usage };
 }
 
 /* ------------------------------------------------------------ saving to the library */
@@ -203,7 +264,7 @@ function friendly(err) {
 async function api(req, res, path) {
   if (!loopback(req) || !sameOrigin(req)) return json(res, 403, { error: 'The maker only answers this computer.' });
   try {
-    if (path === '/api/maker/status' && req.method === 'GET') return json(res, 200, { key: !!apiKey(), model: MODEL, keyFile: '.anthropic.key' });
+    if (path === '/api/maker/status' && req.method === 'GET') return json(res, 200, { backend: backend(), key: !!apiKey(), cli: !!claudeCli(), model: MODEL, keyFile: '.anthropic.key' });
     if (req.method !== 'POST' || !/^application\/json/.test(req.headers['content-type'] || '')) return json(res, 405, { error: 'Not allowed.' });
     const body = await readBody(req);
     if (path === '/api/maker/generate') {
@@ -237,7 +298,7 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`Preview:  http://localhost:${PORT}/tools/preview.html`);
   console.log(`3D:       http://localhost:${PORT}/tools/preview3d.html`);
-  console.log(`Maker:    http://localhost:${PORT}/tools/maker.html   (${apiKey() ? 'API key found' : 'no API key yet: put it in .anthropic.key'})`);
+  console.log(`Maker:    http://localhost:${PORT}/tools/maker.html   (${{ api: 'API key', subscription: 'Claude subscription through Claude Code' }[backend()] || 'no way to reach Claude yet'}, ${MODEL})`);
   console.log(`Demo:     http://localhost:${PORT}/demo/game.html`);
   console.log('Ctrl+C to stop.');
 });

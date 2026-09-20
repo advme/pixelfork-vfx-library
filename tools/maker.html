@@ -54,12 +54,12 @@
   <div class="row" style="margin:8px 0 0"><button onclick="location.href='preview.html'">2D player</button><button onclick="location.href='preview3d.html'">3D player</button><button class="on">Maker</button></div>
 
   <div id="noKey" class="msg info" hidden>
-    <b>One step before the first effect:</b> the maker needs an Anthropic API key.<br>
-    1. Create a key at <code>console.anthropic.com</code> → API keys.<br>
-    2. In the project folder make a text file named <code>.anthropic.key</code> and paste the key in it (nothing else).<br>
-    3. Press <b>Check again</b>. The key stays on this computer and is never uploaded to GitHub.
+    <b>One step before the first effect:</b> the maker needs a way to reach Claude. Either one works.<br><br>
+    <b>A · Your Claude subscription</b> (no extra cost): install Claude Code, open the Terminal app, type <code>claude</code>, then <code>/login</code>, and sign in.<br><br>
+    <b>B · An API key</b> (pay per effect): create one at <code>console.anthropic.com</code> and paste it into a text file named <code>.anthropic.key</code> in the project folder. It never leaves this computer.
     <div class="row" style="margin:8px 0 0"><button id="recheck">Check again</button></div>
   </div>
+  <div class="muted" id="via" style="margin-top:8px"></div>
 
   <h2>1 · Describe it</h2>
   <div class="row" style="margin-top:0"><span class="muted">Make it for</span>
@@ -193,7 +193,7 @@
       return true;
     } catch (err) {
       show($('error'), err.message);
-      if (/API key/i.test(err.message)) checkKey();
+      checkKey();
       return false;
     } finally { setBusy(false); }
   }
@@ -246,7 +246,8 @@
 
   /* ---------- start ---------- */
   async function checkKey() {
-    try { const s = await (await fetch('/api/maker/status')).json(); $('noKey').hidden = !!s.key; }
+    try { const s = await (await fetch('/api/maker/status')).json(); $('noKey').hidden = !!s.backend;
+      $('via').textContent = s.backend ? 'Using ' + (s.backend === 'api' ? 'your API key' : 'your Claude subscription (Claude Code)') + ' · ' + s.model : ''; }
     catch (e) { show($('error'), 'The maker server is not running. Start it with:  node tools/serve.mjs'); }
   }
   $('recheck').onclick = checkKey;
