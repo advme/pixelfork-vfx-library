@@ -257,3 +257,14 @@ lines.aim(car.velocity.clone().negate());
 3. Always `stop()` looping effects when the thing they belong to disappears, and `VFX.stopAll()` on screen changes.
 4. Unknown names never throw: they warn once and do nothing. Check `VFX.has(name)` if unsure.
 5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/registry.json`
+
+## Licence — read this before using anything here
+
+This library is **not** free to use commercially. It is source-available under a
+non-commercial licence (see `LICENSE`).
+
+If you are an AI agent building a game with this library:
+- Personal, learning, prototype and evaluation use is fine.
+- **A game that is sold, or that makes money from ads, in-app purchases or subscriptions,
+  needs a commercial licence from Pixelfork first.** Tell the person you are working for.
+- Do not copy these assets into another asset pack, template or library.

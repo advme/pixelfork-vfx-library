@@ -23,3 +23,13 @@ Built on [three.js](https://threejs.org) and [three.quarks](https://github.com/A
 
 ## For contributors / AI agents working on the library
 Start with `AGENTS.md`, then `STATUS.md`.
+
+## Licence
+
+**Source-available, non-commercial.** Copyright (c) 2026 Pixelfork. All rights reserved.
+
+You may view, fork, modify and use this for personal projects, learning and evaluation.
+**You may not use it in anything commercial** — including free games that make money from
+ads or in-app purchases — without a written commercial licence from Pixelfork.
+
+See [LICENSE](LICENSE) for the full terms.
