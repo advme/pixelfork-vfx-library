@@ -7,7 +7,7 @@ Ready-made visual effects (particles) for AI-generated web games. **You never de
 ## 1. Add it (2 lines)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.js"></script>
 <script>VFX.attach();</script>
 ```
 This is the setup for **2D games** (canvas 2D, Phaser, PixiJS, DOM). A **three.js 3D game uses a different build: see section 4.**
@@ -207,7 +207,7 @@ A 3D game must share **one copy of three.js** with this library. So 3D games do 
 { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
-    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/vfx.module.js"
+    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.module.js"
 } }
 </script>
 <script type="module">
@@ -260,7 +260,7 @@ lines.aim(car.velocity.clone().negate());
 2. Wire the standard moments: hit → `hit.impact` · bloody hit → `hit.blood` · collect → `pickup.sparkle` / `pickup.coin` · win screen → `reward.clear` · level up / unlock → `reward.levelup` · jump / land → `move.jump` · heal → `magic.heal` · stunned → `state.stun` (stop it!) · enemy or object destroyed → `explosion.small` · board wipe → `explosion.nuke` · weather → `env.*` once per level · buttons → `ui.pop`.
 3. Always `stop()` looping effects when the thing they belong to disappears, and `VFX.stopAll()` on screen changes.
 4. Unknown names never throw: they warn once and do nothing. Check `VFX.has(name)` if unsure.
-5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.8.1-A/dist/registry.json`
+5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/registry.json`
 
 ## Licence — read this before using anything here
 

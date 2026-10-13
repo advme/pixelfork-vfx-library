@@ -1,15 +1,11 @@
 # STATUS
 
-**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.8.1-A** published (https://github.com/advme/pixelfork-vfx-library) · the VFX Maker, `state.dome` and `hit.shieldzap` are committed locally, NOT published yet
+**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.9.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
 
 ## Next task
-**Owner pastes their Anthropic API key into the maker's key box and generates the first effect with
-Opus 5.5** (http://localhost:8767/tools/maker.html). The maker now defaults to `claude-opus-5-5` on the
-owner's API key (their request, 2026-10-14). The key is checked with a free `models.retrieve` call
-before it is saved to the git-ignored `.anthropic.key` (mode 600); it never passes through chat.
-A real Opus 5.5 generation has NOT run yet: Opus 5.5 is newer than the request shape in `generate()`,
-so if it rejects an option (fallbacks / adaptive thinking / effort) the server retries simpler and
-logs the 400 to its console. Then step 2: send a snapshot of the playing effect back to the AI.
+**Build the VFX Studio** (separate project, `../Pixelfork VFX Studio`): the owner's standalone
+"describe it → Opus 5.5 makes it" tool. It loads this library from jsDelivr at `v0.9.0-A`. Once it
+works, retire `tools/maker*` here (step 4 of the owner's plan) so this repo is only the library.
 
 ## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
 `state.dome` (loop: ring lights up, energy rises, the dome builds itself tile by tile from the ground
@@ -54,7 +50,7 @@ under `advme` because that is the account logged in on the owner's Mac. Moving i
 ## In progress
 _Nothing._
 
-## The pack — 93 effects, all playable
+## The pack — 93 effects, all playable (v0.9.0-A)
 | Group | Effects |
 |---|---|
 | `hit.*` (10) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap (made with the maker) |
