@@ -5,6 +5,7 @@
  *   /tools/preview.html, /tools/preview3d.html, /tools/maker.html, /demo/...   static files
  *   GET  /api/maker/status     is there an API key, which model
  *   POST /api/maker/generate   { prompt, mode: '2d'|'3d', code?, feedback? } -> { code, note }
+ *   POST /api/maker/key        { key } | { remove: true } -> checks the key with Anthropic, then saves it
  *   POST /api/maker/save       { code } -> writes packs/casual/effects/<name>.js, adds it to the
  *                              pack index and rebuilds. Rolls everything back if the build fails.
  *
@@ -13,7 +14,7 @@
  * The /api routes only answer this computer (loopback) and only same-origin requests.
  */
 import http from 'node:http';
-import { readFileSync, writeFileSync, existsSync, statSync, unlinkSync, createReadStream, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, statSync, unlinkSync, createReadStream, mkdtempSync, rmSync, chmodSync } from 'node:fs';
 import { execFile, spawn } from 'node:child_process';
 import { tmpdir, homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -22,8 +23,8 @@ import Anthropic from '@anthropic-ai/sdk';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const PORT = Number(process.argv[2]) || 8767;
-// the owner asked for Sonnet 5 (2026-09-21). Any model id works: VFX_MAKER_MODEL=claude-opus-5 node tools/serve.mjs
-const MODEL = process.env.VFX_MAKER_MODEL || 'claude-sonnet-5';
+// the owner asked for Opus 5.5 on their own API key (2026-10-14). Any model id works: VFX_MAKER_MODEL=claude-sonnet-5 node tools/serve.mjs
+const MODEL = process.env.VFX_MAKER_MODEL || 'claude-opus-5-5';
 const KEY_FILE = join(ROOT, '.anthropic.key');
 const EFFECTS_DIR = join(ROOT, 'packs/casual/effects');
 const INDEX = join(ROOT, 'packs/casual/index.js');
@@ -150,14 +151,22 @@ async function generate(body) {
       system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: user }],
     };
-    let message;
-    try {
-      // if a safety classifier declines, let the API re-run it on its recommended fallback model
-      message = await client.beta.messages.stream({ ...request, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }).finalMessage();
-    } catch (err) {
-      if (!(err instanceof Anthropic.BadRequestError)) throw err;
-      message = await client.messages.stream(request).finalMessage();
+    // Newest first: refusal fallbacks + adaptive thinking + effort. If the model rejects one of those
+    // options (a 400), drop them step by step instead of failing; the server console says which.
+    const attempts = [
+      () => client.beta.messages.stream({ ...request, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }).finalMessage(),
+      () => client.messages.stream(request).finalMessage(),
+      () => client.messages.stream({ model: request.model, max_tokens: request.max_tokens, system: request.system, messages: request.messages }).finalMessage(),
+    ];
+    let message, firstError;
+    for (const attempt of attempts) {
+      try { message = await attempt(); break; } catch (err) {
+        if (!(err instanceof Anthropic.BadRequestError)) throw err;
+        console.warn('[maker] ' + MODEL + ' rejected a request option, retrying simpler: ' + err.message);
+        firstError = firstError || err;
+      }
     }
+    if (!message) throw firstError;
     if (message.stop_reason === 'refusal') throw Object.assign(new Error('The AI declined this request. Try describing the effect differently.'), { status: 422 });
     if (message.stop_reason === 'max_tokens') throw Object.assign(new Error('The AI ran out of room before finishing. Try a simpler description.'), { status: 422 });
     text = message.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
@@ -171,6 +180,30 @@ async function generate(body) {
   inspect(code);
   const note = text.slice(m.index + m[0].length).trim().split('\n')[0] || '';
   return { code, note, model, backend: how, usage };
+}
+
+/* ------------------------------------------------------------ the API key */
+
+/**
+ * The owner pastes their key into the maker page (never into a chat). It is checked against
+ * Anthropic first (a free model lookup, which also proves this key may use MODEL), and only then
+ * written to the git-ignored .anthropic.key, readable by this user only. It is never sent back.
+ */
+async function saveKey(body) {
+  if (body.remove) { if (existsSync(KEY_FILE)) unlinkSync(KEY_FILE); return { ok: true, removed: true }; }
+  const key = String(body.key || '').trim();
+  if (!/^sk-ant-[A-Za-z0-9_-]{20,}$/.test(key)) throw Object.assign(new Error('That does not look like an Anthropic API key. It starts with sk-ant-'), { status: 400 });
+  let info;
+  try {
+    info = await new Anthropic({ apiKey: key }).models.retrieve(MODEL);
+  } catch (err) {
+    if (err instanceof Anthropic.AuthenticationError) throw Object.assign(new Error('Anthropic did not accept this key. Copy it again from console.anthropic.com.'), { status: 401 });
+    if (err instanceof Anthropic.NotFoundError || err instanceof Anthropic.PermissionDeniedError) throw Object.assign(new Error('The key works, but it cannot use ' + MODEL + '. Check the key\'s workspace and plan in console.anthropic.com.'), { status: 403 });
+    throw err;
+  }
+  writeFileSync(KEY_FILE, key + '\n', { mode: 0o600 });
+  chmodSync(KEY_FILE, 0o600);
+  return { ok: true, model: info.id, name: info.display_name || info.id };
 }
 
 /* ------------------------------------------------------------ saving to the library */
@@ -256,7 +289,7 @@ function readBody(req) {
 }
 
 function friendly(err) {
-  if (err instanceof Anthropic.AuthenticationError) return [401, 'The API key was not accepted. Check the key in .anthropic.key.'];
+  if (err instanceof Anthropic.AuthenticationError) return [401, 'The API key was not accepted. Paste it again in the key box at the top.'];
   if (err instanceof Anthropic.PermissionDeniedError) return [403, 'This API key is not allowed to use ' + MODEL + '.'];
   if (err instanceof Anthropic.RateLimitError) return [429, 'The AI is busy (rate limit). Wait a minute and try again.'];
   if (err instanceof Anthropic.APIConnectionError) return [503, 'Could not reach the AI. Check the internet connection.'];
@@ -275,6 +308,7 @@ async function api(req, res, path) {
       return json(res, 200, await generate(body));
     }
     if (path === '/api/maker/save') return json(res, 200, await save(body));
+    if (path === '/api/maker/key') return json(res, 200, await saveKey(body));
     return json(res, 404, { error: 'Unknown.' });
   } catch (err) {
     const [status, message] = friendly(err);

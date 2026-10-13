@@ -53,11 +53,12 @@
   <div class="muted">Describe an effect, watch it, refine it. Nothing is added to the library until you say so.</div>
   <div class="row" style="margin:8px 0 0"><button onclick="location.href='preview.html'">2D player</button><button onclick="location.href='preview3d.html'">3D player</button><button class="on">Maker</button></div>
 
-  <div id="noKey" class="msg info" hidden>
-    <b>One step before the first effect:</b> the maker needs a way to reach Claude. Either one works.<br><br>
-    <b>A · Your Claude subscription</b> (no extra cost): install Claude Code, open the Terminal app, type <code>claude</code>, then <code>/login</code>, and sign in.<br><br>
-    <b>B · An API key</b> (pay per effect): create one at <code>console.anthropic.com</code> and paste it into a text file named <code>.anthropic.key</code> in the project folder. It never leaves this computer.
-    <div class="row" style="margin:8px 0 0"><button id="recheck">Check again</button></div>
+  <div id="keyBox" class="msg info" hidden>
+    <b>Connect the maker to Claude.</b> Paste your Anthropic API key here (from <code>console.anthropic.com</code> → API keys).
+    It is checked with Anthropic, then saved only on this computer. It never goes to GitHub and is never shown again.
+    <div class="row" style="margin:8px 0 0"><input id="keyIn" type="password" placeholder="sk-ant-…" autocomplete="off" spellcheck="false" style="flex:1"><button id="keySave" class="ok">Save key</button></div>
+    <div id="keyErr" class="msg err" style="margin:8px 0 0" hidden></div>
+    <div class="row" style="margin:4px 0 0" id="keyCancelRow" hidden><button id="keyCancel">Cancel</button></div>
   </div>
   <div class="muted" id="via" style="margin-top:8px"></div>
 
@@ -76,6 +77,7 @@
       <div><span class="name" id="fxName"></span><span class="tag" id="fxLoop" hidden>LOOP</span></div>
       <div class="muted" id="fxNote" style="margin-top:4px"></div>
       <div class="muted" id="fxStats" style="margin-top:4px"></div>
+      <div class="muted" id="fxModel" style="margin-top:2px"></div>
     </div>
     <div class="row"><button id="replay">Play again</button><button id="auto" class="on">Auto replay</button><button id="slow">Slow motion</button><button id="undo" disabled>← Previous version</button></div>
     <div id="playError" class="msg err" hidden></div>
@@ -151,6 +153,7 @@
     $('fxLoop').hidden = !meta.loop;
     $('fxNote').textContent = v.note || '';
     $('fxStats').textContent = '';
+    $('fxModel').textContent = '';
     $('name').value = meta.name;
     $('code').value = v.code;
     show($('playError'), ''); show($('confirm'), ''); show($('saved'), '');
@@ -190,6 +193,8 @@
     try {
       const out = await call('/api/maker/generate', body);
       push(out.code, out.note);
+      const u = out.usage;
+      $('fxModel').textContent = 'Made by ' + modelName(out.model) + (u ? ' · ' + Math.round(u.input / 1000) + 'k tokens in (' + Math.round(u.cached / 1000) + 'k from cache) · ' + Math.round(u.output / 1000) + 'k out' : '');
       return true;
     } catch (err) {
       show($('error'), err.message);
@@ -245,12 +250,37 @@
   $('save').onclick = () => { if (current() && !S.busy) { show($('saved'), ''); if (current().broken) show($('confirm'), 'This version does not play yet. Fix it first.'); else confirmSave(false); } };
 
   /* ---------- start ---------- */
+  const MODEL_NAMES = { 'claude-opus-5-5': 'Opus 5.5', 'claude-opus-5': 'Opus 5', 'claude-sonnet-5': 'Sonnet 5' };
+  const modelName = (id) => MODEL_NAMES[id] || id;
   async function checkKey() {
-    try { const s = await (await fetch('/api/maker/status')).json(); $('noKey').hidden = !!s.backend;
-      $('via').textContent = s.backend ? 'Using ' + (s.backend === 'api' ? 'your API key' : 'your Claude subscription (Claude Code)') + ' · ' + s.model : ''; }
-    catch (e) { show($('error'), 'The maker server is not running. Start it with:  node tools/serve.mjs'); }
+    try {
+      const s = await (await fetch('/api/maker/status')).json();
+      $('keyBox').hidden = !!s.key;
+      $('keyCancelRow').hidden = true;
+      if (s.key) {
+        $('via').innerHTML = 'Using your API key · ' + esc(modelName(s.model)) + ' · <a href="#" id="keyChange" style="color:#aab3d6">change key</a>';
+        $('keyChange').onclick = (e) => { e.preventDefault(); $('keyBox').hidden = false; $('keyCancelRow').hidden = false; $('keyIn').focus(); };
+      } else {
+        $('via').textContent = s.backend === 'subscription' ? 'Until a key is saved, it uses your Claude subscription through Claude Code · ' + modelName(s.model) : '';
+      }
+    } catch (e) { show($('error'), 'The maker server is not running. Start it with:  node tools/serve.mjs'); }
   }
-  $('recheck').onclick = checkKey;
+  $('keyCancel').onclick = () => { $('keyIn').value = ''; show($('keyErr'), ''); checkKey(); };
+  $('keySave').onclick = async () => {
+    const key = $('keyIn').value.trim();
+    if (!key) { $('keyIn').focus(); return; }
+    show($('keyErr'), '');
+    $('keySave').disabled = true; $('keySave').textContent = 'Checking…';
+    try {
+      const out = await call('/api/maker/key', { key });
+      $('keyIn').value = '';
+      await checkKey();
+      show($('saved'), '');
+      $('via').innerHTML = '✓ Key works and can use <b>' + esc(out.name) + '</b>. ' + $('via').innerHTML;
+    } catch (err) { show($('keyErr'), err.message); }
+    finally { $('keySave').disabled = false; $('keySave').textContent = 'Save key'; }
+  };
+  $('keyIn').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('keySave').click(); });
   IDEAS.forEach((t) => { const b = document.createElement('button'); b.textContent = t; b.onclick = () => { $('prompt').value = t; $('prompt').focus(); }; $('ideas').appendChild(b); });
   let mode = '2d';
   try {

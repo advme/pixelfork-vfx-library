@@ -1,17 +1,15 @@
 # STATUS
 
-**Last updated:** 2026-09-21 · by **A (Claude)** · version **v0.8.1-A** published (https://github.com/advme/pixelfork-vfx-library) · the VFX Maker is committed locally, NOT published yet
+**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.8.1-A** published (https://github.com/advme/pixelfork-vfx-library) · the VFX Maker, `state.dome` and `hit.shieldzap` are committed locally, NOT published yet
 
 ## Next task
-**Owner logs Claude Code in, then tries the VFX Maker** (http://localhost:8767/tools/maker.html). It now
-runs on the owner's Claude subscription with Sonnet 5 (their request): `serve.mjs` calls the installed
-`claude` CLI in print mode (no tools, temp folder) when there is no API key. On 2026-09-21 the CLI's
-login was expired ("OAuth session expired"), so the owner must run `claude` → `/login` in Terminal once.
-Everything around the AI call is tested (preview in 2D and 3D, broken-effect handling, add to library,
-rollback); a real generation has still never run. If the first request fails with an
-"AI service answered with an error" message, read it: the request shape is in `generate()` in
-`tools/serve.mjs`. Then **step 2**: send a snapshot of the playing effect back to the AI so it can
-correct itself.
+**Owner pastes their Anthropic API key into the maker's key box and generates the first effect with
+Opus 5.5** (http://localhost:8767/tools/maker.html). The maker now defaults to `claude-opus-5-5` on the
+owner's API key (their request, 2026-10-14). The key is checked with a free `models.retrieve` call
+before it is saved to the git-ignored `.anthropic.key` (mode 600); it never passes through chat.
+A real Opus 5.5 generation has NOT run yet: Opus 5.5 is newer than the request shape in `generate()`,
+so if it rejects an option (fallbacks / adaptive thinking / effort) the server retries simpler and
+logs the 400 to its console. Then step 2: send a snapshot of the playing effect back to the AI.
 
 ## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
 `state.dome` (loop: ring lights up, energy rises, the dome builds itself tile by tile from the ground

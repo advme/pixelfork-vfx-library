@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased — VFX Maker on Opus 5.5 with the owner's API key
+- Agent: A (Claude) · Date: 2026-10-14
+- Why: the owner wants the creator tool powered by Opus 5.5 on their own API key.
+- Done: `serve.mjs` defaults to `claude-opus-5-5` (`VFX_MAKER_MODEL` still overrides). New `POST /api/maker/key`: checks a pasted key with Anthropic (`models.retrieve(MODEL)`: free, proves the key works AND may use the model), then writes `.anthropic.key` with mode 600; bad format, rejected key and no-access are plain messages; `{ remove: true }` deletes it. The key is never echoed. A key always wins over the Claude Code subscription route. Requests degrade on a 400: fallbacks + thinking + effort → without fallbacks → bare request, each rejection logged. The maker page has a key box (shown until a key is saved, "change key" afterwards) and shows the model and token use under each effect.
+- Tested: malformed key and a fake `sk-ant-` key (really checked with Anthropic, refused, nothing written); foreign Origin refused; key file confirmed git-ignored; the key box and its errors in the browser.
+- NOT tested: a generation with Opus 5.5 (no real key on the machine).
+
 ## Unreleased — state.dome + state.domebreak: the hexagon force field, 2D and 3D
 - Agent: A (Claude) · Date: 2026-09-21
 - Why: the owner brought a 15-frame reference sheet (ring → energy rising → dome forming → active with three pulses → dissipating → breaking into hex tiles → last particles → end) and wants exactly that in both worlds. After the first version they asked for two things: the dome must not scale up while forming but build itself tile by tile, and the tiling must be seamless over the whole hemisphere (a UV-sphere texture pinched at the top).
