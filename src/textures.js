@@ -23,6 +23,8 @@
  *   key     a simple key, bow at the top (pickups)
  *   ellipse a ring seen at a low angle (a base ring on the ground, 2D)
  *   hexshard one glowing hexagon tile (dome tiles, shield fragments); penttile: its pentagon
+ *   arrow   a bold chevron (^) pointing up (stat buffs; rotate by PI for down)
+ *   pixel   a hard-edged square, no rounding or blur (retro pixel-art effects)
  */
 export function makeTextures(THREE) {
   const S = 128;
@@ -268,6 +270,18 @@ export function makeTextures(THREE) {
       g.shadowBlur = s * 0.1; g.shadowColor = W(1);
       g.lineWidth = s * 0.09; g.lineJoin = 'round'; g.strokeStyle = W(1); g.stroke(); g.stroke();
     }),
+    arrow: make((g, s) => {
+      // a bold chevron (^): reads as "up" even when small, where an arrow with a shaft looks like a house
+      soft(g, s);
+      g.strokeStyle = W(1); g.lineWidth = s * 0.2; g.lineCap = 'round'; g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(s * 0.16, s * 0.7); g.lineTo(s * 0.5, s * 0.32); g.lineTo(s * 0.84, s * 0.7); g.stroke(); g.stroke();
+    }),
+    pixel: (() => {
+      // drawn without smoothing and sampled NEAREST so it stays a crisp block at any size
+      const t = make((g, s) => { g.fillStyle = W(1); g.fillRect(s * 0.1, s * 0.1, s * 0.8, s * 0.8); }, 16);
+      t.minFilter = THREE.NearestFilter; t.magFilter = THREE.NearestFilter; t.generateMipmaps = false; t.needsUpdate = true;
+      return t;
+    })(),
     penttile: make((g, s, c) => {
       g.beginPath();
       for (let i = 0; i < 5; i++) { const a = (i * 2 * Math.PI) / 5; const x = c + Math.cos(a) * c * 0.98, y = c + Math.sin(a) * c * 0.98; if (i === 0) g.moveTo(x, y); else g.lineTo(x, y); }

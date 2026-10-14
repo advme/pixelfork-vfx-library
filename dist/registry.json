@@ -1,9 +1,9 @@
 {
   "name": "casual",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "style": "Modern mobile casual: chunky, bright, glossy, cartoon. Bold shapes, saturated colours, short and punchy. Not realistic, not gritty.",
-  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.js",
-  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.module.js",
+  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.js",
+  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.module.js",
   "moduleNeeds": "three >= 0.182 provided by the page through an import map",
   "effects": [
     {
@@ -251,6 +251,67 @@
       "aliases": []
     },
     {
+      "name": "hit.kick",
+      "category": "hit",
+      "whenToUse": "A ball is kicked, hit or thrown hard: a soccer shot, a golf drive, a baseball hit, a power shot, a volleyball spike. Play it on the ball at the moment of the hit; in 2D set dir (degrees) and in 3D pass direction the way the ball flies. Then follow the ball with move.trail.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "kick",
+        "ball",
+        "soccer",
+        "football",
+        "shot",
+        "sports",
+        "golf",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.stomp",
+      "category": "hit",
+      "whenToUse": "The player jumps on an enemy's head, squashes a bug, ground-pounds a target or bounces off a foe in a platformer. Play it on top of the enemy as it gets squashed.",
+      "duration": 0.55,
+      "loop": false,
+      "tint": "#ffe14d",
+      "anchor": "center",
+      "tags": [
+        "stomp",
+        "squash",
+        "jump on",
+        "platformer",
+        "mario",
+        "ground pound",
+        "enemy",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.splat",
+      "category": "hit",
+      "whenToUse": "Something wet and sticky hits: a slime enemy squashed, a paint ball or paint shot, a tomato or egg thrown, ink, mud, honey or goo. Play it where it lands; tint it for the substance (green slime, paint colour, red tomato).",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#7ee83a",
+      "anchor": "center",
+      "tags": [
+        "splat",
+        "slime",
+        "paint",
+        "goo",
+        "ink",
+        "mud",
+        "tomato",
+        "squash",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
       "name": "explosion.small",
       "category": "explosion",
       "whenToUse": "A small thing blows up: a barrel, an enemy, a car crash, a bomb, a rocket landing. About 150px wide.",
@@ -354,6 +415,26 @@
         "wipe",
         "super",
         "flash"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.pixel",
+      "category": "explosion",
+      "whenToUse": "An explosion, enemy death or block break in a pixel-art, retro, 8-bit or arcade-style game, where soft glowing effects would look out of place. Tint it for non-fire blasts (null keeps the fire colours).",
+      "duration": 0.7,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "pixel",
+        "retro",
+        "8-bit",
+        "arcade",
+        "explosion",
+        "pixel art",
+        "blocks",
+        "enemy death"
       ],
       "aliases": []
     },
@@ -947,6 +1028,26 @@
       "aliases": []
     },
     {
+      "name": "move.bounce",
+      "category": "move",
+      "whenToUse": "A trampoline, spring, jump pad, mushroom or bouncy surface launches the character up. Play it on the pad at the moment of the bounce.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#5cd6ff",
+      "anchor": "feet",
+      "tags": [
+        "bounce",
+        "spring",
+        "trampoline",
+        "jump pad",
+        "launch",
+        "platformer",
+        "boost",
+        "move"
+      ],
+      "aliases": []
+    },
+    {
       "name": "magic.heal",
       "category": "magic",
       "whenToUse": "Health restored, a potion drunk, a shrine touched, a buff applied. Play on the character.",
@@ -1161,6 +1262,46 @@
         "drain",
         "evil",
         "spiral"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.buff",
+      "category": "magic",
+      "whenToUse": "A character gets stronger: attack up, defence up, speed up, a blessing, a potion that raises a stat, a party buff in an RPG. Play it on the character; tint by stat (red attack, blue defence, green speed, gold all). For healing use magic.heal.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ffd23a",
+      "anchor": "feet",
+      "tags": [
+        "buff",
+        "stat up",
+        "power up",
+        "blessing",
+        "rpg",
+        "strength",
+        "boost",
+        "arrow"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.debuff",
+      "category": "magic",
+      "whenToUse": "A character gets weaker: attack down, defence down, slowed, weakened, cursed for a stat, a bad status in an RPG. Play it on the character; tint by stat. For an ongoing curse use magic.curse or state.poison.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#a14dff",
+      "anchor": "center",
+      "tags": [
+        "debuff",
+        "stat down",
+        "weaken",
+        "slow",
+        "rpg",
+        "curse",
+        "nerf",
+        "arrow"
       ],
       "aliases": []
     },
@@ -1440,6 +1581,67 @@
         "hexagon",
         "off",
         "destroyed"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.magnet",
+      "category": "state",
+      "whenToUse": "A magnet, vacuum or attract power-up is active: endless runners, coin collectors, auto-pickup buffs, a gravity field. Follow the character; stop it when the power-up runs out.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff4f6b",
+      "anchor": "center",
+      "tags": [
+        "magnet",
+        "powerup",
+        "attract",
+        "coins",
+        "runner",
+        "vacuum",
+        "buff",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.rainbow",
+      "category": "state",
+      "whenToUse": "The player is invincible or super-powered for a short time: a star power-up, a fever or rush mode, a rainbow road, a hyper state. Follow the character; stop it when the power ends. For a calm magical sparkle use state.sparkle.",
+      "duration": 1,
+      "loop": true,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "invincible",
+        "star",
+        "rainbow",
+        "powerup",
+        "fever",
+        "super",
+        "platformer",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.selected",
+      "category": "state",
+      "whenToUse": "A unit, hero, building or target is selected or targeted: RTS and tactics selection, the active character in a turn-based fight, a locked-on enemy, a placed tower. Play it at the unit's feet and stop it on deselect. Tint green for own units, red for enemies.",
+      "duration": 1.2,
+      "loop": true,
+      "tint": "#4dff9a",
+      "anchor": "feet",
+      "tags": [
+        "select",
+        "selection",
+        "target",
+        "lock on",
+        "rts",
+        "tactics",
+        "turn based",
+        "unit",
+        "status"
       ],
       "aliases": []
     },
@@ -1803,6 +2005,48 @@
       "aliases": []
     },
     {
+      "name": "vehicle.siren",
+      "category": "vehicle",
+      "whenToUse": "A police car, ambulance, fire truck or alarm is flashing: a chase, a crime or heist game, an emergency, a wanted level. Follow the light bar on the roof; stop it when the chase ends.",
+      "duration": 0.6,
+      "loop": true,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "police",
+        "siren",
+        "chase",
+        "crime",
+        "cop",
+        "emergency",
+        "alarm",
+        "wanted",
+        "vehicle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "vehicle.wake",
+      "category": "vehicle",
+      "whenToUse": "A boat, jet ski, surfboard or swimming creature moves through water. Follow the back of the hull at the water line; stop it when it stops. For a single splash use move.splash.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "boat",
+        "wake",
+        "water",
+        "foam",
+        "jetski",
+        "ship",
+        "sea",
+        "island",
+        "vehicle"
+      ],
+      "aliases": []
+    },
+    {
       "name": "weapon.muzzle",
       "category": "weapon",
       "whenToUse": "A gun, cannon or blaster fires: every shot. Play it at the barrel tip; in 2D set dir (degrees, 0 = right), in 3D pass direction along the barrel. Tiny and fast: fine at full-auto rates.",
@@ -1861,6 +2105,46 @@
         "bolt",
         "weapon",
         "sci-fi"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "weapon.rocket",
+      "category": "weapon",
+      "whenToUse": "A rocket, missile, RPG round, firework rocket or jetpack is flying. Follow the projectile; in 3D pass direction (backward, out of the tail) and keep it current with handle.aim(v). On impact stop it and play explosion.big.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff8a2a",
+      "anchor": "center",
+      "tags": [
+        "rocket",
+        "missile",
+        "rpg",
+        "smoke trail",
+        "projectile",
+        "military",
+        "jetpack",
+        "weapon"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "weapon.shell",
+      "category": "weapon",
+      "whenToUse": "A gun ejects a spent casing after a shot (pair it with weapon.muzzle on every shot of a pistol, rifle or shotgun). Play it at the ejection port on the side of the gun; in 2D set dir (degrees) for the side the casing flies to.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#d8b04a",
+      "anchor": "center",
+      "tags": [
+        "shell",
+        "casing",
+        "brass",
+        "gun",
+        "shot",
+        "fps",
+        "shooter",
+        "weapon"
       ],
       "aliases": []
     },
@@ -1924,6 +2208,68 @@
         "survival",
         "warm",
         "night"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.beacon",
+      "category": "world",
+      "whenToUse": "Marks a place the player must go: a quest objective, a waypoint, a delivery drop-off, a mission start, the next checkpoint. Play it on the ground at that spot and stop it when the player arrives (then play reward.checkpoint).",
+      "duration": 1.2,
+      "loop": true,
+      "tint": "#ffd23a",
+      "anchor": "feet",
+      "tags": [
+        "objective",
+        "waypoint",
+        "marker",
+        "quest",
+        "mission",
+        "target",
+        "destination",
+        "open world"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.lootbeam",
+      "category": "world",
+      "whenToUse": "Marks dropped loot, a weapon on the ground, an airdrop or a rare item so it can be seen from afar (battle royale, RPG, looter). Play it on the item and stop it when picked up. Tint by rarity: white common, green uncommon, blue rare, purple epic, gold legendary.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#b45cff",
+      "anchor": "feet",
+      "tags": [
+        "loot",
+        "drop",
+        "rarity",
+        "item",
+        "beam",
+        "battle royale",
+        "rpg",
+        "airdrop",
+        "treasure"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.build",
+      "category": "world",
+      "whenToUse": "A building, wall, tower, furniture or block is placed or finishes construction: base building, city builders, sandbox and voxel games, tower defense placement, an upgrade completing. Play it at the base of the new thing; size it to the building (size 2 for a house).",
+      "duration": 1,
+      "loop": false,
+      "tint": "#d9b27c",
+      "anchor": "feet",
+      "tags": [
+        "build",
+        "construct",
+        "place",
+        "building",
+        "base",
+        "sandbox",
+        "tower",
+        "upgrade",
+        "craft"
       ],
       "aliases": []
     },
@@ -2024,6 +2370,46 @@
         "match3",
         "puzzle",
         "rocket"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.wrong",
+      "category": "puzzle",
+      "whenToUse": "The player makes a wrong or invalid move: a wrong answer in a quiz or logic puzzle, a swap that makes no match, a locked tile tapped, a mistake in a sorting or word game. Play it on the tile or answer; keep the sound short too.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#ff3b4a",
+      "anchor": "center",
+      "tags": [
+        "wrong",
+        "error",
+        "mistake",
+        "invalid",
+        "no",
+        "quiz",
+        "puzzle",
+        "fail"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.hint",
+      "category": "puzzle",
+      "whenToUse": "Show the player what to do next: a hint on a tile, the next move in a tutorial, an idle nudge after a few seconds, a clickable item in a hidden-object game. Play it on the tile (el: the tile) and stop it when the player acts.",
+      "duration": 1.2,
+      "loop": true,
+      "tint": "#fff39a",
+      "anchor": "center",
+      "tags": [
+        "hint",
+        "tutorial",
+        "help",
+        "suggest",
+        "idle",
+        "tap here",
+        "puzzle",
+        "glow"
       ],
       "aliases": []
     },

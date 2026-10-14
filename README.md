@@ -1,12 +1,12 @@
 # Pixelfork VFX Library
 
 Ready-made game visual effects (particles) for AI-generated web games. An AI picks a name; it never designs an effect.
-117 effects · all drawn in code, nothing to load · overlay over any engine, or inside a three.js scene · pairs with the Super Casual UI Kit.
+136 effects · all drawn in code, nothing to load · overlay over any engine, or inside a three.js scene · pairs with the Super Casual UI Kit.
 
 ## Use it in a game (no install)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.js"></script>
 <script>VFX.attach();</script>
 
 <script>VFX.play('hit.impact', { x: 120, y: 340 });</script>

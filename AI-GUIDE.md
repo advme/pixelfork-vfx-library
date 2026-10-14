@@ -2,12 +2,12 @@
 
 Ready-made visual effects (particles) for AI-generated web games. **You never design or draw an effect — you call a name from the list below.**
 
-**117 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
+**136 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
 
 ## 1. Add it (2 lines)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.js"></script>
 <script>VFX.attach();</script>
 ```
 This is the setup for **2D games** (canvas 2D, Phaser, PixiJS, DOM). A **three.js 3D game uses a different build: see section 4.**
@@ -75,6 +75,9 @@ For this to work the character or UI must be a positioned element with a z-index
 | `hit.dirt` | A bullet, arrow, shovel, hoof or heavy step hits soil, sand or grass: missed shots in a shooter, digging, a stomp on dirt. Play it on the ground where it hit. Tint it for sand, mud or snow. | no (0.8s) | yes, default `#8a6a48` |
 | `hit.ko` | A character is knocked out or defeated: K.O. in a fighting game, the player dies in a platformer, a boss goes down, an enemy is finished off. Play it on the character's body. For an enemy simply vanishing use explosion.puff. | no (1s) | yes, default `#ffe14d` |
 | `hit.flurry` | A rapid multi-hit attack: a punch flurry, a fast sword combo, a machine-gun burst on one target, a special move that hits several times. Play it once on the target; it lands four hits in under half a second. | no (0.6s) | yes, default `#ffd23a` |
+| `hit.kick` | A ball is kicked, hit or thrown hard: a soccer shot, a golf drive, a baseball hit, a power shot, a volleyball spike. Play it on the ball at the moment of the hit; in 2D set dir (degrees) and in 3D pass direction the way the ball flies. Then follow the ball with move.trail. | no (0.5s) | yes, default `#ffffff` |
+| `hit.stomp` | The player jumps on an enemy's head, squashes a bug, ground-pounds a target or bounces off a foe in a platformer. Play it on top of the enemy as it gets squashed. | no (0.55s) | yes, default `#ffe14d` |
+| `hit.splat` | Something wet and sticky hits: a slime enemy squashed, a paint ball or paint shot, a tomato or egg thrown, ink, mud, honey or goo. Play it where it lands; tint it for the substance (green slime, paint colour, red tomato). | no (0.8s) | yes, default `#7ee83a` |
 
 **`explosion.*`**
 
@@ -86,6 +89,7 @@ For this to work the character or UI must be a positioned element with a z-index
 | `explosion.fireball` | A fire spell lands, a fuel can ignites, a dragon breath hits, a torch bursts. Fire without the smoke of an explosion. | no (1s) | yes, default `#ff7a1f` |
 | `explosion.firework` | Celebrations and fun blasts: fireworks on a win screen, a party popper, a magic burst. Tint it or leave it multicolour. | no (1.6s) | yes |
 | `explosion.nuke` | A bomb power-up clears the board, a super attack wipes every enemy, the final boss dies. Covers the whole screen; play once. | no (2s) | yes |
+| `explosion.pixel` | An explosion, enemy death or block break in a pixel-art, retro, 8-bit or arcade-style game, where soft glowing effects would look out of place. Tint it for non-fire blasts (null keeps the fire colours). | no (0.7s) | yes |
 
 **`pickup.*`**
 
@@ -133,6 +137,7 @@ For this to work the character or UI must be a positioned element with a z-index
 | `move.skid` | A car drifts or brakes hard, a character slides to a stop, a cart skids. Follow the wheels; stop when grip returns. | yes, call stop() | yes, default `#e6e6e6` |
 | `move.doublejump` | A double jump, an air jump, a wing flap or a mid-air dash start in a platformer. Play it at the character's feet at the moment of the jump. For a jump off the ground use move.jump. | no (0.45s) | yes, default `#ffffff` |
 | `move.wallslide` | A character slides down a wall, clings to a wall, grinds along a rail or scrapes along a surface in a platformer. Follow the hand or foot touching the wall; stop it when they let go. Tint it for the wall (stone dust, snow, sparks on metal). | yes, call stop() | yes, default `#e9dcc7` |
+| `move.bounce` | A trampoline, spring, jump pad, mushroom or bouncy surface launches the character up. Play it on the pad at the moment of the bounce. | no (0.5s) | yes, default `#5cd6ff` |
 
 **`magic.*`**
 
@@ -150,6 +155,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `magic.fire` | A fireball, a flaming arrow, a meteor or any burning projectile while it flies. Play with follow on the projectile; stop it on impact and play explosion.fireball. | yes, call stop() | yes, default `#ff7a1f` |
 | `magic.summon` | A creature, ally or boss is summoned; a ritual completes; a big spell is cast from a circle. Play at the feet. | no (1.6s) | yes, default `#b56bff` |
 | `magic.curse` | A curse, hex, debuff or drain lands on a character; a cursed item is picked up. Play on the body. | no (1.2s) | yes, default `#7a2cff` |
+| `magic.buff` | A character gets stronger: attack up, defence up, speed up, a blessing, a potion that raises a stat, a party buff in an RPG. Play it on the character; tint by stat (red attack, blue defence, green speed, gold all). For healing use magic.heal. | no (1s) | yes, default `#ffd23a` |
+| `magic.debuff` | A character gets weaker: attack down, defence down, slowed, weakened, cursed for a stat, a bad status in an RPG. Play it on the character; tint by stat. For an ongoing curse use magic.curse or state.poison. | no (1s) | yes, default `#a14dff` |
 
 **`state.*`**
 
@@ -170,6 +177,9 @@ For this to work the character or UI must be a positioned element with a z-index
 | `state.charged` | A character is electrified, stunned by a shock, or carrying a charged power. Also a live wire or a generator. Follow it; stop when it discharges. | yes, call stop() | yes, default `#9fd8ff` |
 | `state.dome` | A force field, energy dome or barrier shield goes up around a character, a base or an object and stays until it is switched off. Play it at the feet / on the ground; call stop() and the dome breaks apart on its own (state.domebreak). | yes, call stop() | yes, default `#4fb8ff` |
 | `state.domebreak` | An energy dome or force field is switched off or destroyed. Played automatically when state.dome is stopped; play it yourself only for a dome the game drew itself. | no (1.7s) | yes, default `#4fb8ff` |
+| `state.magnet` | A magnet, vacuum or attract power-up is active: endless runners, coin collectors, auto-pickup buffs, a gravity field. Follow the character; stop it when the power-up runs out. | yes, call stop() | yes, default `#ff4f6b` |
+| `state.rainbow` | The player is invincible or super-powered for a short time: a star power-up, a fever or rush mode, a rainbow road, a hyper state. Follow the character; stop it when the power ends. For a calm magical sparkle use state.sparkle. | yes, call stop() | no |
+| `state.selected` | A unit, hero, building or target is selected or targeted: RTS and tactics selection, the active character in a turn-based fight, a locked-on enemy, a placed tower. Play it at the unit's feet and stop it on deselect. Tint green for own units, red for enemies. | yes, call stop() | yes, default `#4dff9a` |
 
 **`env.*`**
 
@@ -199,6 +209,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `vehicle.nitro` | A car, kart, rocket or jetpack boosts: nitro, turbo, afterburner. Follow the exhaust or nozzle; in 3D pass direction (backward, out of the nozzle) and keep it current with handle.aim(v). Stop it when the boost ends. | yes, call stop() | yes, default `#47b6ff` |
 | `vehicle.crash` | Two cars collide, a car hits a wall or a pole, a vehicle lands hard or gets wrecked. Play it at the point of impact. | no (1s) | yes, default `#ffcf5a` |
 | `vehicle.damaged` | A car, tank, plane or machine is badly damaged or wrecked: low health, a burning wreck, a broken generator. Follow the engine or hood; stop it when it is repaired or removed. | yes, call stop() | yes, default `#ff7a1f` |
+| `vehicle.siren` | A police car, ambulance, fire truck or alarm is flashing: a chase, a crime or heist game, an emergency, a wanted level. Follow the light bar on the roof; stop it when the chase ends. | yes, call stop() | no |
+| `vehicle.wake` | A boat, jet ski, surfboard or swimming creature moves through water. Follow the back of the hull at the water line; stop it when it stops. For a single splash use move.splash. | yes, call stop() | yes, default `#ffffff` |
 
 **`weapon.*`**
 
@@ -207,6 +219,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `weapon.muzzle` | A gun, cannon or blaster fires: every shot. Play it at the barrel tip; in 2D set dir (degrees, 0 = right), in 3D pass direction along the barrel. Tiny and fast: fine at full-auto rates. | no (0.5s) | yes, default `#ffcf5a` |
 | `weapon.smoke` | A smoke grenade, a smoke bomb, a flare canister, a fog machine or a coloured signal smoke. Play it on the ground where it landed; stop it after a few seconds and the cloud drifts away. Tint it for coloured smoke. | yes, call stop() | yes, default `#d3d9de` |
 | `weapon.laser` | A laser, blaster or energy bolt is fired in a shooter or shoot-em-up. Play it at the gun or ship nose; in 2D set dir (degrees: 90 = up for a vertical shooter, 0 = right), in 3D pass direction. It only shows the shot; for the hit use hit.bullet or hit.shieldzap. | no (0.45s) | yes, default `#ff3b6b` |
+| `weapon.rocket` | A rocket, missile, RPG round, firework rocket or jetpack is flying. Follow the projectile; in 3D pass direction (backward, out of the tail) and keep it current with handle.aim(v). On impact stop it and play explosion.big. | yes, call stop() | yes, default `#ff8a2a` |
+| `weapon.shell` | A gun ejects a spent casing after a shot (pair it with weapon.muzzle on every shot of a pistol, rifle or shotgun). Play it at the ejection port on the side of the gun; in 2D set dir (degrees) for the side the casing flies to. | no (0.9s) | yes, default `#d8b04a` |
 
 **`gather.*`**
 
@@ -220,6 +234,9 @@ For this to work the character or UI must be a positioned element with a z-index
 | Effect | Play it when | Loops | Tint |
 |---|---|---|---|
 | `world.campfire` | A campfire, bonfire, fireplace, brazier, burning barrel or a torch in the world. Play it on the fire's base and leave it running; size 0.5 makes a torch or candle-sized flame. | yes, call stop() | yes, default `#ff8a2a` |
+| `world.beacon` | Marks a place the player must go: a quest objective, a waypoint, a delivery drop-off, a mission start, the next checkpoint. Play it on the ground at that spot and stop it when the player arrives (then play reward.checkpoint). | yes, call stop() | yes, default `#ffd23a` |
+| `world.lootbeam` | Marks dropped loot, a weapon on the ground, an airdrop or a rare item so it can be seen from afar (battle royale, RPG, looter). Play it on the item and stop it when picked up. Tint by rarity: white common, green uncommon, blue rare, purple epic, gold legendary. | yes, call stop() | yes, default `#b45cff` |
+| `world.build` | A building, wall, tower, furniture or block is placed or finishes construction: base building, city builders, sandbox and voxel games, tower defense placement, an upgrade completing. Play it at the base of the new thing; size it to the building (size 2 for a house). | no (1s) | yes, default `#d9b27c` |
 
 **`puzzle.*`**
 
@@ -230,6 +247,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `puzzle.shatter` | A gem, crystal, ice block or glass tile breaks: a locked or frozen tile freed in a puzzle, a crystal smashed, a glass obstacle broken. Tint it with the gem's colour. | no (0.75s) | yes, default `#7fd8ff` |
 | `puzzle.merge` | Two or more items combine into a better one: a merge game (2048, merge dragons, suika), fusing, crafting two things together, a level-up of a unit. Play it where the new item appears; tint it with the new item's colour. | no (0.7s) | yes, default `#ffc23a` |
 | `puzzle.blast` | A special tile, bomb or booster fires in a match-3 or block puzzle: a cross blast that clears a row and a column, a bomb candy, a rocket booster. Play it on the special tile. | no (0.6s) | yes, default `#ff7a2a` |
+| `puzzle.wrong` | The player makes a wrong or invalid move: a wrong answer in a quiz or logic puzzle, a swap that makes no match, a locked tile tapped, a mistake in a sorting or word game. Play it on the tile or answer; keep the sound short too. | no (0.5s) | yes, default `#ff3b4a` |
+| `puzzle.hint` | Show the player what to do next: a hint on a tile, the next move in a tutorial, an idle nudge after a few seconds, a clickable item in a hidden-object game. Play it on the tile (el: the tile) and stop it when the player acts. | yes, call stop() | yes, default `#fff39a` |
 
 **`ui.*`**
 
@@ -256,7 +275,7 @@ A 3D game must share **one copy of three.js** with this library. So 3D games do 
 { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
-    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.module.js"
+    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.module.js"
 } }
 </script>
 <script type="module">
@@ -284,9 +303,9 @@ What the library does for you in 3D:
 - Effects are **inside the world**: hidden behind walls and characters, sized by distance.
 - Effects are **truly 3D where it matters**: explosions, smoke and debris burst in every direction; debris is solid tumbling chunks (planks, crystal shards, rubble); shockwaves, landing dust and magic circles lie flat on the floor; halos and auras circle around the character; `move.trail` and `magic.fire` draw a ribbon through the air. You do nothing for this — same names, same call.
 - Everything else **turns to face the camera**, so it reads the same from any angle (top-down, side, orbit). One-shots lock their angle when they spawn; loops keep turning. Gravity always falls to the ground, flames always rise.
-- **Aim the directional effects with a vector.** Eleven effects are real 3D cones or winds that take `direction: [x, y, z]` (a world vector, any length):
-  `hit.blood` (away from the weapon), `hit.slash` (along the swing), `hit.parry` (where the sparks fly), `reward.confetti` (out of the cannon), `move.dash` and `move.speed` (OPPOSITE to the movement: the streaks fly backward), `env.sandstorm` (the way the wind blows along the ground), `weapon.muzzle` and `weapon.laser` (along the barrel), `vehicle.exhaust` and `vehicle.nitro` (backward, out of the pipe or nozzle; keep loops aimed with `handle.aim(v)` while the vehicle turns).
-  Without `direction` they default sensibly (blood, parry and confetti up; slash across; dash, speed, exhaust and nitro to the camera's left; muzzle and laser to the camera's right; sandstorm along +X). Blood also leaves short-lived splats on the floor.
+- **Aim the directional effects with a vector.** Thirteen effects are real 3D cones or winds that take `direction: [x, y, z]` (a world vector, any length):
+  `hit.blood` (away from the weapon), `hit.slash` (along the swing), `hit.parry` (where the sparks fly), `reward.confetti` (out of the cannon), `move.dash` and `move.speed` (OPPOSITE to the movement: the streaks fly backward), `env.sandstorm` (the way the wind blows along the ground), `weapon.muzzle` and `weapon.laser` (along the barrel), `vehicle.exhaust`, `vehicle.nitro` and `weapon.rocket` (backward, out of the pipe, nozzle or tail; keep loops aimed with `handle.aim(v)` while it turns), `hit.kick` (the way the ball flies).
+  Without `direction` they default sensibly (blood, parry and confetti up; slash across; dash, speed, exhaust, nitro and rocket to the camera's left; muzzle, laser and kick to the camera's right; sandstorm along +X). Blood also leaves short-lived splats on the floor.
 ```js
 VFX.play('hit.blood', { position: enemy.position, direction: enemy.position.clone().sub(player.position) });
 const lines = VFX.play('move.speed', { follow: car, direction: car.velocity.clone().negate() });
@@ -309,7 +328,7 @@ lines.aim(car.velocity.clone().negate());
 2. Wire the standard moments: hit → `hit.impact` · bloody hit → `hit.blood` · collect → `pickup.sparkle` / `pickup.coin` · win screen → `reward.clear` · level up / unlock → `reward.levelup` · jump / land → `move.jump` · heal → `magic.heal` · stunned → `state.stun` (stop it!) · enemy or object destroyed → `explosion.small` · board wipe → `explosion.nuke` · weather → `env.*` once per level · buttons → `ui.pop`.
 3. Always `stop()` looping effects when the thing they belong to disappears, and `VFX.stopAll()` on screen changes.
 4. Unknown names never throw: they warn once and do nothing. Check `VFX.has(name)` if unsure.
-5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/registry.json`
+5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/registry.json`
 
 ## Licence — read this before using anything here
 

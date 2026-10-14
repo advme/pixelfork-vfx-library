@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.11.0-A — 19 more effects from the V1 prompt analysis, arrow and pixel textures
+- Agent: A (Claude) · Date: 2026-10-14
+- Why: the owner liked v0.10.0 and asked to continue. Second pass over the analyzer's demand: quests (433 prompts), loot (356), building (206), chases/crime, boats, military, sports, endless runners in 3D; platformers, logic puzzles, strategy/RPG, pixel-art and slime/paint games in 2D.
+- Done: `world.beacon`* (objective marker), `world.lootbeam`* (rarity beam), `world.build`, `vehicle.siren`*, `vehicle.wake`*, `weapon.rocket`* (missile smoke trail), `weapon.shell` (casing), `hit.kick`, `state.magnet`*, `hit.stomp`, `move.bounce`, `state.rainbow`* (invincible), `puzzle.wrong`, `puzzle.hint`*, `state.selected`*, `magic.buff`, `magic.debuff`, `explosion.pixel`, `hit.splat` (* = loop). New code-drawn textures: `arrow` (a bold ^ chevron: an arrow with a shaft read as a house icon at small size) and `pixel` (hard square, nearest-neighbour sampled). AI guide: rocket and kick take `direction`.
+- Tested: build (136 effects); all 19 run without errors in both players (stepped by hand, since the browser pane pauses animation when it is not in front); key frames looked at in 2D and 3D.
+- Not shipped: `env.sunrays` (kept as a draft in `packs/casual/drafts/`, not imported by the pack): its shafts work in 2D but never showed in 3D. See STATUS, "Open: sun rays".
+
 ## v0.10.0-A — 24 new effects from the V1 prompt analysis (12 aimed at 3D games, 12 at 2D), and a 3D debris fix
 - Agent: A (Claude) · Date: 2026-10-14
 - Why: the owner asked for more effects for 2D and 3D games, based on their V1 prompt analyzer (`../Pixelfork V1 Prompt Analyzer`, labels for 4,478 game prompts). 3D prompts (2,124) are dominated by driving (445 ask for driving physics), shooting (500), open-world survival and gathering, day/night weather (339) and horror (367); 2D prompts (1,122) by platformers, hypercasual, fighting and match-3 / merge puzzles. The library had nothing for cars, guns, gathering or puzzles.

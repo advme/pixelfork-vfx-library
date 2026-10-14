@@ -67,7 +67,7 @@
   const hero = document.getElementById('hero');
   let useTint = false, behind = false, selected = VFX.list()[0];
   const loops = {};
-  const feet = { 'state.dome': true, 'state.domebreak': true, 'hit.dirt': true, 'world.campfire': true, 'weapon.smoke': true, 'move.doublejump': true, 'reward.checkpoint': true };            // effects that belong at the character's feet (the VFX Maker adds move.* here)
+  const feet = { 'state.dome': true, 'state.domebreak': true, 'hit.dirt': true, 'world.campfire': true, 'weapon.smoke': true, 'move.doublejump': true, 'reward.checkpoint': true, 'magic.buff': true, 'move.bounce': true, 'state.selected': true, 'world.beacon': true, 'world.lootbeam': true, 'world.build': true };            // effects that belong at the character's feet (the VFX Maker adds move.* here)
 
   document.getElementById('ver').textContent = 'v' + VFX.VERSION;
   sizeEl.oninput = () => (sizeVal.textContent = Number(sizeEl.value).toFixed(1));

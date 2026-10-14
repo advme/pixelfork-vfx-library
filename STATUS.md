@@ -1,16 +1,20 @@
 # STATUS
 
-**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.10.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
+**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.11.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
 
 ## Next task
-**Owner review of the 24 new effects** (v0.10.0-A) in both players: the 3D set (`vehicle.*`, `weapon.*`,
-`gather.*`, `world.campfire`, `hit.dirt`, `env.storm`, `env.spirits`) in the 3D player, the 2D set
-(`puzzle.*`, `move.doublejump`, `move.wallslide`, `hit.ko`, `hit.flurry`, `reward.checkpoint`,
-`reward.jackpot`, `weapon.laser`) in the 2D player. They were chosen from the owner's V1 prompt analysis
-(`../Pixelfork V1 Prompt Analyzer`, 4,478 game prompts): 3D asks for driving, shooting, gathering,
-weather and horror; 2D for platformers, fighting and match-3 / merge puzzles, none of which had effects.
-The VFX Studio is a separate Claude Code project now (`../Pixelfork VFX Studio`, worked on in its own
-session); do not build it from here. Retire `tools/maker*` here once the owner says the Studio works.
+**Owner review of the 19 effects added in v0.11.0-A** (second batch from the V1 prompt analysis: quests,
+loot, building, chases, boats, military, sports, runners; platformers, puzzles, strategy/RPG, pixel art):
+`world.beacon`, `world.lootbeam`, `world.build`, `vehicle.siren`, `vehicle.wake`, `weapon.rocket`,
+`weapon.shell`, `hit.kick`, `state.magnet` · `hit.stomp`, `move.bounce`, `state.rainbow`, `puzzle.wrong`,
+`puzzle.hint`, `state.selected`, `magic.buff`, `magic.debuff`, `explosion.pixel`, `hit.splat`.
+The VFX Studio is a separate Claude Code project (`../Pixelfork VFX Studio`); do not build it from here.
+
+## Open: sun rays (`packs/casual/drafts/env.sunrays.js`, a draft, not in the pack)
+Works in 2D (slanted shafts from a line emitter pushed by a force, stretched). In 3D the shafts never
+showed: slow stretched sprites smear into faint blobs whether placed in the world (`env3d`) or on the
+camera-facing sheet. Needs a different technique (e.g. a few long thin quads / a cone mesh with a soft
+gradient texture, or the bolt approach with fast particles and a short life). Do not ship it 2D-only.
 
 ## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
 `state.dome` (loop: ring lights up, energy rises, the dome builds itself tile by tile from the ground
@@ -55,22 +59,22 @@ under `advme` because that is the account logged in on the owner's Mac. Moving i
 ## In progress
 _Nothing._
 
-## The pack — 117 effects, all playable (v0.10.0-A)
+## The pack — 136 effects, all playable (v0.11.0-A)
 | Group | Effects |
 |---|---|
-| `hit.*` (13) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry |
-| `explosion.*` (6) | small, big, puff, fireball, firework, nuke (full screen) |
+| `hit.*` (16) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry, kick, stomp, splat |
+| `explosion.*` (7) | small, big, puff, fireball, firework, nuke (full screen), pixel |
 | `pickup.*` (8) | sparkle, coin, gem, heart, powerup, xp, key, food |
 | `reward.*` (9) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen), checkpoint, jackpot |
-| `move.*` (15) | jump, footstep, land, dash, splash, teleport, spawn, doublejump · loops: trail, dust, speed, swim, fly, skid, wallslide |
-| `magic.*` (12) | heal, ice, lightning, shield, poison, dark, holy, summon, curse · loops: portal, cast, fire (projectile) |
-| `state.*` (15) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, dome (ends with the one-shot domebreak) |
+| `move.*` (16) | jump, footstep, land, dash, splash, teleport, spawn, doublejump, bounce · loops: trail, dust, speed, swim, fly, skid, wallslide |
+| `magic.*` (14) | heal, ice, lightning, shield, poison, dark, holy, summon, curse, buff, debuff · loops: portal, cast, fire (projectile) |
+| `state.*` (18) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, magnet, rainbow, selected, dome (ends with the one-shot domebreak) |
 | `env.*` (15, all loops) | snow, rain, leaves, confetti, clouds, storm (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm, spirits (everywhere) |
-| `vehicle.*` (4) | crash · loops: exhaust, nitro, damaged |
-| `weapon.*` (3) | muzzle, laser · loop: smoke (grenade) |
+| `vehicle.*` (6) | crash · loops: exhaust, nitro, damaged, siren, wake |
+| `weapon.*` (5) | muzzle, laser, shell · loops: smoke (grenade), rocket |
 | `gather.*` (2) | wood, stone |
-| `world.*` (1) | loop: campfire |
-| `puzzle.*` (5) | match, line, shatter, merge, blast |
+| `world.*` (4) | build · loops: campfire, beacon, lootbeam |
+| `puzzle.*` (7) | match, line, shatter, merge, blast, wrong · loop: hint |
 | `ui.*` (9) | pop, tap, star, burst, unlock, flash (full-screen), shine · loops: glow, countup |
 
 ## 3D (three.js) mode — steps 1 and 2 done
