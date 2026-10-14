@@ -2,7 +2,7 @@
 export default {
   name: 'world.cooking',
   category: 'world',
-  whenToUse: 'Food is frying or sizzling: a pan or wok on the stove, a grill or barbecue, a griddle or hot plate in a cooking or restaurant game. Play it on the cooking surface and leave it running while the food cooks. For a boiling pot or kettle use world.steam; for a bubbling potion pot use world.cauldron.',
+  whenToUse: 'Food is frying or sizzling: a pan or wok on the stove, a grill or barbecue, a griddle or hot plate in a cooking or restaurant game. Play it on the cooking surface and leave it running while the food cooks. For a boiling pot of soup or water use world.boil; for a bubbling potion pot use world.cauldron.',
   duration: 1, loop: true, tint: '#ffc94a',
   tags: ['cooking', 'frying', 'sizzle', 'pan', 'grill', 'kitchen', 'restaurant', 'food'],
   build(c) {

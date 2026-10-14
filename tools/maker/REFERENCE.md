@@ -77,7 +77,7 @@ Any number may be written `[min, max]` for a random value per particle.
 
 ### Shapes
 - `{ type: 'point' }`: no direction, so give no `speed` (use it for single flashes and rings).
-- `{ type: 'circle', radius: 14 }`: starts inside a circle and flies **outward** in the screen plane. The standard burst. `thickness: 0` = only on the rim. `arc` = part of the circle (`Math.PI` = the upper half; with `c.vol` that becomes a hemisphere in 3D).
+- `{ type: 'circle', radius: 14 }`: starts inside a circle and flies **outward** in the screen plane. The standard burst. `thickness: 0` = only on the rim. `arc` = part of the circle (`Math.PI` = the upper half; with `c.vol` that becomes a hemisphere opening upward in 3D). `even: true` spaces a burst's particles evenly round the circle instead of at random (rings of runes, orbiting dots, star bursts).
 - `{ type: 'sphere', radius }`: the same in every direction.
 - `{ type: 'cone', angle: 0.4, radius: 4 }`: a directed spray; `angle` is the half-spread in radians. Aims up unless `dir` is set.
 - `{ type: 'rect', w: 400, h: 0 }`: a line or box (`thickness: 1` fills the box instead of its edge). **Rect emitters push particles sideways, not forward**: always use `speed: 0` with them and move the particles with `c.gravity` / `c.force` plus `c.limitSpeed`. A vertical line is `{ w: 0, h: 300 }`; do not turn a rect with `dir`.

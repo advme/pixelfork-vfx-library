@@ -2,7 +2,7 @@
 export default {
   name: 'explosion.ice',
   category: 'explosion',
-  whenToUse: 'An ice bomb, a frost nova, a freezing spell exploding, an ice crystal shattering into a blast, a snow grenade. Play it at the centre. Freeze nearby enemies with state.frozen.',
+  whenToUse: 'An ice bomb, a freezing spell exploding, an ice crystal shattering into a blast, a snow grenade. Play it at the centre. Freeze nearby enemies with state.frozen; for a frost tower freezing the ground around it use explosion.frostnova.',
   duration: 1.0, loop: false, tint: '#8fdcff',
   tags: ['ice', 'frost', 'nova', 'freeze', 'cold', 'explosion', 'snow', 'blizzard'],
   build(c) {

@@ -2,7 +2,7 @@
 export default {
   name: 'world.steam',
   category: 'world',
-  whenToUse: 'Steam or vapour escaping: a pipe or vent in a factory, a hot spring, a boiling pot or kettle, a geyser vent, a cooling engine, hot food. Play it at the opening and leave it running; size 0.4 for a cup or pot.',
+  whenToUse: 'Steam or vapour escaping: a pipe or vent in a factory, a hot spring, a kettle, a geyser vent, a cooling engine, hot food. Play it at the opening and leave it running; size 0.4 for a cup or pot.',
   duration: 1, loop: true, tint: '#ffffff',
   tags: ['steam', 'vapor', 'vent', 'pipe', 'factory', 'hot spring', 'kettle', 'cooking', 'industrial'],
   build(c) {

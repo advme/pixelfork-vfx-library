@@ -477,6 +477,106 @@ import worldWaterfall from './effects/world.waterfall.js';
 import worldWave from './effects/world.wave.js';
 import worldWhirlpool from './effects/world.whirlpool.js';
 import worldWormhole from './effects/world.wormhole.js';
+import envAcidrain from './effects/env.acidrain.js';
+import envBokeh from './effects/env.bokeh.js';
+import envCandy from './effects/env.candy.js';
+import envFireworks from './effects/env.fireworks.js';
+import envGlitch from './effects/env.glitch.js';
+import envGoldendust from './effects/env.goldendust.js';
+import envMatrix from './effects/env.matrix.js';
+import envMoonlight from './effects/env.moonlight.js';
+import envOldfilm from './effects/env.oldfilm.js';
+import envToxic from './effects/env.toxic.js';
+import explosionBubblegum from './effects/explosion.bubblegum.js';
+import explosionDepthcharge from './effects/explosion.depthcharge.js';
+import explosionFlour from './effects/explosion.flour.js';
+import explosionFrostnova from './effects/explosion.frostnova.js';
+import explosionFruit from './effects/explosion.fruit.js';
+import explosionJelly from './effects/explosion.jelly.js';
+import explosionPellets from './effects/explosion.pellets.js';
+import explosionPinata from './effects/explosion.pinata.js';
+import explosionPopcorn from './effects/explosion.popcorn.js';
+import explosionSlime from './effects/explosion.slime.js';
+import explosionSoda from './effects/explosion.soda.js';
+import explosionVirus from './effects/explosion.virus.js';
+import hitBasehit from './effects/hit.basehit.js';
+import hitBlockland from './effects/hit.blockland.js';
+import hitChop from './effects/hit.chop.js';
+import hitEat from './effects/hit.eat.js';
+import hitInk from './effects/hit.ink.js';
+import hitKnife from './effects/hit.knife.js';
+import hitPillow from './effects/hit.pillow.js';
+import hitPoisoncloud from './effects/hit.poisoncloud.js';
+import hitRopecut from './effects/hit.ropecut.js';
+import hitSkeleton from './effects/hit.skeleton.js';
+import hitSlice from './effects/hit.slice.js';
+import hitSplashdown from './effects/hit.splashdown.js';
+import hitSqueak from './effects/hit.squeak.js';
+import hitTilebreak from './effects/hit.tilebreak.js';
+import hitWaterballoon from './effects/hit.waterballoon.js';
+import magicBubblewand from './effects/magic.bubblewand.js';
+import magicSlowfield from './effects/magic.slowfield.js';
+import moveFall from './effects/move.fall.js';
+import moveGrow from './effects/move.grow.js';
+import moveSplit from './effects/move.split.js';
+import moveSquash from './effects/move.squash.js';
+import moveStir from './effects/move.stir.js';
+import pickupIngredient from './effects/pickup.ingredient.js';
+import pickupPearl from './effects/pickup.pearl.js';
+import pickupPellet from './effects/pickup.pellet.js';
+import pickupPotion from './effects/pickup.potion.js';
+import pickupScroll from './effects/pickup.scroll.js';
+import pickupVacuum from './effects/pickup.vacuum.js';
+import puzzleCapture from './effects/puzzle.capture.js';
+import puzzleFlip from './effects/puzzle.flip.js';
+import puzzlePair from './effects/puzzle.pair.js';
+import puzzlePlace from './effects/puzzle.place.js';
+import puzzlePromote from './effects/puzzle.promote.js';
+import rewardBalloons from './effects/reward.balloons.js';
+import rewardBingo from './effects/reward.bingo.js';
+import rewardBullseye from './effects/reward.bullseye.js';
+import rewardEquip from './effects/reward.equip.js';
+import rewardFirst from './effects/reward.first.js';
+import rewardGate from './effects/reward.gate.js';
+import rewardLoot from './effects/reward.loot.js';
+import rewardPerfectstack from './effects/reward.perfectstack.js';
+import rewardSlotwin from './effects/reward.slotwin.js';
+import rewardWavecleared from './effects/reward.wavecleared.js';
+import rewardYummy from './effects/reward.yummy.js';
+import stateBubbled from './effects/state.bubbled.js';
+import stateBurnt from './effects/state.burnt.js';
+import stateDrowning from './effects/state.drowning.js';
+import stateLeader from './effects/state.leader.js';
+import stateQuest from './effects/state.quest.js';
+import stateSpicy from './effects/state.spicy.js';
+import uiBadge from './effects/ui.badge.js';
+import uiCardshine from './effects/ui.cardshine.js';
+import uiClaim from './effects/ui.claim.js';
+import uiEnergy from './effects/ui.energy.js';
+import uiLoading from './effects/ui.loading.js';
+import uiLocked from './effects/ui.locked.js';
+import uiReady from './effects/ui.ready.js';
+import uiSale from './effects/ui.sale.js';
+import uiScratch from './effects/ui.scratch.js';
+import uiStreak from './effects/ui.streak.js';
+import uiWarning from './effects/ui.warning.js';
+import uiXp from './effects/ui.xp.js';
+import weaponMortar from './effects/weapon.mortar.js';
+import weaponSniper from './effects/weapon.sniper.js';
+import weaponTeslacoil from './effects/weapon.teslacoil.js';
+import worldBoil from './effects/world.boil.js';
+import worldCrystalball from './effects/world.crystalball.js';
+import worldGeyser from './effects/world.geyser.js';
+import worldGoldmine from './effects/world.goldmine.js';
+import worldJellyfish from './effects/world.jellyfish.js';
+import worldLighthouse from './effects/world.lighthouse.js';
+import worldPlacement from './effects/world.placement.js';
+import worldRoulette from './effects/world.roulette.js';
+import worldSeal from './effects/world.seal.js';
+import worldSeaweed from './effects/world.seaweed.js';
+import worldStormzone from './effects/world.stormzone.js';
+import worldSunkenchest from './effects/world.sunkenchest.js';
+import worldTrapfire from './effects/world.trapfire.js';
 
 export const PACK = {
   name: 'casual',
@@ -539,6 +639,21 @@ export const EFFECTS = [
   hitThrust,
   hitUpgradefail,
   hitWater,
+  hitBasehit,
+  hitBlockland,
+  hitChop,
+  hitEat,
+  hitInk,
+  hitKnife,
+  hitPillow,
+  hitPoisoncloud,
+  hitRopecut,
+  hitSkeleton,
+  hitSlice,
+  hitSplashdown,
+  hitSqueak,
+  hitTilebreak,
+  hitWaterballoon,
   explosionSmall,
   explosionBig,
   explosionPuff,
@@ -568,6 +683,18 @@ export const EFFECTS = [
   explosionSmokebomb,
   explosionSoul,
   explosionSupernova,
+  explosionBubblegum,
+  explosionDepthcharge,
+  explosionFlour,
+  explosionFrostnova,
+  explosionFruit,
+  explosionJelly,
+  explosionPellets,
+  explosionPinata,
+  explosionPopcorn,
+  explosionSlime,
+  explosionSoda,
+  explosionVirus,
   pickupSparkle,
   pickupCoin,
   pickupGem,
@@ -587,6 +714,12 @@ export const EFFECTS = [
   pickupSpeed,
   pickupTime,
   pickupTreat,
+  pickupIngredient,
+  pickupPearl,
+  pickupPellet,
+  pickupPotion,
+  pickupScroll,
+  pickupVacuum,
   rewardConfetti,
   rewardLevelup,
   rewardStarburst,
@@ -621,6 +754,17 @@ export const EFFECTS = [
   rewardUnbox,
   rewardUpgrade,
   rewardWheel,
+  rewardBalloons,
+  rewardBingo,
+  rewardBullseye,
+  rewardEquip,
+  rewardFirst,
+  rewardGate,
+  rewardLoot,
+  rewardPerfectstack,
+  rewardSlotwin,
+  rewardWavecleared,
+  rewardYummy,
   moveJump,
   moveFootstep,
   moveLand,
@@ -666,6 +810,11 @@ export const EFFECTS = [
   moveSwing,
   moveWallkick,
   moveWarp,
+  moveFall,
+  moveGrow,
+  moveSplit,
+  moveSquash,
+  moveStir,
   magicHeal,
   magicIce,
   magicLightning,
@@ -705,6 +854,8 @@ export const EFFECTS = [
   magicUltimate,
   magicWarcry,
   magicWave,
+  magicBubblewand,
+  magicSlowfield,
   stateStun,
   statePoison,
   stateBurning,
@@ -760,6 +911,12 @@ export const EFFECTS = [
   stateThinking,
   stateUltready,
   stateZerog,
+  stateBubbled,
+  stateBurnt,
+  stateDrowning,
+  stateLeader,
+  stateQuest,
+  stateSpicy,
   envSnow,
   envRain,
   envLeaves,
@@ -802,6 +959,16 @@ export const EFFECTS = [
   envSunrays,
   envUnderground,
   envUnderwater,
+  envAcidrain,
+  envBokeh,
+  envCandy,
+  envFireworks,
+  envGlitch,
+  envGoldendust,
+  envMatrix,
+  envMoonlight,
+  envOldfilm,
+  envToxic,
   vehicleExhaust,
   vehicleNitro,
   vehicleCrash,
@@ -841,6 +1008,9 @@ export const EFFECTS = [
   weaponThunderhammer,
   weaponTorpedo,
   weaponTractorbeam,
+  weaponMortar,
+  weaponSniper,
+  weaponTeslacoil,
   gatherWood,
   gatherStone,
   gatherHarvest,
@@ -908,6 +1078,19 @@ export const EFFECTS = [
   worldWave,
   worldWhirlpool,
   worldWormhole,
+  worldBoil,
+  worldCrystalball,
+  worldGeyser,
+  worldGoldmine,
+  worldJellyfish,
+  worldLighthouse,
+  worldPlacement,
+  worldRoulette,
+  worldSeal,
+  worldSeaweed,
+  worldStormzone,
+  worldSunkenchest,
+  worldTrapfire,
   puzzleMatch,
   puzzleLine,
   puzzleShatter,
@@ -916,6 +1099,11 @@ export const EFFECTS = [
   puzzleWrong,
   puzzleHint,
   puzzleBubble,
+  puzzleCapture,
+  puzzleFlip,
+  puzzlePair,
+  puzzlePlace,
+  puzzlePromote,
   uiPop,
   uiTap,
   uiStar,
@@ -959,4 +1147,16 @@ export const EFFECTS = [
   uiTransition,
   uiVictory,
   uiWrongtry,
+  uiBadge,
+  uiCardshine,
+  uiClaim,
+  uiEnergy,
+  uiLoading,
+  uiLocked,
+  uiReady,
+  uiSale,
+  uiScratch,
+  uiStreak,
+  uiWarning,
+  uiXp,
 ];

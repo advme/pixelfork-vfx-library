@@ -416,13 +416,16 @@ export function makeContext(opts) {
     // lie flat in the screen plane and are only turned when `dir` is given
     // (a turned rect becomes a line: the way env.* effects emit along an edge).
     const wantsDir = p.plane !== 'ground' && (p.dir !== undefined || (p.shape && p.shape.type === 'cone'));
-    if (p.plane === 'ground' || wantsDir || p.dir3) {
+    // three.quarks' hemisphere opens along its local +z (toward the camera); vol() makes one from an
+    // upper half-circle, which means "up", so it is tipped over to open along world +y
+    const opensUp = !!p.in3d && !wantsDir && !p.dir3 && p.plane !== 'ground' && !!p.shape && p.shape.type === 'hemisphere';
+    if (p.plane === 'ground' || wantsDir || p.dir3 || opensUp) {
       const q = system.emitter.quaternion;
       if (p.dir3) {
         // aimed along a world direction (see spray())
         q.setFromUnitVectors(new THREE.Vector3(0, 0, 1), p.dir3);
-      } else if (p.plane === 'ground') {
-        // circle / rect emitters live in their local XY plane: tip it over onto XZ
+      } else if (p.plane === 'ground' || opensUp) {
+        // circle / rect emitters live in their local XY plane: tip it over onto XZ (local +z becomes world +y)
         q.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
       } else {
         const d = p.dir === undefined ? (dir === undefined ? Math.PI / 2 : dir) : p.dir;

@@ -2,7 +2,7 @@
 export default {
   name: 'state.overheat',
   category: 'state',
-  whenToUse: 'A character is overheated or far too hot: a desert or lava level, a heatwave, a sauna, a fever, eating something too spicy, a runner worn out in the sun. Follow the body; stop it when they cool down. For actually being on fire use state.burning; for a quick nervous sweat use state.sweat.',
+  whenToUse: 'A character is overheated or far too hot: a desert or lava level, a heatwave, a sauna, a fever, a runner worn out in the sun (for eating something too spicy use state.spicy). Follow the body; stop it when they cool down. For actually being on fire use state.burning; for a quick nervous sweat use state.sweat.',
   duration: 1, loop: true, tint: '#ff8a1f',
   tags: ['overheat', 'hot', 'heat', 'sweat', 'steam', 'desert', 'spicy', 'status'],
   build(c) {
