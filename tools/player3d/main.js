@@ -302,7 +302,7 @@ const loops = {};
 const SCREEN = (e) => e.category === 'ui';                       // only real UI feedback stays on the screen
 const AREA = (e) => e.category === 'env' || ['reward.coinshower', 'reward.clear'].includes(e.name);   // world volumes that follow the camera's focus
 const HEAD = ['state.stun', 'state.sleep', 'state.love', 'state.rage'];
-const FEET = ['move.jump', 'move.footstep', 'move.land', 'move.dust', 'move.skid', 'move.splash', 'magic.summon', 'move.spawn', 'move.teleport', 'state.dome', 'state.domebreak'];
+const FEET = ['move.jump', 'move.footstep', 'move.land', 'move.dust', 'move.skid', 'move.splash', 'magic.summon', 'move.spawn', 'move.teleport', 'state.dome', 'state.domebreak', 'hit.dirt', 'world.campfire', 'weapon.smoke', 'move.doublejump', 'reward.checkpoint'];
 
 $('ver').textContent = 'v' + VFX.VERSION;
 sizeEl.oninput = () => (sizeVal.textContent = Number(sizeEl.value).toFixed(1));

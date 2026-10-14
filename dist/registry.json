@@ -1,9 +1,9 @@
 {
   "name": "casual",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "style": "Modern mobile casual: chunky, bright, glossy, cartoon. Bold shapes, saturated colours, short and punchy. Not realistic, not gritty.",
-  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.js",
-  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.module.js",
+  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.js",
+  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.module.js",
   "moduleNeeds": "three >= 0.182 provided by the page through an import map",
   "effects": [
     {
@@ -187,6 +187,66 @@
         "energy",
         "block",
         "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.dirt",
+      "category": "hit",
+      "whenToUse": "A bullet, arrow, shovel, hoof or heavy step hits soil, sand or grass: missed shots in a shooter, digging, a stomp on dirt. Play it on the ground where it hit. Tint it for sand, mud or snow.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#8a6a48",
+      "anchor": "center",
+      "tags": [
+        "dirt",
+        "ground",
+        "impact",
+        "bullet",
+        "soil",
+        "sand",
+        "dig",
+        "miss"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.ko",
+      "category": "hit",
+      "whenToUse": "A character is knocked out or defeated: K.O. in a fighting game, the player dies in a platformer, a boss goes down, an enemy is finished off. Play it on the character's body. For an enemy simply vanishing use explosion.puff.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ffe14d",
+      "anchor": "center",
+      "tags": [
+        "ko",
+        "knockout",
+        "defeat",
+        "death",
+        "die",
+        "fighting",
+        "finish",
+        "boss"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.flurry",
+      "category": "hit",
+      "whenToUse": "A rapid multi-hit attack: a punch flurry, a fast sword combo, a machine-gun burst on one target, a special move that hits several times. Play it once on the target; it lands four hits in under half a second.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#ffd23a",
+      "anchor": "center",
+      "tags": [
+        "combo",
+        "flurry",
+        "multi hit",
+        "rapid",
+        "fighting",
+        "punch",
+        "attack",
+        "special"
       ],
       "aliases": []
     },
@@ -573,6 +633,47 @@
       "aliases": []
     },
     {
+      "name": "reward.checkpoint",
+      "category": "reward",
+      "whenToUse": "The player reaches a checkpoint, a save point, a flag, a respawn point or a goal post. Play it at the checkpoint's base. For finishing a whole level use reward.clear.",
+      "duration": 1.1,
+      "loop": false,
+      "tint": "#4dff9a",
+      "anchor": "feet",
+      "tags": [
+        "checkpoint",
+        "save",
+        "flag",
+        "respawn",
+        "goal",
+        "platformer",
+        "progress",
+        "reward"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.jackpot",
+      "category": "reward",
+      "whenToUse": "A big win: a slot or casino jackpot, a lucky spin, a huge payout in an idle or clicker game, a treasure vault opening. Play it at the centre of the win. For a normal coin pickup use pickup.coin; for coins falling from the top use reward.coinshower.",
+      "duration": 1.5,
+      "loop": false,
+      "tint": "#ffd23a",
+      "anchor": "center",
+      "tags": [
+        "jackpot",
+        "win",
+        "casino",
+        "slots",
+        "coins",
+        "payout",
+        "idle",
+        "treasure",
+        "reward"
+      ],
+      "aliases": []
+    },
+    {
       "name": "move.jump",
       "category": "move",
       "whenToUse": "A character jumps, lands, or starts running. Play at the feet. Also a soft landing for a dropped object.",
@@ -803,6 +904,45 @@
         "smoke",
         "brake",
         "slide"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.doublejump",
+      "category": "move",
+      "whenToUse": "A double jump, an air jump, a wing flap or a mid-air dash start in a platformer. Play it at the character's feet at the moment of the jump. For a jump off the ground use move.jump.",
+      "duration": 0.45,
+      "loop": false,
+      "tint": "#ffffff",
+      "anchor": "feet",
+      "tags": [
+        "double jump",
+        "air jump",
+        "jump",
+        "platformer",
+        "flap",
+        "air",
+        "move"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "move.wallslide",
+      "category": "move",
+      "whenToUse": "A character slides down a wall, clings to a wall, grinds along a rail or scrapes along a surface in a platformer. Follow the hand or foot touching the wall; stop it when they let go. Tint it for the wall (stone dust, snow, sparks on metal).",
+      "duration": 1,
+      "loop": true,
+      "tint": "#e9dcc7",
+      "anchor": "center",
+      "tags": [
+        "wall slide",
+        "wall jump",
+        "slide",
+        "grind",
+        "scrape",
+        "platformer",
+        "dust",
+        "move"
       ],
       "aliases": []
     },
@@ -1540,6 +1680,350 @@
         "ambient",
         "winner",
         "event"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.storm",
+      "category": "env",
+      "whenToUse": "A thunderstorm, a stormy night, a dramatic or scary level, bad weather in a day/night cycle. Play it once without a position for the whole screen (2D) or the area around the camera (3D); stop it when the storm passes. For calm rain use env.rain.",
+      "duration": 5,
+      "loop": true,
+      "tint": "#c6e2ff",
+      "anchor": "top",
+      "tags": [
+        "storm",
+        "thunder",
+        "lightning",
+        "rain",
+        "weather",
+        "night",
+        "horror",
+        "dramatic"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.spirits",
+      "category": "env",
+      "whenToUse": "A haunted house, a graveyard, a cursed forest, a horror level, a spirit world or a dream. Play it once without a position for the whole screen (2D) or the area around the camera (3D); stop it to clear the air. For friendly night lights use env.fireflies.",
+      "duration": 8,
+      "loop": true,
+      "tint": "#a8f0ff",
+      "anchor": "center",
+      "tags": [
+        "ghost",
+        "spirit",
+        "wisp",
+        "haunted",
+        "horror",
+        "graveyard",
+        "spooky",
+        "ambient"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "vehicle.exhaust",
+      "category": "vehicle",
+      "whenToUse": "A car, truck, motorbike or boat engine is running. Follow the exhaust pipe; in 3D pass direction (pointing backward out of the pipe) and keep it current with handle.aim(v) while the vehicle turns. Stop it when the engine stops.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#d4d4d4",
+      "anchor": "center",
+      "tags": [
+        "car",
+        "exhaust",
+        "smoke",
+        "engine",
+        "vehicle",
+        "driving",
+        "tailpipe"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "vehicle.nitro",
+      "category": "vehicle",
+      "whenToUse": "A car, kart, rocket or jetpack boosts: nitro, turbo, afterburner. Follow the exhaust or nozzle; in 3D pass direction (backward, out of the nozzle) and keep it current with handle.aim(v). Stop it when the boost ends.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#47b6ff",
+      "anchor": "center",
+      "tags": [
+        "nitro",
+        "boost",
+        "turbo",
+        "flame",
+        "racing",
+        "afterburner",
+        "jet",
+        "vehicle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "vehicle.crash",
+      "category": "vehicle",
+      "whenToUse": "Two cars collide, a car hits a wall or a pole, a vehicle lands hard or gets wrecked. Play it at the point of impact.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#ffcf5a",
+      "anchor": "center",
+      "tags": [
+        "crash",
+        "collision",
+        "car",
+        "impact",
+        "sparks",
+        "glass",
+        "wreck",
+        "vehicle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "vehicle.damaged",
+      "category": "vehicle",
+      "whenToUse": "A car, tank, plane or machine is badly damaged or wrecked: low health, a burning wreck, a broken generator. Follow the engine or hood; stop it when it is repaired or removed.",
+      "duration": 2,
+      "loop": true,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "damaged",
+        "wreck",
+        "smoke",
+        "fire",
+        "engine",
+        "burning",
+        "low health",
+        "vehicle"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "weapon.muzzle",
+      "category": "weapon",
+      "whenToUse": "A gun, cannon or blaster fires: every shot. Play it at the barrel tip; in 2D set dir (degrees, 0 = right), in 3D pass direction along the barrel. Tiny and fast: fine at full-auto rates.",
+      "duration": 0.5,
+      "loop": false,
+      "tint": "#ffcf5a",
+      "anchor": "center",
+      "tags": [
+        "muzzle",
+        "gun",
+        "shot",
+        "fire",
+        "shoot",
+        "weapon",
+        "flash",
+        "rifle",
+        "pistol"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "weapon.smoke",
+      "category": "weapon",
+      "whenToUse": "A smoke grenade, a smoke bomb, a flare canister, a fog machine or a coloured signal smoke. Play it on the ground where it landed; stop it after a few seconds and the cloud drifts away. Tint it for coloured smoke.",
+      "duration": 4,
+      "loop": true,
+      "tint": "#d3d9de",
+      "anchor": "center",
+      "tags": [
+        "smoke",
+        "grenade",
+        "cloud",
+        "cover",
+        "flare",
+        "signal",
+        "military",
+        "weapon"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "weapon.laser",
+      "category": "weapon",
+      "whenToUse": "A laser, blaster or energy bolt is fired in a shooter or shoot-em-up. Play it at the gun or ship nose; in 2D set dir (degrees: 90 = up for a vertical shooter, 0 = right), in 3D pass direction. It only shows the shot; for the hit use hit.bullet or hit.shieldzap.",
+      "duration": 0.45,
+      "loop": false,
+      "tint": "#ff3b6b",
+      "anchor": "center",
+      "tags": [
+        "laser",
+        "blaster",
+        "shot",
+        "shmup",
+        "space",
+        "energy",
+        "bolt",
+        "weapon",
+        "sci-fi"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "gather.wood",
+      "category": "gather",
+      "whenToUse": "An axe hits a tree, a log is chopped, wood is harvested or a wooden thing is hacked at. Play it at the spot that was hit, once per swing; for a wooden crate breaking use hit.block.",
+      "duration": 1.1,
+      "loop": false,
+      "tint": "#c08a4e",
+      "anchor": "center",
+      "tags": [
+        "wood",
+        "chop",
+        "tree",
+        "axe",
+        "harvest",
+        "gather",
+        "lumber",
+        "survival",
+        "crafting"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "gather.stone",
+      "category": "gather",
+      "whenToUse": "A pickaxe hits rock, ore or a wall; stone is mined or quarried; a boulder is chipped. Play it where it was struck, once per swing. Tint it for ore colours (gold, iron, crystal).",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#9aa0a8",
+      "anchor": "center",
+      "tags": [
+        "stone",
+        "mine",
+        "rock",
+        "pickaxe",
+        "ore",
+        "gather",
+        "quarry",
+        "survival",
+        "voxel"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.campfire",
+      "category": "world",
+      "whenToUse": "A campfire, bonfire, fireplace, brazier, burning barrel or a torch in the world. Play it on the fire's base and leave it running; size 0.5 makes a torch or candle-sized flame.",
+      "duration": 2,
+      "loop": true,
+      "tint": "#ff8a2a",
+      "anchor": "feet",
+      "tags": [
+        "fire",
+        "campfire",
+        "bonfire",
+        "torch",
+        "flame",
+        "camp",
+        "survival",
+        "warm",
+        "night"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.match",
+      "category": "puzzle",
+      "whenToUse": "A tile, gem, candy or block is cleared in a match-3, a tile puzzle, a bubble shooter or a sorting game. Play it on each cleared tile (el: the tile, or at its centre); tint it with the tile's colour. Cheap enough for a whole cascade at once.",
+      "duration": 0.55,
+      "loop": false,
+      "tint": "#ff4f8b",
+      "anchor": "center",
+      "tags": [
+        "match",
+        "match3",
+        "tile",
+        "clear",
+        "gem",
+        "candy",
+        "puzzle",
+        "pop"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.line",
+      "category": "puzzle",
+      "whenToUse": "A full row or column is cleared: a line clear in a block puzzle or tetris-like, a striped candy, a row bonus. Play it on the row with el: the row element, or at its centre with width: the row length in px. For a column set dir: 90.",
+      "duration": 0.65,
+      "loop": false,
+      "tint": "#5cd6ff",
+      "anchor": "center",
+      "tags": [
+        "line",
+        "row",
+        "clear",
+        "column",
+        "tetris",
+        "block",
+        "puzzle",
+        "stripe"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.shatter",
+      "category": "puzzle",
+      "whenToUse": "A gem, crystal, ice block or glass tile breaks: a locked or frozen tile freed in a puzzle, a crystal smashed, a glass obstacle broken. Tint it with the gem's colour.",
+      "duration": 0.75,
+      "loop": false,
+      "tint": "#7fd8ff",
+      "anchor": "center",
+      "tags": [
+        "shatter",
+        "glass",
+        "gem",
+        "crystal",
+        "ice",
+        "break",
+        "puzzle",
+        "smash"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.merge",
+      "category": "puzzle",
+      "whenToUse": "Two or more items combine into a better one: a merge game (2048, merge dragons, suika), fusing, crafting two things together, a level-up of a unit. Play it where the new item appears; tint it with the new item's colour.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#ffc23a",
+      "anchor": "center",
+      "tags": [
+        "merge",
+        "combine",
+        "fuse",
+        "2048",
+        "suika",
+        "upgrade",
+        "puzzle",
+        "craft"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.blast",
+      "category": "puzzle",
+      "whenToUse": "A special tile, bomb or booster fires in a match-3 or block puzzle: a cross blast that clears a row and a column, a bomb candy, a rocket booster. Play it on the special tile.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#ff7a2a",
+      "anchor": "center",
+      "tags": [
+        "bomb",
+        "booster",
+        "special",
+        "cross",
+        "blast",
+        "match3",
+        "puzzle",
+        "rocket"
       ],
       "aliases": []
     },

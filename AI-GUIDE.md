@@ -2,12 +2,12 @@
 
 Ready-made visual effects (particles) for AI-generated web games. **You never design or draw an effect — you call a name from the list below.**
 
-**93 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
+**117 effects**, all in code: no images, no files to load, one script. Works over any 2D engine (canvas 2D, Phaser, PixiJS, DOM) and **inside three.js 3D games** (section 4).
 
 ## 1. Add it (2 lines)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.js"></script>
 <script>VFX.attach();</script>
 ```
 This is the setup for **2D games** (canvas 2D, Phaser, PixiJS, DOM). A **three.js 3D game uses a different build: see section 4.**
@@ -72,6 +72,9 @@ For this to work the character or UI must be a positioned element with a z-index
 | `hit.shieldbreak` | A shield, barrier, bubble or armour breaks. Play where the shield was, then stop its state.shield loop. | no (0.8s) | yes, default `#6fc3ff` |
 | `hit.parry` | A parry, a perfect block, a deflected bullet, swords clashing, a counter. Sharp and bright. Aim the spark spray: dir (degrees) in 2D, direction: [x, y, z] in 3D (default up). | no (0.45s) | yes, default `#ffffff` |
 | `hit.shieldzap` | A shield, force field or energy barrier takes a hit: an energy bolt striking a shield, a shocking blow blocked, an electric barrier zapped. | no (0.7s) | yes, default `#3fb8ff` |
+| `hit.dirt` | A bullet, arrow, shovel, hoof or heavy step hits soil, sand or grass: missed shots in a shooter, digging, a stomp on dirt. Play it on the ground where it hit. Tint it for sand, mud or snow. | no (0.8s) | yes, default `#8a6a48` |
+| `hit.ko` | A character is knocked out or defeated: K.O. in a fighting game, the player dies in a platformer, a boss goes down, an enemy is finished off. Play it on the character's body. For an enemy simply vanishing use explosion.puff. | no (1s) | yes, default `#ffe14d` |
+| `hit.flurry` | A rapid multi-hit attack: a punch flurry, a fast sword combo, a machine-gun burst on one target, a special move that hits several times. Play it once on the target; it lands four hits in under half a second. | no (0.6s) | yes, default `#ffd23a` |
 
 **`explosion.*`**
 
@@ -108,6 +111,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `reward.chest` | A chest, crate, gift box, egg or loot bag opens. Play on the box; the rays shine upward. | no (1.4s) | yes, default `#ffc93c` |
 | `reward.coinshower` | A big money reward: jackpot, chest of coins, level payout, daily bonus. Covers the whole screen from the top. | no (3s) | yes, default `#ffcf3f` |
 | `reward.clear` | Level complete, stage clear, game won. A whole-screen celebration. Play once when the result screen appears. | no (4s) | yes |
+| `reward.checkpoint` | The player reaches a checkpoint, a save point, a flag, a respawn point or a goal post. Play it at the checkpoint's base. For finishing a whole level use reward.clear. | no (1.1s) | yes, default `#4dff9a` |
+| `reward.jackpot` | A big win: a slot or casino jackpot, a lucky spin, a huge payout in an idle or clicker game, a treasure vault opening. Play it at the centre of the win. For a normal coin pickup use pickup.coin; for coins falling from the top use reward.coinshower. | no (1.5s) | yes, default `#ffd23a` |
 
 **`move.*`**
 
@@ -126,6 +131,8 @@ For this to work the character or UI must be a positioned element with a z-index
 | `move.swim` | A character or fish is swimming or diving. Follow the body; stop when it leaves the water. | yes, call stop() | yes, default `#bfefff` |
 | `move.fly` | A bird, bee, dragon or winged character is flying or hovering. Follow the body; stop on landing. | yes, call stop() | yes, default `#ffffff` |
 | `move.skid` | A car drifts or brakes hard, a character slides to a stop, a cart skids. Follow the wheels; stop when grip returns. | yes, call stop() | yes, default `#e6e6e6` |
+| `move.doublejump` | A double jump, an air jump, a wing flap or a mid-air dash start in a platformer. Play it at the character's feet at the moment of the jump. For a jump off the ground use move.jump. | no (0.45s) | yes, default `#ffffff` |
+| `move.wallslide` | A character slides down a wall, clings to a wall, grinds along a rail or scrapes along a surface in a platformer. Follow the hand or foot touching the wall; stop it when they let go. Tint it for the wall (stone dust, snow, sparks on metal). | yes, call stop() | yes, default `#e9dcc7` |
 
 **`magic.*`**
 
@@ -181,6 +188,48 @@ For this to work the character or UI must be a positioned element with a z-index
 | `env.clouds` | A sky background, a flying level, a calm outdoor scene. Very slow; start it once. Play on the back layer if the game has a DOM scene. | yes, call stop() | yes, default `#ffffff` |
 | `env.hearts` | A love scene, a date, a pet-care screen, a valentine event. Rises from the bottom of the screen. | yes, call stop() | yes, default `#ff6b9d` |
 | `env.confetti` | A celebration screen that stays open: a winner podium, a birthday event, a season end. For a one-off burst use reward.confetti or reward.clear. | yes, call stop() | yes |
+| `env.storm` | A thunderstorm, a stormy night, a dramatic or scary level, bad weather in a day/night cycle. Play it once without a position for the whole screen (2D) or the area around the camera (3D); stop it when the storm passes. For calm rain use env.rain. | yes, call stop() | yes, default `#c6e2ff` |
+| `env.spirits` | A haunted house, a graveyard, a cursed forest, a horror level, a spirit world or a dream. Play it once without a position for the whole screen (2D) or the area around the camera (3D); stop it to clear the air. For friendly night lights use env.fireflies. | yes, call stop() | yes, default `#a8f0ff` |
+
+**`vehicle.*`**
+
+| Effect | Play it when | Loops | Tint |
+|---|---|---|---|
+| `vehicle.exhaust` | A car, truck, motorbike or boat engine is running. Follow the exhaust pipe; in 3D pass direction (pointing backward out of the pipe) and keep it current with handle.aim(v) while the vehicle turns. Stop it when the engine stops. | yes, call stop() | yes, default `#d4d4d4` |
+| `vehicle.nitro` | A car, kart, rocket or jetpack boosts: nitro, turbo, afterburner. Follow the exhaust or nozzle; in 3D pass direction (backward, out of the nozzle) and keep it current with handle.aim(v). Stop it when the boost ends. | yes, call stop() | yes, default `#47b6ff` |
+| `vehicle.crash` | Two cars collide, a car hits a wall or a pole, a vehicle lands hard or gets wrecked. Play it at the point of impact. | no (1s) | yes, default `#ffcf5a` |
+| `vehicle.damaged` | A car, tank, plane or machine is badly damaged or wrecked: low health, a burning wreck, a broken generator. Follow the engine or hood; stop it when it is repaired or removed. | yes, call stop() | yes, default `#ff7a1f` |
+
+**`weapon.*`**
+
+| Effect | Play it when | Loops | Tint |
+|---|---|---|---|
+| `weapon.muzzle` | A gun, cannon or blaster fires: every shot. Play it at the barrel tip; in 2D set dir (degrees, 0 = right), in 3D pass direction along the barrel. Tiny and fast: fine at full-auto rates. | no (0.5s) | yes, default `#ffcf5a` |
+| `weapon.smoke` | A smoke grenade, a smoke bomb, a flare canister, a fog machine or a coloured signal smoke. Play it on the ground where it landed; stop it after a few seconds and the cloud drifts away. Tint it for coloured smoke. | yes, call stop() | yes, default `#d3d9de` |
+| `weapon.laser` | A laser, blaster or energy bolt is fired in a shooter or shoot-em-up. Play it at the gun or ship nose; in 2D set dir (degrees: 90 = up for a vertical shooter, 0 = right), in 3D pass direction. It only shows the shot; for the hit use hit.bullet or hit.shieldzap. | no (0.45s) | yes, default `#ff3b6b` |
+
+**`gather.*`**
+
+| Effect | Play it when | Loops | Tint |
+|---|---|---|---|
+| `gather.wood` | An axe hits a tree, a log is chopped, wood is harvested or a wooden thing is hacked at. Play it at the spot that was hit, once per swing; for a wooden crate breaking use hit.block. | no (1.1s) | yes, default `#c08a4e` |
+| `gather.stone` | A pickaxe hits rock, ore or a wall; stone is mined or quarried; a boulder is chipped. Play it where it was struck, once per swing. Tint it for ore colours (gold, iron, crystal). | no (0.8s) | yes, default `#9aa0a8` |
+
+**`world.*`**
+
+| Effect | Play it when | Loops | Tint |
+|---|---|---|---|
+| `world.campfire` | A campfire, bonfire, fireplace, brazier, burning barrel or a torch in the world. Play it on the fire's base and leave it running; size 0.5 makes a torch or candle-sized flame. | yes, call stop() | yes, default `#ff8a2a` |
+
+**`puzzle.*`**
+
+| Effect | Play it when | Loops | Tint |
+|---|---|---|---|
+| `puzzle.match` | A tile, gem, candy or block is cleared in a match-3, a tile puzzle, a bubble shooter or a sorting game. Play it on each cleared tile (el: the tile, or at its centre); tint it with the tile's colour. Cheap enough for a whole cascade at once. | no (0.55s) | yes, default `#ff4f8b` |
+| `puzzle.line` | A full row or column is cleared: a line clear in a block puzzle or tetris-like, a striped candy, a row bonus. Play it on the row with el: the row element, or at its centre with width: the row length in px. For a column set dir: 90. | no (0.65s) | yes, default `#5cd6ff` |
+| `puzzle.shatter` | A gem, crystal, ice block or glass tile breaks: a locked or frozen tile freed in a puzzle, a crystal smashed, a glass obstacle broken. Tint it with the gem's colour. | no (0.75s) | yes, default `#7fd8ff` |
+| `puzzle.merge` | Two or more items combine into a better one: a merge game (2048, merge dragons, suika), fusing, crafting two things together, a level-up of a unit. Play it where the new item appears; tint it with the new item's colour. | no (0.7s) | yes, default `#ffc23a` |
+| `puzzle.blast` | A special tile, bomb or booster fires in a match-3 or block puzzle: a cross blast that clears a row and a column, a bomb candy, a rocket booster. Play it on the special tile. | no (0.6s) | yes, default `#ff7a2a` |
 
 **`ui.*`**
 
@@ -207,7 +256,7 @@ A 3D game must share **one copy of three.js** with this library. So 3D games do 
 { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
-    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.module.js"
+    "vfx": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.module.js"
 } }
 </script>
 <script type="module">
@@ -235,9 +284,9 @@ What the library does for you in 3D:
 - Effects are **inside the world**: hidden behind walls and characters, sized by distance.
 - Effects are **truly 3D where it matters**: explosions, smoke and debris burst in every direction; debris is solid tumbling chunks (planks, crystal shards, rubble); shockwaves, landing dust and magic circles lie flat on the floor; halos and auras circle around the character; `move.trail` and `magic.fire` draw a ribbon through the air. You do nothing for this — same names, same call.
 - Everything else **turns to face the camera**, so it reads the same from any angle (top-down, side, orbit). One-shots lock their angle when they spawn; loops keep turning. Gravity always falls to the ground, flames always rise.
-- **Aim the directional effects with a vector.** Seven effects are real 3D cones or winds that take `direction: [x, y, z]` (a world vector, any length):
-  `hit.blood` (away from the weapon), `hit.slash` (along the swing), `hit.parry` (where the sparks fly), `reward.confetti` (out of the cannon), `move.dash` and `move.speed` (OPPOSITE to the movement: the streaks fly backward), `env.sandstorm` (the way the wind blows along the ground).
-  Without `direction` they default sensibly (blood, parry and confetti up; slash across; dash and speed to the camera's left; sandstorm along +X). Blood also leaves short-lived splats on the floor.
+- **Aim the directional effects with a vector.** Eleven effects are real 3D cones or winds that take `direction: [x, y, z]` (a world vector, any length):
+  `hit.blood` (away from the weapon), `hit.slash` (along the swing), `hit.parry` (where the sparks fly), `reward.confetti` (out of the cannon), `move.dash` and `move.speed` (OPPOSITE to the movement: the streaks fly backward), `env.sandstorm` (the way the wind blows along the ground), `weapon.muzzle` and `weapon.laser` (along the barrel), `vehicle.exhaust` and `vehicle.nitro` (backward, out of the pipe or nozzle; keep loops aimed with `handle.aim(v)` while the vehicle turns).
+  Without `direction` they default sensibly (blood, parry and confetti up; slash across; dash, speed, exhaust and nitro to the camera's left; muzzle and laser to the camera's right; sandstorm along +X). Blood also leaves short-lived splats on the floor.
 ```js
 VFX.play('hit.blood', { position: enemy.position, direction: enemy.position.clone().sub(player.position) });
 const lines = VFX.play('move.speed', { follow: car, direction: car.velocity.clone().negate() });
@@ -260,7 +309,7 @@ lines.aim(car.velocity.clone().negate());
 2. Wire the standard moments: hit → `hit.impact` · bloody hit → `hit.blood` · collect → `pickup.sparkle` / `pickup.coin` · win screen → `reward.clear` · level up / unlock → `reward.levelup` · jump / land → `move.jump` · heal → `magic.heal` · stunned → `state.stun` (stop it!) · enemy or object destroyed → `explosion.small` · board wipe → `explosion.nuke` · weather → `env.*` once per level · buttons → `ui.pop`.
 3. Always `stop()` looping effects when the thing they belong to disappears, and `VFX.stopAll()` on screen changes.
 4. Unknown names never throw: they warn once and do nothing. Check `VFX.has(name)` if unsure.
-5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/registry.json`
+5. Machine-readable list of everything: `https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/registry.json`
 
 ## Licence — read this before using anything here
 

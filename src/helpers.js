@@ -327,9 +327,12 @@ export function makeContext(opts) {
   function sys(p) {
     if (!p) return null;                      // a helper opted this part out
     const render = p.render || (p.stretch ? 'stretch' : 'billboard');
-    // a mesh is lit solid debris, unless it glows (blend 'add') or wears a texture (a hexgrid dome)
-    const lit = render === 'mesh' && !p.tex && p.blend !== 'add' && !!opts.lit;
-    const mat = render === 'mesh' && !p.tex ? material('#solid', p.blend === 'add' ? 'add' : (lit ? 'lit' : 'unlit'))
+    // A mesh is solid debris: lit, or glowing with blend 'add'. Its `tex` is only the 2D picture and is
+    // ignored, EXCEPT on the flat dome tiles (geo 'hex' / 'pent'), whose caps are made to wear one.
+    const tiled = render === 'mesh' && (p.geo === 'hex' || p.geo === 'pent');
+    const solid = render === 'mesh' && !tiled;
+    const lit = solid && p.blend !== 'add' && !!opts.lit;
+    const mat = solid ? material('#solid', p.blend === 'add' ? 'add' : (lit ? 'lit' : 'unlit'))
       : material(render === 'trail' ? 'ribbon' : (p.tex || 'glow'), p.blend || 'add');
     const renderMode = { billboard: Q.RenderMode.BillBoard, stretch: Q.RenderMode.StretchedBillBoard, flat: Q.RenderMode.HorizontalBillBoard, mesh: Q.RenderMode.Mesh, trail: Q.RenderMode.Trail }[render];
     let emitterSettings = {};

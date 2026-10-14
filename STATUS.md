@@ -1,11 +1,16 @@
 # STATUS
 
-**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.9.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
+**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.10.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
 
 ## Next task
-**Build the VFX Studio** (separate project, `../Pixelfork VFX Studio`): the owner's standalone
-"describe it → Opus 5.5 makes it" tool. It loads this library from jsDelivr at `v0.9.0-A`. Once it
-works, retire `tools/maker*` here (step 4 of the owner's plan) so this repo is only the library.
+**Owner review of the 24 new effects** (v0.10.0-A) in both players: the 3D set (`vehicle.*`, `weapon.*`,
+`gather.*`, `world.campfire`, `hit.dirt`, `env.storm`, `env.spirits`) in the 3D player, the 2D set
+(`puzzle.*`, `move.doublejump`, `move.wallslide`, `hit.ko`, `hit.flurry`, `reward.checkpoint`,
+`reward.jackpot`, `weapon.laser`) in the 2D player. They were chosen from the owner's V1 prompt analysis
+(`../Pixelfork V1 Prompt Analyzer`, 4,478 game prompts): 3D asks for driving, shooting, gathering,
+weather and horror; 2D for platformers, fighting and match-3 / merge puzzles, none of which had effects.
+The VFX Studio is a separate Claude Code project now (`../Pixelfork VFX Studio`, worked on in its own
+session); do not build it from here. Retire `tools/maker*` here once the owner says the Studio works.
 
 ## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
 `state.dome` (loop: ring lights up, energy rises, the dome builds itself tile by tile from the ground
@@ -50,17 +55,22 @@ under `advme` because that is the account logged in on the owner's Mac. Moving i
 ## In progress
 _Nothing._
 
-## The pack — 93 effects, all playable (v0.9.0-A)
+## The pack — 117 effects, all playable (v0.10.0-A)
 | Group | Effects |
 |---|---|
-| `hit.*` (10) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap (made with the maker) |
+| `hit.*` (13) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry |
 | `explosion.*` (6) | small, big, puff, fireball, firework, nuke (full screen) |
 | `pickup.*` (8) | sparkle, coin, gem, heart, powerup, xp, key, food |
-| `reward.*` (7) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen) |
-| `move.*` (13) | jump, footstep, land, dash, splash, teleport, spawn · loops: trail, dust, speed, swim, fly, skid |
+| `reward.*` (9) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen), checkpoint, jackpot |
+| `move.*` (15) | jump, footstep, land, dash, splash, teleport, spawn, doublejump · loops: trail, dust, speed, swim, fly, skid, wallslide |
 | `magic.*` (12) | heal, ice, lightning, shield, poison, dark, holy, summon, curse · loops: portal, cast, fire (projectile) |
 | `state.*` (15) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, dome (ends with the one-shot domebreak) |
-| `env.*` (13, all loops, full screen) | snow, rain, leaves, confetti, clouds (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm (everywhere) |
+| `env.*` (15, all loops) | snow, rain, leaves, confetti, clouds, storm (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm, spirits (everywhere) |
+| `vehicle.*` (4) | crash · loops: exhaust, nitro, damaged |
+| `weapon.*` (3) | muzzle, laser · loop: smoke (grenade) |
+| `gather.*` (2) | wood, stone |
+| `world.*` (1) | loop: campfire |
+| `puzzle.*` (5) | match, line, shatter, merge, blast |
 | `ui.*` (9) | pop, tap, star, burst, unlock, flash (full-screen), shine · loops: glow, countup |
 
 ## 3D (three.js) mode — steps 1 and 2 done

@@ -95,6 +95,30 @@ import uiFlash from './effects/ui.flash.js';
 import stateDome from './effects/state.dome.js';
 import stateDomebreak from './effects/state.domebreak.js';
 import hitShieldzap from './effects/hit.shieldzap.js';
+import hitDirt from './effects/hit.dirt.js';
+import envStorm from './effects/env.storm.js';
+import envSpirits from './effects/env.spirits.js';
+import vehicleExhaust from './effects/vehicle.exhaust.js';
+import vehicleNitro from './effects/vehicle.nitro.js';
+import vehicleCrash from './effects/vehicle.crash.js';
+import vehicleDamaged from './effects/vehicle.damaged.js';
+import weaponMuzzle from './effects/weapon.muzzle.js';
+import weaponSmoke from './effects/weapon.smoke.js';
+import gatherWood from './effects/gather.wood.js';
+import gatherStone from './effects/gather.stone.js';
+import worldCampfire from './effects/world.campfire.js';
+import hitKo from './effects/hit.ko.js';
+import hitFlurry from './effects/hit.flurry.js';
+import rewardCheckpoint from './effects/reward.checkpoint.js';
+import rewardJackpot from './effects/reward.jackpot.js';
+import moveDoublejump from './effects/move.doublejump.js';
+import moveWallslide from './effects/move.wallslide.js';
+import weaponLaser from './effects/weapon.laser.js';
+import puzzleMatch from './effects/puzzle.match.js';
+import puzzleLine from './effects/puzzle.line.js';
+import puzzleShatter from './effects/puzzle.shatter.js';
+import puzzleMerge from './effects/puzzle.merge.js';
+import puzzleBlast from './effects/puzzle.blast.js';
 
 export const PACK = {
   name: 'casual',
@@ -112,6 +136,9 @@ export const EFFECTS = [
   hitShieldbreak,
   hitParry,
   hitShieldzap,
+  hitDirt,
+  hitKo,
+  hitFlurry,
   explosionSmall,
   explosionBig,
   explosionPuff,
@@ -133,6 +160,8 @@ export const EFFECTS = [
   rewardChest,
   rewardCoinshower,
   rewardClear,
+  rewardCheckpoint,
+  rewardJackpot,
   moveJump,
   moveFootstep,
   moveLand,
@@ -146,6 +175,8 @@ export const EFFECTS = [
   moveSwim,
   moveFly,
   moveSkid,
+  moveDoublejump,
+  moveWallslide,
   magicHeal,
   magicIce,
   magicLightning,
@@ -186,6 +217,23 @@ export const EFFECTS = [
   envClouds,
   envHearts,
   envConfetti,
+  envStorm,
+  envSpirits,
+  vehicleExhaust,
+  vehicleNitro,
+  vehicleCrash,
+  vehicleDamaged,
+  weaponMuzzle,
+  weaponSmoke,
+  weaponLaser,
+  gatherWood,
+  gatherStone,
+  worldCampfire,
+  puzzleMatch,
+  puzzleLine,
+  puzzleShatter,
+  puzzleMerge,
+  puzzleBlast,
   uiPop,
   uiTap,
   uiStar,

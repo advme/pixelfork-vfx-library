@@ -27,7 +27,7 @@ export default {
 };
 ```
 
-Categories: `hit` `explosion` `pickup` `reward` `move` `magic` `state` `env` `ui`.
+Categories: `hit` `explosion` `pickup` `reward` `move` `magic` `state` `env` `ui`, and for specific game types `vehicle` (cars, boats), `weapon` (guns, lasers, grenades), `gather` (chopping, mining), `world` (fires and fixtures placed in the level), `puzzle` (match-3, merge, block puzzles).
 `env.*` effects are weather/ambience that fill the screen (2D) or an area of the world (3D).
 `state.*` are loops that sit on a character. Everything else is normally a one-shot.
 

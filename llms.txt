@@ -2,8 +2,8 @@
 > Ready-made particle effects for AI-generated web games. No install: 1 script, call a name. Overlay over any engine or inside three.js.
 
 - AI guide (start here): https://github.com/advme/pixelfork-vfx-library/blob/main/AI-GUIDE.md
-- Add to a game: <script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/vfx.js"></script> <script>VFX.attach();</script>
+- Add to a game: <script src="https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/vfx.js"></script> <script>VFX.attach();</script>
 - 3D three.js games: load dist/vfx.module.js as an ES module with an import map that maps "three" (>= 0.182) and "vfx"; never load vfx.js next to your own three.js. Then VFX.useScene({ scene, camera, renderer, characterHeight, ground }).
 - Play: VFX.play('hit.impact', { x, y }) · VFX.play('pickup.sparkle', { el }) · loops return a handle: handle.stop()
-- Registry (every effect, when to use it, loop/tint): https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.9.0-A/dist/registry.json
+- Registry (every effect, when to use it, loop/tint): https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.10.0-A/dist/registry.json
 - Sibling libraries: Super Casual UI Kit (advme/mobile-game-ui-library), SFX Library (advme/pixelfork-sfx-library)
