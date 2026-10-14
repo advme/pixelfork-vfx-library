@@ -25,6 +25,10 @@
  *   hexshard one glowing hexagon tile (dome tiles, shield fragments); penttile: its pentagon
  *   arrow   a bold chevron (^) pointing up (stat buffs; rotate by PI for down)
  *   pixel   a hard-edged square, no rounding or blur (retro pixel-art effects)
+ *   note    a music note (singing, music, dancing)
+ *   bolt    a lightning bolt icon (electric hits, energy pickups)
+ *   snowflake  a six-armed snowflake (ice, frost, blizzards)
+ *   petal   a rounded blossom petal (cherry blossoms, flowers)
  */
 export function makeTextures(THREE) {
   const S = 128;
@@ -282,6 +286,47 @@ export function makeTextures(THREE) {
       t.minFilter = THREE.NearestFilter; t.magFilter = THREE.NearestFilter; t.generateMipmaps = false; t.needsUpdate = true;
       return t;
     })(),
+    note: make((g, s) => {
+      soft(g, s);
+      g.fillStyle = W(1); g.strokeStyle = W(1);
+      g.beginPath(); g.ellipse(s * 0.36, s * 0.74, s * 0.17, s * 0.13, -0.4, 0, Math.PI * 2); g.fill();
+      g.lineWidth = s * 0.08; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(s * 0.5, s * 0.72); g.lineTo(s * 0.5, s * 0.14); g.stroke();
+      g.lineWidth = s * 0.1;
+      g.beginPath(); g.moveTo(s * 0.5, s * 0.16); g.quadraticCurveTo(s * 0.78, s * 0.24, s * 0.74, s * 0.48); g.stroke();
+    }),
+    bolt: make((g, s) => {
+      soft(g, s);
+      g.fillStyle = W(1);
+      g.beginPath();
+      g.moveTo(s * 0.6, s * 0.04); g.lineTo(s * 0.2, s * 0.56); g.lineTo(s * 0.46, s * 0.56); g.lineTo(s * 0.36, s * 0.96);
+      g.lineTo(s * 0.82, s * 0.4); g.lineTo(s * 0.55, s * 0.4); g.lineTo(s * 0.68, s * 0.04);
+      g.closePath(); g.fill(); g.fill();
+    }),
+    snowflake: make((g, s, c) => {
+      soft(g, s);
+      g.strokeStyle = W(1); g.lineCap = 'round';
+      for (let i = 0; i < 6; i++) {
+        const a = (i * Math.PI) / 3, ca = Math.cos(a), sa = Math.sin(a), R = c * 0.86;
+        g.lineWidth = s * 0.07;
+        g.beginPath(); g.moveTo(c, c); g.lineTo(c + ca * R, c + sa * R); g.stroke();
+        g.lineWidth = s * 0.05;
+        [0.55, 0.78].forEach((t) => {
+          const bx = c + ca * R * t, by = c + sa * R * t, k = R * 0.22;
+          [a + 0.8, a - 0.8].forEach((b) => { g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + Math.cos(b) * k, by + Math.sin(b) * k); g.stroke(); });
+        });
+      }
+    }),
+    petal: make((g, s, c) => {
+      soft(g, s);
+      g.fillStyle = W(1);
+      g.beginPath();
+      g.moveTo(c, s * 0.92);
+      g.bezierCurveTo(s * 0.08, s * 0.6, s * 0.18, s * 0.1, s * 0.42, s * 0.12);
+      g.lineTo(c, s * 0.24); g.lineTo(s * 0.58, s * 0.12);
+      g.bezierCurveTo(s * 0.82, s * 0.1, s * 0.92, s * 0.6, c, s * 0.92);
+      g.closePath(); g.fill(); g.fill();
+    }),
     penttile: make((g, s, c) => {
       g.beginPath();
       for (let i = 0; i < 5; i++) { const a = (i * 2 * Math.PI) / 5; const x = c + Math.cos(a) * c * 0.98, y = c + Math.sin(a) * c * 0.98; if (i === 0) g.moveTo(x, y); else g.lineTo(x, y); }

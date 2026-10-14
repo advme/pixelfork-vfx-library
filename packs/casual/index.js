@@ -138,6 +138,54 @@ import worldLootbeam from './effects/world.lootbeam.js';
 import worldBuild from './effects/world.build.js';
 import puzzleWrong from './effects/puzzle.wrong.js';
 import puzzleHint from './effects/puzzle.hint.js';
+import hitElectric from './effects/hit.electric.js';
+import hitFire from './effects/hit.fire.js';
+import hitIce from './effects/hit.ice.js';
+import hitHeavy from './effects/hit.heavy.js';
+import hitMetal from './effects/hit.metal.js';
+import explosionIce from './effects/explosion.ice.js';
+import explosionElectric from './effects/explosion.electric.js';
+import explosionToxic from './effects/explosion.toxic.js';
+import explosionMagic from './effects/explosion.magic.js';
+import explosionWater from './effects/explosion.water.js';
+import weaponShotgun from './effects/weapon.shotgun.js';
+import weaponFlamethrower from './effects/weapon.flamethrower.js';
+import magicMeteor from './effects/magic.meteor.js';
+import magicTornado from './effects/magic.tornado.js';
+import magicEarth from './effects/magic.earth.js';
+import magicBeam from './effects/magic.beam.js';
+import magicBlackhole from './effects/magic.blackhole.js';
+import magicRevive from './effects/magic.revive.js';
+import magicNature from './effects/magic.nature.js';
+import magicTime from './effects/magic.time.js';
+import stateAura from './effects/state.aura.js';
+import stateElectrified from './effects/state.electrified.js';
+import stateWet from './effects/state.wet.js';
+import stateBleeding from './effects/state.bleeding.js';
+import stateSad from './effects/state.sad.js';
+import stateMusic from './effects/state.music.js';
+import stateSweat from './effects/state.sweat.js';
+import stateHappy from './effects/state.happy.js';
+import worldTorch from './effects/world.torch.js';
+import worldFountain from './effects/world.fountain.js';
+import worldLava from './effects/world.lava.js';
+import worldSteam from './effects/world.steam.js';
+import worldSparks from './effects/world.sparks.js';
+import worldCrystal from './effects/world.crystal.js';
+import worldRipple from './effects/world.ripple.js';
+import worldBoostpad from './effects/world.boostpad.js';
+import envPetals from './effects/env.petals.js';
+import envBlizzard from './effects/env.blizzard.js';
+import envAsh from './effects/env.ash.js';
+import envMeteors from './effects/env.meteors.js';
+import envWind from './effects/env.wind.js';
+import rewardGoal from './effects/reward.goal.js';
+import rewardRankup from './effects/reward.rankup.js';
+import pickupStar from './effects/pickup.star.js';
+import pickupMana from './effects/pickup.mana.js';
+import pickupArmor from './effects/pickup.armor.js';
+import gatherHarvest from './effects/gather.harvest.js';
+import puzzleBubble from './effects/puzzle.bubble.js';
 
 export const PACK = {
   name: 'casual',
@@ -161,6 +209,11 @@ export const EFFECTS = [
   hitKick,
   hitStomp,
   hitSplat,
+  hitElectric,
+  hitFire,
+  hitIce,
+  hitHeavy,
+  hitMetal,
   explosionSmall,
   explosionBig,
   explosionPuff,
@@ -168,6 +221,11 @@ export const EFFECTS = [
   explosionFirework,
   explosionNuke,
   explosionPixel,
+  explosionIce,
+  explosionElectric,
+  explosionToxic,
+  explosionMagic,
+  explosionWater,
   pickupSparkle,
   pickupCoin,
   pickupGem,
@@ -176,6 +234,9 @@ export const EFFECTS = [
   pickupXp,
   pickupKey,
   pickupFood,
+  pickupStar,
+  pickupMana,
+  pickupArmor,
   rewardConfetti,
   rewardLevelup,
   rewardStarburst,
@@ -185,6 +246,8 @@ export const EFFECTS = [
   rewardClear,
   rewardCheckpoint,
   rewardJackpot,
+  rewardGoal,
+  rewardRankup,
   moveJump,
   moveFootstep,
   moveLand,
@@ -215,6 +278,14 @@ export const EFFECTS = [
   magicCurse,
   magicBuff,
   magicDebuff,
+  magicMeteor,
+  magicTornado,
+  magicEarth,
+  magicBeam,
+  magicBlackhole,
+  magicRevive,
+  magicNature,
+  magicTime,
   stateStun,
   statePoison,
   stateBurning,
@@ -233,6 +304,14 @@ export const EFFECTS = [
   stateMagnet,
   stateRainbow,
   stateSelected,
+  stateAura,
+  stateElectrified,
+  stateWet,
+  stateBleeding,
+  stateSad,
+  stateMusic,
+  stateSweat,
+  stateHappy,
   envSnow,
   envRain,
   envLeaves,
@@ -248,6 +327,11 @@ export const EFFECTS = [
   envConfetti,
   envStorm,
   envSpirits,
+  envPetals,
+  envBlizzard,
+  envAsh,
+  envMeteors,
+  envWind,
   vehicleExhaust,
   vehicleNitro,
   vehicleCrash,
@@ -259,12 +343,23 @@ export const EFFECTS = [
   weaponLaser,
   weaponRocket,
   weaponShell,
+  weaponShotgun,
+  weaponFlamethrower,
   gatherWood,
   gatherStone,
+  gatherHarvest,
   worldCampfire,
   worldBeacon,
   worldLootbeam,
   worldBuild,
+  worldTorch,
+  worldFountain,
+  worldLava,
+  worldSteam,
+  worldSparks,
+  worldCrystal,
+  worldRipple,
+  worldBoostpad,
   puzzleMatch,
   puzzleLine,
   puzzleShatter,
@@ -272,6 +367,7 @@ export const EFFECTS = [
   puzzleBlast,
   puzzleWrong,
   puzzleHint,
+  puzzleBubble,
   uiPop,
   uiTap,
   uiStar,

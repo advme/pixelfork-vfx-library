@@ -1,13 +1,15 @@
 # STATUS
 
-**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.11.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
+**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.12.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
 
 ## Next task
-**Owner review of the 19 effects added in v0.11.0-A** (second batch from the V1 prompt analysis: quests,
-loot, building, chases, boats, military, sports, runners; platformers, puzzles, strategy/RPG, pixel art):
-`world.beacon`, `world.lootbeam`, `world.build`, `vehicle.siren`, `vehicle.wake`, `weapon.rocket`,
-`weapon.shell`, `hit.kick`, `state.magnet` · `hit.stomp`, `move.bounce`, `state.rainbow`, `puzzle.wrong`,
-`puzzle.hint`, `state.selected`, `magic.buff`, `magic.debuff`, `explosion.pixel`, `hit.splat`.
+**Owner review of the 48 effects added in v0.12.0-A** (the owner asked for "a lot" more, not tied to the
+V1 analysis): elemental hits and explosions, shotgun, flamethrower; meteor, tornado, earth spikes,
+energy beam, black hole, revive, nature, time; aura, electrified, wet, bleeding; sad cloud, music,
+sweat, happy; torch, fountain, lava, steam, sparks, crystal, ripple, boost pad; petals, blizzard, ash,
+shooting stars, wind; goal, rank-up; star, mana, armour pickups; harvest; bubble pop.
+Over the ~300-particle budget in 3D (measured peak): `env.snow` 522 and `reward.clear` 430 (both older,
+area / full-screen), `env.ash` ~300, `env.storm` 333, `env.blizzard` 323 (weather over a whole area).
 The VFX Studio is a separate Claude Code project (`../Pixelfork VFX Studio`); do not build it from here.
 
 ## Open: sun rays (`packs/casual/drafts/env.sunrays.js`, a draft, not in the pack)
@@ -59,22 +61,22 @@ under `advme` because that is the account logged in on the owner's Mac. Moving i
 ## In progress
 _Nothing._
 
-## The pack — 136 effects, all playable (v0.11.0-A)
+## The pack — 184 effects, all playable (v0.12.0-A)
 | Group | Effects |
 |---|---|
-| `hit.*` (16) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry, kick, stomp, splat |
-| `explosion.*` (7) | small, big, puff, fireball, firework, nuke (full screen), pixel |
-| `pickup.*` (8) | sparkle, coin, gem, heart, powerup, xp, key, food |
-| `reward.*` (9) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen), checkpoint, jackpot |
+| `hit.*` (21) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry, kick, stomp, splat, electric, fire, ice, heavy, metal |
+| `explosion.*` (12) | small, big, puff, fireball, firework, nuke (full screen), pixel, ice, electric, toxic, magic, water |
+| `pickup.*` (11) | sparkle, coin, gem, heart, powerup, xp, key, food, star, mana, armor |
+| `reward.*` (11) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen), checkpoint, jackpot, goal, rankup |
 | `move.*` (16) | jump, footstep, land, dash, splash, teleport, spawn, doublejump, bounce · loops: trail, dust, speed, swim, fly, skid, wallslide |
-| `magic.*` (14) | heal, ice, lightning, shield, poison, dark, holy, summon, curse, buff, debuff · loops: portal, cast, fire (projectile) |
-| `state.*` (18) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, magnet, rainbow, selected, dome (ends with the one-shot domebreak) |
-| `env.*` (15, all loops) | snow, rain, leaves, confetti, clouds, storm (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm, spirits (everywhere) |
+| `magic.*` (22) | heal, ice, lightning, shield, poison, dark, holy, summon, curse, buff, debuff, meteor, earth, beam, revive, nature, time · loops: tornado, blackhole · loops: portal, cast, fire (projectile) |
+| `state.*` (26) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, magnet, rainbow, selected, aura, electrified, wet, bleeding, sad, music, dome (ends with the one-shot domebreak) · one-shots: sweat, happy |
+| `env.*` (20, all loops) | snow, rain, leaves, confetti, clouds, storm, petals, blizzard, ash, meteors (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm, spirits, wind (everywhere) |
 | `vehicle.*` (6) | crash · loops: exhaust, nitro, damaged, siren, wake |
-| `weapon.*` (5) | muzzle, laser, shell · loops: smoke (grenade), rocket |
-| `gather.*` (2) | wood, stone |
-| `world.*` (4) | build · loops: campfire, beacon, lootbeam |
-| `puzzle.*` (7) | match, line, shatter, merge, blast, wrong · loop: hint |
+| `weapon.*` (7) | muzzle, laser, shell, shotgun · loops: smoke (grenade), rocket, flamethrower |
+| `gather.*` (3) | wood, stone, harvest |
+| `world.*` (12) | build · loops: campfire, beacon, lootbeam, torch, fountain, lava, steam, sparks, crystal, ripple, boostpad |
+| `puzzle.*` (8) | match, line, shatter, merge, blast, wrong, bubble · loop: hint |
 | `ui.*` (9) | pop, tap, star, burst, unlock, flash (full-screen), shine · loops: glow, countup |
 
 ## 3D (three.js) mode — steps 1 and 2 done

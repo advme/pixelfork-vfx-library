@@ -340,7 +340,9 @@ export function makeContext(opts) {
     if (render === 'trail') emitterSettings = { startLength: val((p.trail && p.trail.length) || 24), followLocalOrigin: true };
     const behaviors = (p.behaviors || []).slice();
     if (render === 'mesh' && !p.upright) behaviors.push(new Q.Rotation3DOverLife(new Q.AxisAngleGenerator(new Q.Vector3(0.62, 0.7, 0.35).normalize(), new Q.IntervalValue(-9, 9))));
-    const soft = !!opts.soft && render !== 'mesh' && render !== 'trail' && p.soft !== false;
+    // soft particles fade a sprite where it nears the scene's depth: right for smoke against a wall, but a
+    // sprite lying flat on the floor sits 3 cm above it and would fade to almost nothing, so flat ones never are
+    const soft = !!opts.soft && render !== 'mesh' && render !== 'trail' && render !== 'flat' && p.soft !== false;
     const system = new Q.ParticleSystem({
       duration: p.duration === undefined ? 1 : p.duration,
       looping: !!p.loop,
@@ -350,16 +352,22 @@ export function makeContext(opts) {
       startLife: val(p.life === undefined ? 1 : p.life),
       startSpeed: val(p.speed || 0, u),
       startSize: val(p.size === undefined ? 10 : p.size, u),
-      startRotation: render === 'mesh' ? (p.upright ? new Q.AxisAngleGenerator(new Q.Vector3(0, 1, 0), new Q.ConstantValue(0)) : new Q.RandomQuatGenerator()) : val(p.rotation || 0),
+      // upright meshes stand up in the world; on a ground emitter (tipped -90 deg about X) that needs the opposite tip
+      startRotation: render === 'mesh' ? (p.upright ? new Q.AxisAngleGenerator(new Q.Vector3(1, 0, 0), new Q.ConstantValue(p.plane === 'ground' ? Math.PI / 2 : 0)) : new Q.RandomQuatGenerator()) : val(p.rotation || 0),
       startColor: colorGen(p.color, lit),
       emissionOverTime: val(p.rate || 0),
-      emissionBursts: (p.bursts || []).map((b) => ({
-        time: b.time || 0,
-        count: val(b.count === undefined ? 1 : b.count),
-        cycle: b.cycle === undefined ? 1 : b.cycle,
-        interval: b.interval === undefined ? 0.01 : b.interval,
-        probability: b.probability === undefined ? 1 : b.probability,
-      })),
+      // three.quarks 0.17 ignores a burst's cycle / interval, so repeats are expanded here into separate
+      // bursts; it also walks bursts in order, so they are sorted by time
+      emissionBursts: (p.bursts || []).flatMap((b) => {
+        const n = Math.max(1, Math.round(b.cycle || 1)), gap = b.interval === undefined ? 0.01 : b.interval;
+        return Array.from({ length: n }, (_, k) => ({
+          time: (b.time || 0) + k * gap,
+          count: val(b.count === undefined ? 1 : b.count),
+          cycle: 1,
+          interval: gap,
+          probability: b.probability === undefined ? 1 : b.probability,
+        }));
+      }).sort((a, b) => a.time - b.time),
       behaviors,
       renderMode,
       rendererEmitterSettings: emitterSettings,

@@ -1,9 +1,9 @@
 {
   "name": "casual",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "style": "Modern mobile casual: chunky, bright, glossy, cartoon. Bold shapes, saturated colours, short and punchy. Not realistic, not gritty.",
-  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.js",
-  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.11.0-A/dist/vfx.module.js",
+  "script": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.12.0-A/dist/vfx.js",
+  "module": "https://cdn.jsdelivr.net/gh/advme/pixelfork-vfx-library@v0.12.0-A/dist/vfx.module.js",
   "moduleNeeds": "three >= 0.182 provided by the page through an import map",
   "effects": [
     {
@@ -312,6 +312,107 @@
       "aliases": []
     },
     {
+      "name": "hit.electric",
+      "category": "hit",
+      "whenToUse": "An electric or lightning attack lands: a taser, a shock trap, a thunder sword, a zapped enemy, an electric fence touched. Play it on the target. For a bolt from the sky use magic.lightning; for a shield being hit use hit.shieldzap.",
+      "duration": 0.55,
+      "loop": false,
+      "tint": "#7fd8ff",
+      "anchor": "center",
+      "tags": [
+        "electric",
+        "shock",
+        "zap",
+        "lightning",
+        "thunder",
+        "stun",
+        "spark",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.fire",
+      "category": "hit",
+      "whenToUse": "A fire attack lands: a flaming sword, a fire punch, a fire arrow hit, a burn damage tick, touching lava. Play it on the target. For a fireball exploding use explosion.fireball; for staying on fire use state.burning.",
+      "duration": 0.65,
+      "loop": false,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "fire",
+        "burn",
+        "flame",
+        "hot",
+        "ember",
+        "scorch",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.ice",
+      "category": "hit",
+      "whenToUse": "An ice or frost attack lands: an ice arrow, a freeze punch, a cold blast, snowball impact, a frozen enemy struck. Play it on the target. For becoming frozen use state.frozen; for an ice spell burst use explosion.ice.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#9fe6ff",
+      "anchor": "center",
+      "tags": [
+        "ice",
+        "frost",
+        "freeze",
+        "cold",
+        "snow",
+        "shard",
+        "snowball",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.heavy",
+      "category": "hit",
+      "whenToUse": "A very heavy blow: a hammer smash, a giant's stomp, a body slam, a ground pound, a boss landing, a huge punch. Play it at the point of impact (on the ground for slams). Bigger and slower than hit.punch.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#ffd27a",
+      "anchor": "center",
+      "tags": [
+        "heavy",
+        "slam",
+        "smash",
+        "ground pound",
+        "hammer",
+        "stomp",
+        "shockwave",
+        "boss",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "hit.metal",
+      "category": "hit",
+      "whenToUse": "Metal hits metal: a sword on armour, a bullet on a steel wall, a robot struck, a shield bash, a pipe whacked, a blocked blade. Play it at the point of contact. For a successful parry use hit.parry.",
+      "duration": 0.45,
+      "loop": false,
+      "tint": "#ffe9a8",
+      "anchor": "center",
+      "tags": [
+        "metal",
+        "clang",
+        "armor",
+        "steel",
+        "sparks",
+        "robot",
+        "sword",
+        "ricochet",
+        "hit"
+      ],
+      "aliases": []
+    },
+    {
       "name": "explosion.small",
       "category": "explosion",
       "whenToUse": "A small thing blows up: a barrel, an enemy, a car crash, a bomb, a rocket landing. About 150px wide.",
@@ -435,6 +536,106 @@
         "pixel art",
         "blocks",
         "enemy death"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.ice",
+      "category": "explosion",
+      "whenToUse": "An ice bomb, a frost nova, a freezing spell exploding, an ice crystal shattering into a blast, a snow grenade. Play it at the centre. Freeze nearby enemies with state.frozen.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#8fdcff",
+      "anchor": "center",
+      "tags": [
+        "ice",
+        "frost",
+        "nova",
+        "freeze",
+        "cold",
+        "explosion",
+        "snow",
+        "blizzard"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.electric",
+      "category": "explosion",
+      "whenToUse": "An EMP, a shock bomb, a tesla coil discharge, an overloaded generator blowing, a lightning spell exploding, a robot shorting out. Play it at the centre.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#6fd6ff",
+      "anchor": "center",
+      "tags": [
+        "emp",
+        "electric",
+        "shock",
+        "tesla",
+        "lightning",
+        "explosion",
+        "sci-fi",
+        "discharge"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.toxic",
+      "category": "explosion",
+      "whenToUse": "A gas grenade, a poison bomb, a toxic barrel bursting, a stink bomb, a zombie or mutant exploding, an acid blob popping. Play it at the centre. For a small poison attack use magic.poison.",
+      "duration": 1.4,
+      "loop": false,
+      "tint": "#8fe83a",
+      "anchor": "center",
+      "tags": [
+        "toxic",
+        "poison",
+        "gas",
+        "acid",
+        "zombie",
+        "stink",
+        "explosion",
+        "chemical"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.magic",
+      "category": "explosion",
+      "whenToUse": "A magic spell explodes or is unleashed: an arcane blast, a wizard's area attack, a cursed object bursting, a magic crystal overloading, a fairy explosion. Play it at the centre; tint it for the school of magic.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#b45cff",
+      "anchor": "center",
+      "tags": [
+        "magic",
+        "arcane",
+        "spell",
+        "wizard",
+        "mystic",
+        "burst",
+        "explosion",
+        "fantasy"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "explosion.water",
+      "category": "explosion",
+      "whenToUse": "A water balloon or water bomb bursts, a big wave hits, something huge falls into water, a geyser erupts, a depth charge goes off. Play it at the centre (on the water surface for falls). For a small splash use move.splash.",
+      "duration": 1.2,
+      "loop": false,
+      "tint": "#4fb8ff",
+      "anchor": "center",
+      "tags": [
+        "water",
+        "splash",
+        "balloon",
+        "wave",
+        "geyser",
+        "sea",
+        "explosion",
+        "wet"
       ],
       "aliases": []
     },
@@ -582,6 +783,66 @@
         "snack",
         "stamina",
         "collect"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.star",
+      "category": "pickup",
+      "whenToUse": "A star is collected: level stars, a platformer collectible, a rating star earned in play, a bonus star. Play it where the star was. For the 1-3 stars on a results screen use ui.star.",
+      "duration": 0.65,
+      "loop": false,
+      "tint": "#ffd23a",
+      "anchor": "center",
+      "tags": [
+        "star",
+        "collect",
+        "collectible",
+        "platformer",
+        "bonus",
+        "pickup",
+        "shiny"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.mana",
+      "category": "pickup",
+      "whenToUse": "Mana, energy or stamina is restored: a mana potion, an energy drink, a blue orb picked up, a battery collected, magic power recharged. Play it on the character. For health use pickup.heart or magic.heal.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#4f8bff",
+      "anchor": "center",
+      "tags": [
+        "mana",
+        "energy",
+        "stamina",
+        "potion",
+        "magic",
+        "recharge",
+        "orb",
+        "pickup",
+        "rpg"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "pickup.armor",
+      "category": "pickup",
+      "whenToUse": "Armour, a shield plate or extra protection is picked up: an armour vest in a shooter, a shield potion, a defence boost, a hull repair. Play it on the character. For an active shield bubble use state.shield.",
+      "duration": 0.6,
+      "loop": false,
+      "tint": "#47a6ff",
+      "anchor": "center",
+      "tags": [
+        "armor",
+        "armour",
+        "shield",
+        "protection",
+        "vest",
+        "defense",
+        "pickup",
+        "shooter"
       ],
       "aliases": []
     },
@@ -750,6 +1011,47 @@
         "payout",
         "idle",
         "treasure",
+        "reward"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.goal",
+      "category": "reward",
+      "whenToUse": "A big scoring moment in a sports or party game: a goal, a touchdown, a basket, a hole-in-one, a strike, a finish-line win. Play it at the goal or the centre of the screen. For a plain level win use reward.clear.",
+      "duration": 1.5,
+      "loop": false,
+      "tint": null,
+      "anchor": "center",
+      "tags": [
+        "goal",
+        "score",
+        "touchdown",
+        "sports",
+        "soccer",
+        "celebration",
+        "win",
+        "confetti",
+        "reward"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "reward.rankup",
+      "category": "reward",
+      "whenToUse": "The player is promoted: a new rank, league or tier, a higher division, a battle-pass tier, a prestige level, a title earned. Play it at the centre of the rank badge. For a character level-up use reward.levelup.",
+      "duration": 1.6,
+      "loop": false,
+      "tint": "#b45cff",
+      "anchor": "center",
+      "tags": [
+        "rank up",
+        "promotion",
+        "tier",
+        "league",
+        "prestige",
+        "battle pass",
+        "progress",
         "reward"
       ],
       "aliases": []
@@ -1306,6 +1608,167 @@
       "aliases": []
     },
     {
+      "name": "magic.meteor",
+      "category": "magic",
+      "whenToUse": "A meteor, comet or fiery boulder falls from the sky onto a spot: a meteor spell, an airstrike, a falling star attack, an asteroid in space. Play it at the impact point; the fall takes half a second before the hit.",
+      "duration": 1.4,
+      "loop": false,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "meteor",
+        "comet",
+        "airstrike",
+        "sky",
+        "fire",
+        "impact",
+        "spell",
+        "asteroid"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.tornado",
+      "category": "magic",
+      "whenToUse": "A tornado, whirlwind, wind spell, cyclone or dust devil: a wind attack that stays, a storm hazard, a spinning move. Play it on the ground (follow it if it moves); stop it when it dies down.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#d8e6f0",
+      "anchor": "feet",
+      "tags": [
+        "tornado",
+        "whirlwind",
+        "wind",
+        "cyclone",
+        "spin",
+        "storm",
+        "air",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.earth",
+      "category": "magic",
+      "whenToUse": "An earth or rock spell: stone spikes erupting, a quake attack, ground rising, a golem stomp, a trap of spikes. Play it on the ground where it erupts.",
+      "duration": 1.1,
+      "loop": false,
+      "tint": "#9c7a5a",
+      "anchor": "feet",
+      "tags": [
+        "earth",
+        "rock",
+        "spikes",
+        "stone",
+        "quake",
+        "ground",
+        "golem",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.beam",
+      "category": "magic",
+      "whenToUse": "A charged beam attack: a kamehameha, a laser cannon, a mana beam, a dragon's ray, a mech's energy blast. Play it at the hands or barrel; in 2D set dir (degrees, 0 = right), in 3D pass direction. It charges for 0.25 s, fires for 0.5 s.",
+      "duration": 1,
+      "loop": false,
+      "tint": "#5cd6ff",
+      "anchor": "center",
+      "tags": [
+        "beam",
+        "laser",
+        "charge",
+        "blast",
+        "energy",
+        "kamehameha",
+        "ray",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.blackhole",
+      "category": "magic",
+      "whenToUse": "A gravity well or vortex that pulls things in: a black hole spell, a singularity grenade, a void portal, a whirlpool, a space hazard. Play it at the centre and stop it when it collapses (then play explosion.magic).",
+      "duration": 1,
+      "loop": true,
+      "tint": "#8a4dff",
+      "anchor": "center",
+      "tags": [
+        "black hole",
+        "vortex",
+        "gravity",
+        "void",
+        "singularity",
+        "space",
+        "pull",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.revive",
+      "category": "magic",
+      "whenToUse": "A character comes back to life or is fully restored: a resurrection, a revive item, a second chance, a respawn with blessing, an angel's blessing. Play it at the character's feet. For ordinary healing use magic.heal.",
+      "duration": 1.5,
+      "loop": false,
+      "tint": "#fff1a8",
+      "anchor": "feet",
+      "tags": [
+        "revive",
+        "resurrect",
+        "respawn",
+        "holy",
+        "angel",
+        "second chance",
+        "blessing",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.nature",
+      "category": "magic",
+      "whenToUse": "A nature, plant or druid spell: growing a plant, a forest blessing, a vine attack, a healing grove, summoning flowers, a spring arrives. Play it on the target or the ground. For pure healing use magic.heal.",
+      "duration": 1.1,
+      "loop": false,
+      "tint": "#6cd96a",
+      "anchor": "center",
+      "tags": [
+        "nature",
+        "plant",
+        "leaf",
+        "druid",
+        "grow",
+        "flower",
+        "forest",
+        "spring",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "magic.time",
+      "category": "magic",
+      "whenToUse": "Time is bent: a slow-motion power, a time stop, a rewind, a haste or slow spell, a clock power-up, extra time added in a timed level. Play it on the caster or the centre of the screen.",
+      "duration": 1.3,
+      "loop": false,
+      "tint": "#7fb6ff",
+      "anchor": "center",
+      "tags": [
+        "time",
+        "slow motion",
+        "clock",
+        "rewind",
+        "freeze time",
+        "haste",
+        "chrono",
+        "spell"
+      ],
+      "aliases": []
+    },
+    {
       "name": "state.stun",
       "category": "state",
       "whenToUse": "A character or enemy is stunned, dizzy or knocked out. Play above the head with follow, stop when they recover.",
@@ -1646,6 +2109,171 @@
       "aliases": []
     },
     {
+      "name": "state.aura",
+      "category": "state",
+      "whenToUse": "A character is powered up and blazing with energy: a super mode, a rage or limit break, a charged-up fighter, a boss phase two, a hero glowing with power. Follow the character (at the feet); stop it when the power ends. Tint it for the power's colour.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffd23a",
+      "anchor": "feet",
+      "tags": [
+        "aura",
+        "power up",
+        "super",
+        "energy",
+        "charge",
+        "rage",
+        "fighting",
+        "anime",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.electrified",
+      "category": "state",
+      "whenToUse": "A character or object is charged with electricity or being shocked over time: stunned by a taser, standing in electric water, an overloaded robot, a powered-up machine, a lightning buff. Follow it; stop it when it ends.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#7fd8ff",
+      "anchor": "center",
+      "tags": [
+        "electric",
+        "shock",
+        "sparks",
+        "crackle",
+        "charged",
+        "robot",
+        "stun",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.wet",
+      "category": "state",
+      "whenToUse": "A character is soaking wet: just out of the water, caught in rain, hit by a water attack, slimed, sweating from heat, a wet dog. Follow the character; stop it after a few seconds when they are dry.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#7fc8ff",
+      "anchor": "center",
+      "tags": [
+        "wet",
+        "soaked",
+        "drip",
+        "water",
+        "rain",
+        "slime",
+        "dripping",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.bleeding",
+      "category": "state",
+      "whenToUse": "A character keeps losing health over time from a wound: bleeding damage, a cut, a damage-over-time status, critically hurt. Follow the wound or the body; stop it when healed. Tint it for other fluids (green for aliens, black for oil).",
+      "duration": 1,
+      "loop": true,
+      "tint": "#d6203a",
+      "anchor": "center",
+      "tags": [
+        "bleeding",
+        "blood",
+        "wound",
+        "damage over time",
+        "hurt",
+        "injury",
+        "dot",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.sad",
+      "category": "state",
+      "whenToUse": "A character is sad, gloomy, sulking or unlucky: a pet that is unhappy, a lost game, a bad mood, a funny moment of bad luck. Follow the character's head; stop it when they cheer up.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#9aa6b8",
+      "anchor": "center",
+      "tags": [
+        "sad",
+        "gloomy",
+        "rain cloud",
+        "unhappy",
+        "cute",
+        "pet",
+        "mood",
+        "emotion",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.music",
+      "category": "state",
+      "whenToUse": "A character sings, dances, plays an instrument or listens to music: a radio or jukebox playing, a happy humming pet, a rhythm game, a bard's song. Follow the head or the music source; stop it when the music stops.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff6fb0",
+      "anchor": "center",
+      "tags": [
+        "music",
+        "notes",
+        "sing",
+        "dance",
+        "song",
+        "radio",
+        "rhythm",
+        "happy",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.sweat",
+      "category": "state",
+      "whenToUse": "A cartoon moment of nerves, effort or embarrassment: a close call, a hard push, panic, a puzzle that is tricky, a character caught out, heat. Play it at the head; repeat it while the effort lasts.",
+      "duration": 0.8,
+      "loop": false,
+      "tint": "#8fd4ff",
+      "anchor": "center",
+      "tags": [
+        "sweat",
+        "nervous",
+        "panic",
+        "effort",
+        "embarrassed",
+        "hot",
+        "anime",
+        "emotion",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "state.happy",
+      "category": "state",
+      "whenToUse": "A quick happy reaction: a pet is petted or fed, a character likes a gift, a villager is pleased, a correct choice in a dating or care game. Play it at the head. For a lasting in-love state use state.love.",
+      "duration": 0.9,
+      "loop": false,
+      "tint": "#ff5c8a",
+      "anchor": "center",
+      "tags": [
+        "happy",
+        "joy",
+        "love",
+        "pet",
+        "cute",
+        "pleased",
+        "hearts",
+        "emotion",
+        "status"
+      ],
+      "aliases": []
+    },
+    {
       "name": "env.snow",
       "category": "env",
       "whenToUse": "A winter level, a Christmas event, a cold mountain scene. Start it once when the level begins; it covers the whole screen.",
@@ -1926,6 +2554,110 @@
       "aliases": []
     },
     {
+      "name": "env.petals",
+      "category": "env",
+      "whenToUse": "Spring, romance or peace: cherry blossom season, a Japanese or anime setting, a wedding, a love scene, a calm garden, a happy ending. Play it once without a position for the whole screen (2D) or the area around the camera (3D); stop it when the scene changes.",
+      "duration": 6,
+      "loop": true,
+      "tint": "#ffb3d1",
+      "anchor": "top",
+      "tags": [
+        "petals",
+        "cherry blossom",
+        "sakura",
+        "spring",
+        "romance",
+        "anime",
+        "japan",
+        "flowers",
+        "calm"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.blizzard",
+      "category": "env",
+      "whenToUse": "A snowstorm: a frozen mountain, an arctic level, a harsh winter survival scene, a snow boss arena, a cold that should feel dangerous. Play it once without a position (whole screen in 2D, the area around the camera in 3D). For gentle snowfall use env.snow.",
+      "duration": 4,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "top",
+      "tags": [
+        "blizzard",
+        "snowstorm",
+        "snow",
+        "wind",
+        "winter",
+        "arctic",
+        "cold",
+        "storm",
+        "weather"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.ash",
+      "category": "env",
+      "whenToUse": "A burning or ruined world: near a volcano, after an explosion or war, a city on fire, a post-apocalyptic wasteland, a dragon's lair, a hell level. Play it once without a position (whole screen in 2D, the area around the camera in 3D).",
+      "duration": 6,
+      "loop": true,
+      "tint": "#a0a0a0",
+      "anchor": "top",
+      "tags": [
+        "ash",
+        "embers",
+        "volcano",
+        "apocalypse",
+        "war",
+        "fire",
+        "ruins",
+        "hell",
+        "weather"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.meteors",
+      "category": "env",
+      "whenToUse": "A magical or romantic night sky: a wish moment, a space level, a calm night camp, a dreamy menu background, a star festival. Play it once without a position; pair it with env.stars for a full starry sky.",
+      "duration": 3,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "top",
+      "tags": [
+        "shooting stars",
+        "meteors",
+        "night",
+        "sky",
+        "wish",
+        "space",
+        "stars",
+        "dreamy",
+        "romantic"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "env.wind",
+      "category": "env",
+      "whenToUse": "A windy place or a strong breeze: a cliff top, a sailing scene, a speed or flying level, a storm coming, a desert, a dramatic standoff. Play it once without a position. For a sandstorm use env.sandstorm; for snow in wind use env.blizzard.",
+      "duration": 3,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "wind",
+        "breeze",
+        "gust",
+        "air",
+        "windy",
+        "flying",
+        "speed",
+        "weather"
+      ],
+      "aliases": []
+    },
+    {
       "name": "vehicle.exhaust",
       "category": "vehicle",
       "whenToUse": "A car, truck, motorbike or boat engine is running. Follow the exhaust pipe; in 3D pass direction (pointing backward out of the pipe) and keep it current with handle.aim(v) while the vehicle turns. Stop it when the engine stops.",
@@ -2149,6 +2881,46 @@
       "aliases": []
     },
     {
+      "name": "weapon.shotgun",
+      "category": "weapon",
+      "whenToUse": "A shotgun, blunderbuss, cannon or scatter gun fires: one big spread shot. Play it at the barrel; in 2D set dir (degrees, 0 = right), in 3D pass direction along the barrel. For ordinary guns use weapon.muzzle.",
+      "duration": 0.7,
+      "loop": false,
+      "tint": "#ffcf5a",
+      "anchor": "center",
+      "tags": [
+        "shotgun",
+        "blast",
+        "spread",
+        "cannon",
+        "pellets",
+        "gun",
+        "shooter",
+        "weapon"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "weapon.flamethrower",
+      "category": "weapon",
+      "whenToUse": "A continuous stream of fire: a flamethrower, a dragon's breath, a fire hose of magic, a burning jet from a pipe. Play it at the nozzle or mouth; in 2D set dir (degrees), in 3D pass direction and keep it aimed with handle.aim(v). Stop it when the fire stops.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff7a1f",
+      "anchor": "center",
+      "tags": [
+        "flamethrower",
+        "fire",
+        "breath",
+        "dragon",
+        "stream",
+        "burn",
+        "flame",
+        "weapon"
+      ],
+      "aliases": []
+    },
+    {
       "name": "gather.wood",
       "category": "gather",
       "whenToUse": "An axe hits a tree, a log is chopped, wood is harvested or a wooden thing is hacked at. Play it at the spot that was hit, once per swing; for a wooden crate breaking use hit.block.",
@@ -2187,6 +2959,27 @@
         "quarry",
         "survival",
         "voxel"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "gather.harvest",
+      "category": "gather",
+      "whenToUse": "A crop, fruit, flower or plant is harvested or picked: farming games, pulling a carrot, picking an apple, collecting herbs, a garden plot ready. Play it on the plant at the moment it is picked.",
+      "duration": 0.75,
+      "loop": false,
+      "tint": "#7bd44a",
+      "anchor": "center",
+      "tags": [
+        "harvest",
+        "farm",
+        "crop",
+        "pick",
+        "plant",
+        "garden",
+        "fruit",
+        "gather",
+        "farming"
       ],
       "aliases": []
     },
@@ -2270,6 +3063,173 @@
         "tower",
         "upgrade",
         "craft"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.torch",
+      "category": "world",
+      "whenToUse": "A wall torch, a hand-held torch, a lantern flame, a candle (size 0.4), a brazier in a dungeon, castle or cave. Play it where the flame sits on top of the torch and leave it running; follow a carried torch.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff8a2a",
+      "anchor": "center",
+      "tags": [
+        "torch",
+        "flame",
+        "candle",
+        "lantern",
+        "dungeon",
+        "castle",
+        "fire",
+        "light",
+        "medieval"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.fountain",
+      "category": "world",
+      "whenToUse": "A water fountain in a town square or garden, a geyser, a broken water pipe, a whale's spout, a magic spring. Play it at the nozzle and leave it running.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#7fc8ff",
+      "anchor": "feet",
+      "tags": [
+        "fountain",
+        "water",
+        "geyser",
+        "spring",
+        "park",
+        "town",
+        "pipe",
+        "splash"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.lava",
+      "category": "world",
+      "whenToUse": "A pool or river of lava, a bubbling cauldron of fire, a volcano crater, molten metal in a forge, a hazard floor. Play it at the centre of the pool and leave it running; size it to the pool (size 2 for a big one).",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ff5a1f",
+      "anchor": "feet",
+      "tags": [
+        "lava",
+        "magma",
+        "volcano",
+        "molten",
+        "hazard",
+        "fire",
+        "cauldron",
+        "forge",
+        "hell"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.steam",
+      "category": "world",
+      "whenToUse": "Steam or vapour escaping: a pipe or vent in a factory, a hot spring, a boiling pot or kettle, a geyser vent, a cooling engine, hot food. Play it at the opening and leave it running; size 0.4 for a cup or pot.",
+      "duration": 1,
+      "loop": true,
+      "tint": "#ffffff",
+      "anchor": "center",
+      "tags": [
+        "steam",
+        "vapor",
+        "vent",
+        "pipe",
+        "factory",
+        "hot spring",
+        "kettle",
+        "cooking",
+        "industrial"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.sparks",
+      "category": "world",
+      "whenToUse": "Something sparks on and off: a torn power cable, a damaged machine or robot, a short circuit, a grinder or welding, a broken street light, a sci-fi corridor. Play it at the break and leave it running.",
+      "duration": 1.4,
+      "loop": true,
+      "tint": "#ffd27a",
+      "anchor": "center",
+      "tags": [
+        "sparks",
+        "wire",
+        "electric",
+        "broken",
+        "machine",
+        "welding",
+        "short circuit",
+        "sci-fi",
+        "industrial"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.crystal",
+      "category": "world",
+      "whenToUse": "A magic crystal, gem cluster, power core, energy stone or glowing ore in the world: cave crystals, a mana well, a sci-fi reactor core, a collectible that should catch the eye. Play it on the crystal and leave it running.",
+      "duration": 1.6,
+      "loop": true,
+      "tint": "#7ff0ff",
+      "anchor": "center",
+      "tags": [
+        "crystal",
+        "gem",
+        "glow",
+        "magic",
+        "ore",
+        "cave",
+        "energy",
+        "core",
+        "shiny"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.ripple",
+      "category": "world",
+      "whenToUse": "Something disturbs still water over time: a fishing bobber, a duck or frog sitting in a pond, a drip into a puddle, a stone just dropped in, something swimming under the surface. Play it on the water surface and leave it running; for one big splash use move.splash.",
+      "duration": 1.2,
+      "loop": true,
+      "tint": "#d6f1ff",
+      "anchor": "center",
+      "tags": [
+        "ripple",
+        "water",
+        "pond",
+        "fishing",
+        "bobber",
+        "puddle",
+        "lake",
+        "calm",
+        "drip"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "world.boostpad",
+      "category": "world",
+      "whenToUse": "A speed boost pad, a jump ramp marker, a conveyor or launch strip in a racing, runner or platform game: anything that says \"go this way, fast\". Play it on the pad; in 2D set dir (degrees, 0 = right), in 3D it lies on the ground pointing along +X (turn the pad, not the effect). When something drives over it play vehicle.nitro.",
+      "duration": 0.6,
+      "loop": true,
+      "tint": "#38ffb0",
+      "anchor": "feet",
+      "tags": [
+        "boost",
+        "speed pad",
+        "racing",
+        "arrows",
+        "ramp",
+        "runner",
+        "conveyor",
+        "go",
+        "track"
       ],
       "aliases": []
     },
@@ -2410,6 +3370,25 @@
         "tap here",
         "puzzle",
         "glow"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "puzzle.bubble",
+      "category": "puzzle",
+      "whenToUse": "A bubble pops: a bubble shooter match, a balloon popped, a soap bubble tapped, a slime ball burst, a pop-it toy. Play it on each bubble; tint it with the bubble's colour. Cheap enough for many at once.",
+      "duration": 0.45,
+      "loop": false,
+      "tint": "#5cd6ff",
+      "anchor": "center",
+      "tags": [
+        "bubble",
+        "pop",
+        "balloon",
+        "bubble shooter",
+        "soap",
+        "puzzle",
+        "burst"
       ],
       "aliases": []
     },

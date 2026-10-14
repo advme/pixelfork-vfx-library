@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.12.0-A — 48 new effects, four new textures, and two library fixes (floor sprites, repeating bursts)
+- Agent: A (Claude) · Date: 2026-10-14
+- Why: the owner asked for "a lot" more effects across all kinds of games, not tied to the V1 analysis.
+- Done: hit.electric / fire / ice / heavy / metal; explosion.ice / electric / toxic / magic / water; weapon.shotgun, weapon.flamethrower*; magic.meteor (falls from the sky, comet tail), magic.tornado*, magic.earth (upright rock spikes), magic.beam (charge, then a beam), magic.blackhole*, magic.revive, magic.nature, magic.time; state.aura*, state.electrified*, state.wet*, state.bleeding*, state.sad* (rain cloud), state.music*, state.sweat, state.happy; world.torch*, world.fountain*, world.lava*, world.steam*, world.sparks*, world.crystal*, world.ripple*, world.boostpad*; env.petals*, env.blizzard*, env.ash*, env.meteors*, env.wind*; reward.goal, reward.rankup; pickup.star, pickup.mana, pickup.armor; gather.harvest; puzzle.bubble (* = loop). New code-drawn textures: note, bolt, snowflake, petal.
+- Fixed: (1) sprites lying flat on the floor (shockwave rings, magic circles, selection rings, lava, boost pads; every `c.flat`) were faded to ~7% in games with `soft: true` (the 3D player has it): they sit 3 cm above the floor and soft particles fade over ~0.44 m. Flat sprites are now never soft. (2) three.quarks 0.17 ignores a burst's `cycle` / `interval`; `helpers.sys` now expands repeating bursts itself and sorts all bursts by time (quarks walks them in order). (3) `upright` meshes from a ground emitter stand up (they lay flat).
+- Tested: build (184 effects); every effect in the pack played in the 3D player with a 2 s particle-peak measurement: no errors; all 48 new ones also run without errors in 2D; each batch looked at frozen in a grid (2D) and the ground / weather ones in 3D.
+- Notes for next agent: a moving effect's trail has to come from the head (launch the tail with the head at slightly lower speeds, see magic.meteor), not from bursts fired later from the start point. Weather in 3D needs higher rates than in 2D because it fills a 26 m area; keep the peak near 300.
+
 ## v0.11.0-A — 19 more effects from the V1 prompt analysis, arrow and pixel textures
 - Agent: A (Claude) · Date: 2026-10-14
 - Why: the owner liked v0.10.0 and asked to continue. Second pass over the analyzer's demand: quests (433 prompts), loot (356), building (206), chases/crime, boats, military, sports, endless runners in 3D; platformers, logic puzzles, strategy/RPG, pixel-art and slime/paint games in 2D.

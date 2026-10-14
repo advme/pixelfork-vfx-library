@@ -1,6 +1,6 @@
 {
   "name": "pixelfork-vfx-library",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Ready-made game visual effects for AI-generated web games (Pixelfork). One script, call a name.",
   "scripts": {
     "build": "node tools/build.mjs",

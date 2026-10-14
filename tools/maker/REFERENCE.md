@@ -52,9 +52,9 @@ x is right, y is UP. Angles are radians, 0 = right, `Math.PI / 2` = up.
 
 | Option | Meaning | Default |
 |---|---|---|
-| `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` `ellipse` (a ground ring seen from the side) `hexshard` / `penttile` (one glowing hexagon / pentagon tile) `arrow` (a bold ^ chevron; rotation Math.PI points it down) `pixel` (a hard-edged square for pixel-art looks, use blend 'normal') | `glow` |
+| `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` `ellipse` (a ground ring seen from the side) `hexshard` / `penttile` (one glowing hexagon / pentagon tile) `arrow` (a bold ^ chevron; rotation Math.PI points it down) `pixel` (a hard-edged square for pixel-art looks, use blend 'normal') `note` (music note) `bolt` (lightning-bolt icon) `snowflake` `petal` (blossom petal) | `glow` |
 | `blend` | `'add'` (light: glows, sparks, fire, magic) or `'normal'` (solid things: smoke, debris, coins, leaves, blood) | `'add'` |
-| `bursts` | `[{ count: 12 }, { time: 0.15, count: [4, 6] }]` particles fired at once | none |
+| `bursts` | `[{ count: 12 }, { time: 0.15, count: [4, 6] }]` particles fired at once; `{ time: 0.25, count: 2, cycle: 20, interval: 0.025 }` repeats a burst (a stream that starts late) | none |
 | `rate` | particles per second, continuously (needs `duration`, or `loop: true`) | 0 |
 | `duration` | seconds the emitter runs | 1 |
 | `loop` | `true` on every system of a looping effect | false |
