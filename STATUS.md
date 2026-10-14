@@ -1,22 +1,14 @@
 # STATUS
 
-**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.12.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
+**Last updated:** 2026-10-14 · by **A (Claude)** · version **v0.13.0-A** · **published**: https://github.com/advme/pixelfork-vfx-library
 
 ## Next task
-**Owner review of the 48 effects added in v0.12.0-A** (the owner asked for "a lot" more, not tied to the
-V1 analysis): elemental hits and explosions, shotgun, flamethrower; meteor, tornado, earth spikes,
-energy beam, black hole, revive, nature, time; aura, electrified, wet, bleeding; sad cloud, music,
-sweat, happy; torch, fountain, lava, steam, sparks, crystal, ripple, boost pad; petals, blizzard, ash,
-shooting stars, wind; goal, rank-up; star, mana, armour pickups; harvest; bubble pop.
-Over the ~300-particle budget in 3D (measured peak): `env.snow` 522 and `reward.clear` 430 (both older,
-area / full-screen), `env.ash` ~300, `env.storm` 333, `env.blizzard` 323 (weather over a whole area).
+**Finish wave 5 and publish it as v0.14.0-A** (see In progress), then **owner review of the 291 effects
+added in v0.13.0-A**: open `tools/gallery.html` (every effect replaying in a 4x3 grid, by group) and the
+3D player, and flag anything that reads wrong.
+Over the ~300-particle budget in 3D (measured peak): `env.snow` 537 and `reward.clear` 436 (both older,
+area / full-screen), `env.storm` 333, `env.blizzard` 323, `env.ash` 301 (weather over a whole area).
 The VFX Studio is a separate Claude Code project (`../Pixelfork VFX Studio`); do not build it from here.
-
-## Open: sun rays (`packs/casual/drafts/env.sunrays.js`, a draft, not in the pack)
-Works in 2D (slanted shafts from a line emitter pushed by a force, stretched). In 3D the shafts never
-showed: slow stretched sprites smear into faint blobs whether placed in the world (`env3d`) or on the
-camera-facing sheet. Needs a different technique (e.g. a few long thin quads / a cone mesh with a soft
-gradient texture, or the bolt approach with fast particles and a short life). Do not ship it 2D-only.
 
 ## Hexagon force-field dome (2026-09-21, from the owner's reference sheet)
 `state.dome` (loop: ring lights up, energy rises, the dome builds itself tile by tile from the ground
@@ -59,25 +51,30 @@ Note: the sibling UI Kit now lives under a different GitHub account (`pixelfork-
 under `advme` because that is the account logged in on the owner's Mac. Moving it is the owner's call.
 
 ## In progress
-_Nothing._
+**Wave 5: 100 more effects being written** (not in the pack yet; their files in `packs/casual/effects/`
+are not imported by `packs/casual/index.js` and were left out of the v0.13.0-A commit). Themes: cooking,
+toys, slicing / stacking, tower defense, .io games, dungeon loot, casino and board games, ocean, UI,
+menu backdrops. To finish: wait for each batch's writer + reviewer, run `node tools/check-effect.mjs` on
+the new files, list them in `packs/casual/index.js` within their group, build, play each in both players
+(error + peak sweep, frozen grids), then publish v0.14.0-A.
 
-## The pack — 184 effects, all playable (v0.12.0-A)
+## The pack — 475 effects, all playable (v0.13.0-A)
 | Group | Effects |
 |---|---|
-| `hit.*` (21) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry, kick, stomp, splat, electric, fire, ice, heavy, metal |
-| `explosion.*` (12) | small, big, puff, fireball, firework, nuke (full screen), pixel, ice, electric, toxic, magic, water |
-| `pickup.*` (11) | sparkle, coin, gem, heart, powerup, xp, key, food, star, mana, armor |
-| `reward.*` (11) | confetti, levelup, starburst, combo, chest, coinshower (top), clear (full screen), checkpoint, jackpot, goal, rankup |
-| `move.*` (16) | jump, footstep, land, dash, splash, teleport, spawn, doublejump, bounce · loops: trail, dust, speed, swim, fly, skid, wallslide |
-| `magic.*` (22) | heal, ice, lightning, shield, poison, dark, holy, summon, curse, buff, debuff, meteor, earth, beam, revive, nature, time · loops: tornado, blackhole · loops: portal, cast, fire (projectile) |
-| `state.*` (26) | loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, magnet, rainbow, selected, aura, electrified, wet, bleeding, sad, music, dome (ends with the one-shot domebreak) · one-shots: sweat, happy |
-| `env.*` (20, all loops) | snow, rain, leaves, confetti, clouds, storm, petals, blizzard, ash, meteors (top) · embers, bubbles, fog, hearts (bottom) · stars, fireflies, dust, sandstorm, spirits, wind (everywhere) |
-| `vehicle.*` (6) | crash · loops: exhaust, nitro, damaged, siren, wake |
-| `weapon.*` (7) | muzzle, laser, shell, shotgun · loops: smoke (grenade), rocket, flamethrower |
-| `gather.*` (3) | wood, stone, harvest |
-| `world.*` (12) | build · loops: campfire, beacon, lootbeam, torch, fountain, lava, steam, sparks, crystal, ripple, boostpad |
-| `puzzle.*` (8) | match, line, shatter, merge, blast, wrong, bubble · loop: hint |
-| `ui.*` (9) | pop, tap, star, burst, unlock, flash (full-screen), shine · loops: glow, countup |
+| `hit.*` (55) | impact, slash, punch, bullet, crit, block, blood, shieldbreak, parry, shieldzap, dirt, ko, flurry, kick, stomp, splat, electric, fire, ice, heavy, metal, arrow, asteroid, backstab, bite, bonk, brick, charge, claw, counter, dunk, elementfire, elementice, elementshock, emp, fur, ghost, glass, golf, homerun, laser, note, paddle, pie, racket, robot, shieldwall, slow, sonic, splashhit, sweep, tackle, thrust, upgradefail, water |
+| `explosion.*` (29) | small, big, puff, fireball, firework, nuke, pixel, ice, electric, toxic, magic, water, artillery, balloon, barrel, bass, candy, catapult, chain, dust, glitter, gunpowder, mine, paint, ship, shockwave, smokebomb, soul, supernova |
+| `pickup.*` (19) | sparkle, coin, gem, heart, powerup, xp, key, food, star, mana, armor, bomb, fuel, life, multiball, shard, speed, time, treat |
+| `reward.*` (34) | confetti, levelup, starburst, combo, chest, coinshower, clear, checkpoint, jackpot, goal, rankup, bigcombo, birthday, cardreveal, cheer, clean, cooked, encore, finish, fireworkshow, gift, good, great, legendary, perfect, rare, record, sticker, streak, summon, trophy, unbox, upgrade, wheel |
+| `move.*` (45) | jump, footstep, land, dash, splash, teleport, spawn, doublejump, bounce, blink, blinkstrike, breach, dive, dodge, emerge, feathers, groundpound, hatch, landing, ledge, parachute, pounce, roll, rustle, shadowstep, shake, sweep, swing, wallkick, warp · loops: trail, dust, speed, swim, fly, skid, wallslide, climb, dig, glide, jetpack, orbit, skate, slide, surf |
+| `magic.*` (39) | heal, ice, lightning, shield, poison, dark, holy, summon, curse, buff, debuff, meteor, earth, beam, revive, nature, time, barrier, clone, drain, gust, leap, mark, raise, shockwave, starfall, transform, ultimate, warcry, wave · loops: portal, cast, fire, tornado, blackhole, charge, heallaura, missile, rune |
+| `state.*` (55) | domebreak, sweat, happy, surprise · loops: stun, poison, burning, frozen, shield, rage, regen, sparkle, smoke, love, sleep, invisible, charged, dome, magnet, rainbow, selected, aura, electrified, wet, bleeding, sad, music, angry, charmed, cloak, cursed, dance, drunk, fear, focus, freezing, glitch, groove, halo, hasted, haunted, invulnerable, levitate, lucky, marked, overheat, possessed, purr, rally, sick, sleepy, slowed, thinking, ultready, zerog |
+| `env.*` (42) | loops: snow, rain, leaves, embers, bubbles, fog, stars, fireflies, dust, sandstorm, clouds, hearts, confetti, storm, spirits, petals, blizzard, ash, meteors, wind, aurora, christmas, drizzle, dustdevil, feathers, hail, halloween, heat, lanterns, magic, mist, nebula, ocean, partylights, pollen, rainbowsparkle, smoke, space, spores, sunrays, underground, underwater |
+| `vehicle.*` (15) | crash, backfire, explode, jump, puddle · loops: exhaust, nitro, damaged, siren, wake, drift, offroad, rotorwash, scrape, thruster |
+| `weapon.*` (24) | muzzle, laser, shell, shotgun, arrowrain, cannon, catapult, launch, musket, plasma, railgun · loops: smoke, rocket, flamethrower, boomerang, chargebow, flamesword, frostblade, holyspear, minigun, poisondagger, thunderhammer, torpedo, tractorbeam |
+| `gather.*` (8) | wood, stone, harvest, egg, fish, seed · loops: drill, water |
+| `world.*` (59) | build, anvil, bloom, crumble, dooropen, keyhole, pressureplate, secret, spikes, switch, towerup, trap · loops: campfire, beacon, lootbeam, torch, fountain, lava, steam, sparks, crystal, ripple, boostpad, altar, banner, bubblecolumn, burning, capture, cauldron, chestidle, chimney, cooking, datastream, discoball, dripping, enchant, flag, forcefield, grave, grow, hologram, laserfence, planetring, rally, reactor, savepoint, saw, scanner, shore, smelt, spawnportal, speaker, sprinkler, teleporter, volcano, waterfall, wave, whirlpool, wormhole |
+| `puzzle.*` (8) | match, line, shatter, merge, blast, wrong, bubble · loops: hint |
+| `ui.*` (43) | pop, tap, star, burst, unlock, flash, shine, achievement, carddeal, cardflip, chip, cooldown, correct, countdown, dice, fill, focuslines, gameover, go, hack, healed, hurt, levelstart, lifelost, miss, notify, purchase, tapburst, transition, victory, wrongtry · loops: glow, countup, beat, frozen, hurry, lowhp, new, poisoned, rays, sparkle, speedlines, tapme |
 
 ## 3D (three.js) mode — steps 1 and 2 done
 `VFX.useScene({ scene, camera, renderer, characterHeight, ground, soft })` attaches a game's scene.
@@ -105,8 +102,8 @@ bodies (planks / rubble / shards) that collide, settle, can be pushed, and shrin
 (cap 90 bodies, oldest removed first).
 
 ## Two builds (owner's decision, 2026-09-19)
-- `dist/vfx.js` — IIFE, three.js bundled (1020 KB / 254 KB gz). For 2D games: one script tag.
-- `dist/vfx.module.js` — ES module, three.js external (294 KB / 69 KB gz). For 3D games: an import
+- `dist/vfx.js` — IIFE, three.js bundled (1765 KB / 407 KB gz, 475 effects). For 2D games: one script tag.
+- `dist/vfx.module.js` — ES module, three.js external (1039 KB / 222 KB gz). For 3D games: an import
   map shares ONE three.js (>= 0.182) between the game, its add-ons and the library.
 Two copies of three.js break rendering, not just size: three.quarks registers its shader chunks in
 the copy it imported, and the game's renderer looks them up in its own. `useScene` warns if the
@@ -119,6 +116,10 @@ z-index 1, below positioned page content, so effects can sit behind a DOM charac
 The preview page has a **Behind character** toggle that uses it.
 
 ## Known gaps
+- Screen-filling `rect` emitters with `thickness: 1` (most 2D `env.*` backdrops) are denser toward the
+  middle of the screen: three.quarks' `RectangleEmitter` puts a point on the edge and scales it by
+  `1 - thickness × random`, which is uniform in that factor, not in area. A uniform-fill shape in
+  `src/helpers.js` would even it out, but it changes how every existing backdrop looks: decide with the owner.
 - 3D: every `dir` effect is now aimed in 3D (`c.spray` / `c.heading` + `c.wind`, `direction` option,
   `handle.aim(v)` for loops): blood, slash, parry, confetti, dash, speed, sandstorm. None left flat.
 - `VFX.attach()` handles `data-vfx`, kit `star`, `buy`, screen `show` and popup `open`. It could

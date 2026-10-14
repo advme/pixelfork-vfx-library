@@ -3,7 +3,7 @@ export default {
   name: 'magic.heal',
   category: 'magic',
   whenToUse: 'Health restored, a potion drunk, a shrine touched, a buff applied. Play on the character.',
-  duration: 1.1,
+  duration: 1.6,
   loop: false,
   tint: '#7cf07c',
   tags: ['heal', 'health', 'potion', 'buff', 'restore', 'plus'],

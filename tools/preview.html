@@ -48,7 +48,7 @@
 <div id="panel">
   <h1>Pixelfork VFX <span class="muted" id="ver"></span></h1>
   <div class="muted">Casual pack · every effect, at any size and tint.</div>
-  <div class="row" style="margin:8px 0 0"><button class="on">2D player</button><button onclick="location.href='preview3d.html'">3D player</button><button onclick="location.href='maker.html'">Maker</button></div>
+  <div class="row" style="margin:8px 0 0"><button class="on">2D player</button><button onclick="location.href='preview3d.html'">3D player</button><button onclick="location.href='gallery.html'">Gallery</button><button onclick="location.href='maker.html'">Maker</button></div>
 
   <div class="row"><label style="width:40px">Size</label><input id="size" type="range" min="0.3" max="2.5" step="0.1" value="1"><span id="sizeVal" style="width:32px">1.0</span></div>
   <div class="row"><label style="width:40px">Tint</label><input id="tint" type="color" value="#ffd54a"><button id="tintOn">Use tint</button><button id="stopAll">Stop all</button></div>
@@ -125,12 +125,13 @@
       if (loops[selected]) { loops[selected].stop(); delete loops[selected]; refresh(); return; }
       const o = opts();
       if (meta.name.startsWith('env.')) loops[selected] = VFX.play(selected, o);
-      else loops[selected] = VFX.play(selected, Object.assign(o, { follow: ['state.stun', 'state.sad', 'state.music', 'state.sweat', 'state.happy'].includes(selected) ? heroTop : feet[selected] ? heroFeet : heroMid }));
+      else loops[selected] = VFX.play(selected, Object.assign(o, { follow: (['state.stun', 'state.sad', 'state.music', 'state.sweat', 'state.happy'].includes(selected) || meta.anchor === 'head') ? heroTop : (feet[selected] || meta.anchor === 'feet') ? heroFeet : heroMid }));
       refresh();
       return;
     }
     if (where) VFX.play(selected, opts({ at: where }));
-    else if (selected === 'move.jump' || feet[selected]) VFX.play(selected, opts({ at: heroFeet() }));
+    else if (selected === 'move.jump' || feet[selected] || meta.anchor === 'feet') VFX.play(selected, opts({ at: heroFeet() }));
+    else if (meta.anchor === 'head') VFX.play(selected, opts({ at: heroTop() }));
     else VFX.play(selected, opts({ el: hero }));
   }
 

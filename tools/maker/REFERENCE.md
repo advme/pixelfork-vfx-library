@@ -1,7 +1,7 @@
 # Writing a Pixelfork VFX effect
 
 This is everything the VFX Maker's AI is given before it writes an effect. It is the same
-vocabulary the 90 effects in `packs/casual/effects/` are written in (`src/helpers.js`).
+vocabulary every effect in `packs/casual/effects/` is written in (`src/helpers.js`); read a few of them.
 Keep it in step with `helpers.js`: an option that is not listed here will not be used.
 
 ## What an effect is
@@ -19,7 +19,7 @@ export default {
   tint: '#7ee83a',               // the default main colour; play(name, { tint }) replaces it
   tags: ['poison', 'acid'],      // 4-8 search words
   // optional: ending: 'state.domebreak'  a one-shot the runtime plays where a LOOP was when the game stops it
-  // optional: anchor: 'feet'   the effect belongs at the character's feet / on the ground
+  // optional: anchor: 'feet'   the effect belongs at the character's feet / on the ground; 'head' = above the head
   build(c) {
     const col = c.color('#7ee83a');          // ALWAYS take the main colour this way, so tint works
     return [ c.sys({ ... }), c.sys({ ... }) ];   // 2-5 particle systems, drawn in `order`
@@ -39,7 +39,7 @@ and punchy. Not realistic, not gritty, not cinematic.
 - Layer it: a flash or glow (order 0-2), a main body (puffs / shapes), fast accents (sparks,
   discs), and often a ring. One system alone always looks cheap.
 - At most about 300 live particles in total; most effects need 30-80.
-- Loops must look right for minutes: steady `rate`, no bursts that visibly repeat.
+- Loops must look right for minutes: a steady `rate` for anything continuous; a burst in a looping system repeats every cycle, which is right for a pulse (a glow breathing, a ring sent out every second) but looks mechanical for spray.
 
 ## Units
 
@@ -54,7 +54,7 @@ x is right, y is UP. Angles are radians, 0 = right, `Math.PI / 2` = up.
 |---|---|---|
 | `tex` | sprite: `glow` (soft blob) `disc` (hard dot) `ring` `star` `spark` (4-point glint) `square` `puff` (smoke cloud) `plus` `heart` `drop` `shard` `leaf` `coin` `flame` `z` `key` `ellipse` (a ground ring seen from the side) `hexshard` / `penttile` (one glowing hexagon / pentagon tile) `arrow` (a bold ^ chevron; rotation Math.PI points it down) `pixel` (a hard-edged square for pixel-art looks, use blend 'normal') `note` (music note) `bolt` (lightning-bolt icon) `snowflake` `petal` (blossom petal) | `glow` |
 | `blend` | `'add'` (light: glows, sparks, fire, magic) or `'normal'` (solid things: smoke, debris, coins, leaves, blood) | `'add'` |
-| `bursts` | `[{ count: 12 }, { time: 0.15, count: [4, 6] }]` particles fired at once; `{ time: 0.25, count: 2, cycle: 20, interval: 0.025 }` repeats a burst (a stream that starts late) | none |
+| `bursts` | `[{ count: 12 }, { time: 0.15, count: [4, 6] }]` particles fired at once; `{ time: 0.25, count: 2, cycle: 20, interval: 0.025 }` repeats a burst (a stream that starts late); `probability: 0.5` fires it only sometimes. In a looping system every burst repeats each cycle | none |
 | `rate` | particles per second, continuously (needs `duration`, or `loop: true`) | 0 |
 | `duration` | seconds the emitter runs | 1 |
 | `loop` | `true` on every system of a looping effect | false |
@@ -80,7 +80,7 @@ Any number may be written `[min, max]` for a random value per particle.
 - `{ type: 'circle', radius: 14 }`: starts inside a circle and flies **outward** in the screen plane. The standard burst. `thickness: 0` = only on the rim. `arc` = part of the circle (`Math.PI` = the upper half; with `c.vol` that becomes a hemisphere in 3D).
 - `{ type: 'sphere', radius }`: the same in every direction.
 - `{ type: 'cone', angle: 0.4, radius: 4 }`: a directed spray; `angle` is the half-spread in radians. Aims up unless `dir` is set.
-- `{ type: 'rect', w: 400, h: 0 }`: a line or box. **Rect emitters push particles sideways, not forward**: always use `speed: 0` with them and move the particles with `c.gravity` / `c.force` plus `c.limitSpeed`.
+- `{ type: 'rect', w: 400, h: 0 }`: a line or box (`thickness: 1` fills the box instead of its edge). **Rect emitters push particles sideways, not forward**: always use `speed: 0` with them and move the particles with `c.gravity` / `c.force` plus `c.limitSpeed`. A vertical line is `{ w: 0, h: 300 }`; do not turn a rect with `dir`.
 
 ### Behaviours (things that change over a particle's life, t = 0..1)
 - `c.colorOverLife(gradient)` with
@@ -99,11 +99,14 @@ Any number may be written `[min, max]` for a random value per particle.
 ### Colours
 `c.color('#hex')` the main colour (respects tint). `c.lighten(col, 0.5)`, `c.darken(col, 0.3)`,
 `c.mix(a, b, 0.5)`. Literal hex strings are fine for fixed colours (white flash, grey smoke).
+`c.rgb('#hex')` turns a hex into a colour value (for building palettes). `c.tint` is the tint the game passed, or null:
+an effect with `tint: null` in its meta uses its own palette unless a tint is given (see `explosion.pixel`, `reward.goal`).
 
 ### Context values
 `c.view.w`, `c.view.h`: the screen in design px (for `env.*` and full-screen `ui.*`).
 `c.target.w`, `c.target.h`: the size of the thing it is played on (ui effects around a button).
-`c.is3d`: true inside a 3D scene.
+`c.is3d`: true inside a 3D scene. `c.dir`: the angle the game passed with `dir` (radians), or undefined; directional effects read
+`const dir = c.dir === undefined ? 0 : c.dir;` and wrap their sprays in `c.spray` so 3D games aim them with `direction`.
 
 ## 3D: one file, two worlds
 
@@ -132,6 +135,21 @@ them at all and design for the flat screen.
 4. A `point` shape has no direction: particles with `speed` and a point shape do not spread. Use `circle`.
 5. Additive white on a bright background burns out: keep flashes short (life 0.1-0.2) and big glows at low alpha through a gradient.
 6. `blend: 'add'` cannot draw anything dark. Smoke, blood, dirt and shadows are `blend: 'normal'`.
-7. Loop effects: every system needs `loop: true`, and `duration` is one cycle. Feed loops with `rate`, not `bursts`: a burst fires once and the loop then looks empty.
+7. Loop effects: every system needs `loop: true` (except a deliberate one-time intro), and `duration` is one cycle. Continuous stuff uses `rate`; bursts repeat every cycle.
 8. No imports, no `THREE`, no DOM, no timers, no randomness at module level. Only `c.*`. (`c.Q` and `c.THREE` exist but you should not need them.)
-9. Never invent a `c.` helper or a `sys` option that is not in this document.
+9. Never invent a `c.` helper, a `sys` option or a texture that is not in this document.
+10. **A stretched sprite is about `size × (stretch.length + speed × stretch.speed)` long, and it trails BACK from its particle** toward where it came from. A fast particle with a big `stretch.speed` draws a line across the whole screen. Sparks: size 3-7, speed 200-600, `{ speed: 0.02, length: 1.5 }` gives 30-90 px. When the tail would poke back into the thing it comes out of (a nozzle, the ground), offset the emitter forward along the direction (see `vehicle.nitro`, `reward.checkpoint`).
+11. Slow stretched sprites (under ~60 px/s) smear into faint blobs in 3D. Do not stretch slow things.
+12. Emitters do not move. A trail behind something flying (a meteor, a comet) cannot be made by firing more particles later from the start point: they start back at the top. Launch the tail together with the head at slightly lower speeds so it strings out behind it (`magic.meteor`).
+13. Lying on the floor in 3D: `c.flat(p)` (it snaps to the game's ground height). On water above the ground: `c.flat(p, { snap: false })`. Rings on the ground, the same in both worlds: `const ring = (p) => (c.is3d ? c.sys(c.flat(Object.assign({ tex: 'ring' }, p))) : c.sys(Object.assign({ tex: 'ellipse' }, p)));`
+14. `c.ground` does nothing in 2D, so a circle emitter becomes a circle on the screen. For things along the ground in 2D (an aura at the feet, a row of spikes) use `shape: c.is3d ? { type: 'circle', radius: 40 } : { type: 'rect', w: 80, h: 0 }` (see `state.aura`, `magic.earth`).
+15. `render: 'mesh'` with `upright: true` (only with `c.ground` or in3d systems) keeps solid shapes standing up, such as rock spikes; without it meshes tumble.
+16. Behaviours cannot be shared between systems. If two systems need the same list, write a function that returns a fresh list.
+17. A one-shot's `duration` must be when its last particle dies; `tools/check-effect.mjs` reports the real figure.
+18. Count the budget: peak particles ≈ Σ (rate × life) + bursts. Weather in 3D covers about 26 m and needs higher rates than 2D, but keep the peak near 300.
+
+## Checking an effect
+
+`node tools/check-effect.mjs packs/casual/effects/<name>.js` builds it in a 2D and a 3D context, runs three seconds of
+simulation in each and reports errors, the peak particle count, how long a one-shot really lasts and the
+longest streak. It cannot judge looks: watch it in `tools/preview.html` (2D) and `tools/preview3d.html` (3D).

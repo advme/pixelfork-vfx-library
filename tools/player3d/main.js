@@ -316,7 +316,13 @@ $('reset').onclick = resetObjects;
 $('debris').onclick = (e) => { realDebris = !realDebris; e.target.classList.toggle('on', realDebris); };
 
 function opts(extra) { const o = Object.assign({ size: Number(sizeEl.value) }, extra || {}); if (useTint) o.tint = tintEl.value; return o; }
-function anchorFor(name) { if (HEAD.includes(name)) return aHead; if (FEET.includes(name)) return aFeet; return aChest; }
+// an effect's own meta says where it belongs (anchor: 'feet' | 'head'); the lists cover older effects
+function anchorFor(name) {
+  const a = (VFX.registry.find((e) => e.name === name) || {}).anchor;
+  if (a === 'head' || HEAD.includes(name)) return aHead;
+  if (a === 'feet' || FEET.includes(name)) return aFeet;
+  return aChest;
+}
 
 /** Opposite of where the character is facing: the way speed lines and dash streaks fly. */
 function backward() { return new T.Vector3(-Math.sin(H.face), 0, -Math.cos(H.face)); }

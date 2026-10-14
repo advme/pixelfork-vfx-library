@@ -19,6 +19,26 @@ export function geometry(name) {
   else if (name === 'ball') g = new THREE.IcosahedronGeometry(0.5, 1);
   else if (name === 'plank') g = new THREE.BoxGeometry(1.4, 0.35, 0.6);
   // flat tiles for energy domes (see TilesEmitter); their top caps take a whole texture, vertex at +z = texture right
+  else if (name === 'shaft') {
+    // a light shaft: two crossed planes (so it reads from any side), 1 long and 0.2 wide, hanging DOWN from
+    // the particle and slanted a little; wears the 'shaft' texture (bright at the top, fading out at the bottom)
+    const w = 0.1, tilt = 0.32, pos = [], uv = [], idx = [];
+    [0, Math.PI / 2].forEach((a, k) => {
+      const ca = Math.cos(a) * w, sa = Math.sin(a) * w;
+      [[-1, 0], [1, 0], [-1, -1], [1, -1]].forEach(([s, y]) => {
+        const x0 = s * ca, z0 = s * sa;
+        pos.push(x0 + Math.sin(tilt) * -y, y * Math.cos(tilt), z0);
+        uv.push((s + 1) / 2, y + 1);
+      });
+      const o = k * 4;
+      idx.push(o, o + 2, o + 1, o + 1, o + 2, o + 3);
+    });
+    g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    g.setIndex(idx);
+    g.computeVertexNormals();
+  }
   else if (name === 'hex') g = new THREE.CylinderGeometry(0.5, 0.5, 0.06, 6);
   else if (name === 'pent') g = new THREE.CylinderGeometry(0.5, 0.5, 0.06, 5);
   else g = new THREE.BoxGeometry(0.8, 0.8, 0.8);            // 'box'
@@ -329,7 +349,7 @@ export function makeContext(opts) {
     const render = p.render || (p.stretch ? 'stretch' : 'billboard');
     // A mesh is solid debris: lit, or glowing with blend 'add'. Its `tex` is only the 2D picture and is
     // ignored, EXCEPT on the flat dome tiles (geo 'hex' / 'pent'), whose caps are made to wear one.
-    const tiled = render === 'mesh' && (p.geo === 'hex' || p.geo === 'pent');
+    const tiled = render === 'mesh' && (p.geo === 'hex' || p.geo === 'pent' || p.geo === 'shaft');
     const solid = render === 'mesh' && !tiled;
     const lit = solid && p.blend !== 'add' && !!opts.lit;
     const mat = solid ? material('#solid', p.blend === 'add' ? 'add' : (lit ? 'lit' : 'unlit'))

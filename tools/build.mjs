@@ -104,12 +104,15 @@ const groups = {};
 for (const e of EFFECTS) (groups[e.category] = groups[e.category] || []).push(e);
 let table = '';
 for (const cat of Object.keys(groups)) {
-  table += `\n**\`${cat}.*\`**\n\n| Effect | Play it when | Loops | Tint |\n|---|---|---|---|\n`;
+  table += `\n**\`${cat}.*\`**\n\n| Effect | Play it when | Runs | Tint |\n|---|---|---|---|\n`;
   for (const e of groups[cat]) {
-    table += `| \`${e.name}\` | ${e.whenToUse} | ${e.loop ? 'yes, call stop()' : `no (${e.duration}s)`} | ${e.tint ? `yes, default \`${e.tint}\`` : e.tint === null ? 'yes' : 'no'} |\n`;
+    // Runs: a one-shot's length, or "loop" (call stop()); plus where it goes when that matters
+    const runs = (e.loop ? 'loop' : `${e.duration} s`) + (e.anchor === 'feet' ? ', at feet' : e.anchor === 'head' ? ', over head' : '');
+    table += `| \`${e.name}\` | ${e.whenToUse} | ${runs} | ${e.tint ? `\`${e.tint}\`` : e.tint === null ? 'any' : '-'} |\n`;
   }
 }
-guide = guide.replace(/<!-- EFFECTS:START -->[\s\S]*<!-- EFFECTS:END -->/, `<!-- EFFECTS:START -->\n${table}\n<!-- EFFECTS:END -->`);
+const legend = '\nRuns: how long a one-shot lasts, or `loop` (it runs until you call `stop()`), and where it belongs when that matters. Tint: its default colour (`tint` replaces it), `any` = its own palette unless you pass a tint, `-` = no tint.\n';
+guide = guide.replace(/<!-- EFFECTS:START -->[\s\S]*<!-- EFFECTS:END -->/, `<!-- EFFECTS:START -->\n${legend}${table}\n<!-- EFFECTS:END -->`);
 guide = guide.replace(/(\*\*)(\d+) effects(\*\*)/, `$1${EFFECTS.length} effects$3`);
 writeFileSync(guidePath, guide);
 

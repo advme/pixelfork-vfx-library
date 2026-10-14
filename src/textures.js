@@ -327,6 +327,17 @@ export function makeTextures(THREE) {
       g.bezierCurveTo(s * 0.82, s * 0.1, s * 0.92, s * 0.6, c, s * 0.92);
       g.closePath(); g.fill(); g.fill();
     }),
+    // a light shaft for the 'shaft' mesh: soft across, bright at the top (v = 1) and fading to nothing at the bottom
+    shaft: make((g, s) => {
+      const across = g.createLinearGradient(0, 0, s, 0);
+      across.addColorStop(0, W(0)); across.addColorStop(0.3, W(0.8)); across.addColorStop(0.5, W(1)); across.addColorStop(0.7, W(0.8)); across.addColorStop(1, W(0));
+      g.fillStyle = across; g.fillRect(0, 0, s, s);
+      const along = g.createLinearGradient(0, 0, 0, s);
+      along.addColorStop(0, W(0.2)); along.addColorStop(0.12, W(1)); along.addColorStop(0.55, W(0.55)); along.addColorStop(1, W(0));
+      g.globalCompositeOperation = 'destination-in';
+      g.fillStyle = along; g.fillRect(0, 0, s, s);
+      g.globalCompositeOperation = 'source-over';
+    }),
     penttile: make((g, s, c) => {
       g.beginPath();
       for (let i = 0; i < 5; i++) { const a = (i * 2 * Math.PI) / 5; const x = c + Math.cos(a) * c * 0.98, y = c + Math.sin(a) * c * 0.98; if (i === 0) g.moveTo(x, y); else g.lineTo(x, y); }

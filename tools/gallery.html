@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pixelfork VFX — gallery</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; font: 13px/1.4 -apple-system, system-ui, sans-serif; color: #eee; background: #12141c; overflow: hidden; display: flex; flex-direction: column; }
+  #bar { position: relative; flex: none; min-height: 52px; padding-top: 8px; padding-bottom: 8px; display: flex; gap: 8px; align-items: center; padding: 0 14px; background: rgba(16,18,26,.95); border-bottom: 1px solid #2c3145; z-index: 3000; flex-wrap: wrap; }
+  #bar h1 { font-size: 15px; margin: 0 8px 0 0; }
+  button, select { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #3a4160; background: #262c42; color: #fff; cursor: pointer; }
+  button:hover { background: #333b5c; }
+  button.on { background: #ffc93c; color: #221; border-color: #ffc93c; }
+  .muted { color: #8b93b0; }
+  @media (max-width: 900px) { .hint { display: none; } }
+  #grid { flex: 1; min-height: 0; display: grid; }
+  .tile { position: relative; border-right: 1px solid #1f2333; border-bottom: 1px solid #1f2333; cursor: pointer;
+    background: radial-gradient(circle at 50% 60%, #1d2133 0%, #12141c 75%); }
+  .tile:hover { background: radial-gradient(circle at 50% 60%, #262b42 0%, #12141c 75%); }
+  .tile .name { position: absolute; left: 8px; top: 6px; font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: #ffc93c; }
+  .tile .tag { position: absolute; right: 8px; top: 6px; font-size: 10px; color: #8b93b0; }
+  .tile .use { position: absolute; left: 8px; right: 8px; bottom: 6px; font-size: 11px; color: #7d86a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .floor { position: absolute; left: 12%; right: 12%; bottom: 28%; height: 1px; background: #2a3048; }
+</style>
+</head>
+<body>
+<div id="bar">
+  <h1>Pixelfork VFX gallery <span class="muted" id="ver"></span></h1>
+  <select id="group"></select>
+  <button id="prev">‹ Prev</button><span id="page" class="muted"></span><button id="next">Next ›</button>
+  <button id="slow">Slow motion</button>
+  <span class="muted hint">Every tile replays on its own · click a tile to replay it · weather (env) shows one at a time</span>
+  <span style="flex:1"></span>
+  <button onclick="location.href='preview.html'">2D player</button><button onclick="location.href='preview3d.html'">3D player</button>
+</div>
+<div id="grid"></div>
+
+<script src="../dist/vfx.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const all = VFX.registry;
+  const groups = ['all'].concat([...new Set(all.map((e) => e.category))]);
+  let group = 'all', page = 0, timers = [], handles = [];
+  try { const s = JSON.parse(localStorage.getItem('vfx.gallery') || '{}'); if (groups.includes(s.group)) group = s.group; page = s.page || 0; } catch (e) { /* private window */ }
+  $('ver').textContent = 'v' + VFX.VERSION + ' · ' + all.length + ' effects';
+  $('group').innerHTML = groups.map((g) => `<option value="${g}">${g === 'all' ? 'all groups' : g + '.*'} (${g === 'all' ? all.length : all.filter((e) => e.category === g).length})</option>`).join('');
+  $('group').value = group;
+
+  const list = () => (group === 'all' ? all : all.filter((e) => e.category === group));
+  const perPage = () => (group === 'env' ? 1 : 12);
+
+  function clear() {
+    timers.forEach(clearTimeout); timers = [];
+    VFX.stopAll(true); handles = [];
+  }
+
+  function playIn(tile, e) {
+    const r = tile.getBoundingClientRect();
+    const size = Math.min(r.width, r.height) / 300;
+    const x = r.left + r.width / 2, floorY = r.top + r.height * 0.72, midY = r.top + r.height * 0.5;
+    const o = { size: Math.max(0.35, Math.min(size, 1)) };
+    if (e.category === 'env') return VFX.play(e.name, {});
+    if (e.anchor === 'feet') Object.assign(o, { x, y: floorY });
+    else if (e.anchor === 'head') Object.assign(o, { x, y: midY - 40 * o.size });
+    else Object.assign(o, { x, y: midY });
+    if (e.category === 'ui') Object.assign(o, { width: 120 * o.size, height: 48 * o.size });
+    return VFX.play(e.name, o);
+  }
+
+  function run(tile, e) {
+    const h = playIn(tile, e);
+    if (e.loop) { handles.push(h); return; }
+    timers.push(setTimeout(() => run(tile, e), ((e.duration || 1) + 0.7) * 1000 / (VFX.timeScale || 1)));
+  }
+
+  function render() {
+    clear();
+    const items = list(), n = perPage(), pages = Math.max(1, Math.ceil(items.length / n));
+    page = Math.max(0, Math.min(page, pages - 1));
+    $('page').textContent = 'page ' + (page + 1) + ' / ' + pages;
+    const shown = items.slice(page * n, page * n + n);
+    const cols = n === 1 ? 1 : 4, rows = n === 1 ? 1 : 3;
+    $('grid').style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    $('grid').style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    $('grid').innerHTML = '';
+    shown.forEach((e) => {
+      const t = document.createElement('div');
+      t.className = 'tile';
+      t.innerHTML = `<div class="floor"></div><div class="name">${e.name}</div><div class="tag">${e.loop ? 'LOOP' : e.duration + ' s'}</div><div class="use"></div>`;
+      t.querySelector('.use').textContent = e.whenToUse;
+      t.title = e.whenToUse;
+      t.onclick = () => { if (!e.loop) playIn(t, e); };
+      $('grid').appendChild(t);
+    });
+    // wait one frame so the tiles have their size
+    requestAnimationFrame(() => [...$('grid').children].forEach((t, i) => run(t, shown[i])));
+    try { localStorage.setItem('vfx.gallery', JSON.stringify({ group, page })); } catch (e) { /* private window */ }
+  }
+
+  $('group').onchange = () => { group = $('group').value; page = 0; render(); };
+  $('prev').onclick = () => { page--; render(); };
+  $('next').onclick = () => { page++; render(); };
+  $('slow').onclick = (ev) => { VFX.timeScale = VFX.timeScale === 1 ? 0.25 : 1; ev.target.classList.toggle('on', VFX.timeScale !== 1); render(); };
+  addEventListener('keydown', (ev) => { if (ev.key === 'ArrowRight') $('next').click(); if (ev.key === 'ArrowLeft') $('prev').click(); });
+  addEventListener('resize', () => { clearTimeout(render.t); render.t = setTimeout(render, 200); });
+  render();
+</script>
+</body>
+</html>

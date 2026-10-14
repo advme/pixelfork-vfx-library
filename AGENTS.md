@@ -35,6 +35,9 @@ tools/preview.html               2D player: every effect, size, tint, slow motio
 tools/preview3d.html             3D player page (HTML + panel). Its code is tools/player3d/main.js:
                                    walled arena, crashcat physics, pushable crates, see-through walls.
                                    tools/player3d.js is the GENERATED bundle — edit main.js, then build.
+tools/check-effect.mjs           CHECK EFFECT FILES WITHOUT A BROWSER: builds each in 2D and 3D, simulates 3 s, reports
+                                   errors, peak particles, real duration vs `duration`, streak length. Run it on every new effect.
+tools/gallery.html               every effect replaying in a 4x3 grid, by group and page (2D): the fastest way to review many
 tools/serve.mjs                  local no-cache preview server (port 8767) + the VFX Maker's API (Claude call, save)
 tools/serve.py                   the old static-only server: a fallback for the players when Node is missing
 tools/maker.html                 VFX MAKER: prompt -> AI writes an effect -> live preview -> Add to library on confirm
@@ -54,8 +57,8 @@ those files, not from memory.
 1. Copy the closest file in `packs/casual/effects/`, rename it `category.thing.js`, set `name`, `category`, `whenToUse` (one plain sentence a game-building AI can match), `duration`, `loop`, `tint` (default hex, `null` = tint replaces the whole palette, or omit for untintable), `tags`.
 2. Write `build(c)` with `c.sys({...})`. Units are **design pixels at size 1** on a ~400px-wide phone. Use `c.color('#hex')` for the main colour so `tint` works.
 3. Import it in `packs/casual/index.js`.
-4. `node tools/build.mjs` — validates names, bundles, writes the registry and the AI-guide table.
-5. Look at it: `node tools/serve.mjs 8767` → `tools/preview.html`. Use **Slow motion**. Check it at size 0.5 and 2, and with a tint.
+4. `node tools/check-effect.mjs packs/casual/effects/<name>.js` — fix every ERROR, look at every WARN. Then `node tools/build.mjs` — validates names, bundles, writes the registry and the AI-guide table.
+5. Look at it: `node tools/serve.mjs 8767` → `tools/preview.html` (2D), `tools/preview3d.html` (3D), `tools/gallery.html` (many at once). Use **Slow motion**. Check it at size 0.5 and 2, and with a tint.
 6. If it is a UI-kit moment, wire it in `attach()` in `src/vfx.js` and check it in `demo/game.html`.
 7. Update **`STATUS.md`** and **`CHANGELOG.md`** (see §7).
 

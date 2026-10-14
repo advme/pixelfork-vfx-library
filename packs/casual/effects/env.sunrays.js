@@ -15,11 +15,11 @@ export default {
       behaviors: [c.noise(0.4, 20), c.sizeOverLife(c.curve([[0, 0], [0.3, 1], [0.7, 1], [1, 0]]))] }, p);
     if (c.is3d) {
       return [
-        // 3D: the shafts are a sheet facing the camera above the spot it looks at (slow stretched sprites
-        // placed out in the world smear into faint blobs); the dust motes live in the world
-        c.sys({ tex: 'glow', blend: 'add', loop: true, prewarm: true, duration: 8, rate: 0.9, shape: { type: 'rect', w: 1500, h: 0 }, offset: [250, 420],
-          speed: 0, life: [6, 8], size: [130, 190], color: col, stretch: { speed: 0.06, length: 3 },
-          behaviors: [c.force(-20, -60), c.limitSpeed(60, 1), c.colorOverLife(c.grad([['#fff', 0], ['#fff', 1]], [[0, 0], [0.3, 0.3], [0.3, 0.7], [0, 1]]))], order: 0 }),
+        // 3D: real light shafts standing in the world (crossed slanted planes hanging down from about 10 m),
+        // fading in and out where they stand; dust motes drift through them
+        c.sys(c.env3d({ render: 'mesh', geo: 'shaft', tex: 'shaft', upright: true, blend: 'add', loop: true, prewarm: true, duration: 8, rate: 1,
+          speed: 0, life: [6, 8], size: [520, 680], color: col,
+          behaviors: [c.colorOverLife(c.grad([['#fff', 0], ['#fff', 1]], [[0, 0], [0.24, 0.3], [0.24, 0.7], [0, 1]]))], order: 0 }, { w: 900, y: 520 })),
         c.sys(c.env3d(motes({ rate: 6, life: [4, 6], size: [3, 5] }), { w: 900, y: 110 })),
       ];
     }

@@ -186,6 +186,297 @@ import pickupMana from './effects/pickup.mana.js';
 import pickupArmor from './effects/pickup.armor.js';
 import gatherHarvest from './effects/gather.harvest.js';
 import puzzleBubble from './effects/puzzle.bubble.js';
+import envAurora from './effects/env.aurora.js';
+import envChristmas from './effects/env.christmas.js';
+import envDrizzle from './effects/env.drizzle.js';
+import envDustdevil from './effects/env.dustdevil.js';
+import envFeathers from './effects/env.feathers.js';
+import envHail from './effects/env.hail.js';
+import envHalloween from './effects/env.halloween.js';
+import envHeat from './effects/env.heat.js';
+import envLanterns from './effects/env.lanterns.js';
+import envMagic from './effects/env.magic.js';
+import envMist from './effects/env.mist.js';
+import envNebula from './effects/env.nebula.js';
+import envOcean from './effects/env.ocean.js';
+import envPartylights from './effects/env.partylights.js';
+import envPollen from './effects/env.pollen.js';
+import envRainbowsparkle from './effects/env.rainbowsparkle.js';
+import envSmoke from './effects/env.smoke.js';
+import envSpace from './effects/env.space.js';
+import envSpores from './effects/env.spores.js';
+import envSunrays from './effects/env.sunrays.js';
+import envUnderground from './effects/env.underground.js';
+import envUnderwater from './effects/env.underwater.js';
+import explosionArtillery from './effects/explosion.artillery.js';
+import explosionBalloon from './effects/explosion.balloon.js';
+import explosionBarrel from './effects/explosion.barrel.js';
+import explosionBass from './effects/explosion.bass.js';
+import explosionCandy from './effects/explosion.candy.js';
+import explosionCatapult from './effects/explosion.catapult.js';
+import explosionChain from './effects/explosion.chain.js';
+import explosionDust from './effects/explosion.dust.js';
+import explosionGlitter from './effects/explosion.glitter.js';
+import explosionGunpowder from './effects/explosion.gunpowder.js';
+import explosionMine from './effects/explosion.mine.js';
+import explosionPaint from './effects/explosion.paint.js';
+import explosionShip from './effects/explosion.ship.js';
+import explosionShockwave from './effects/explosion.shockwave.js';
+import explosionSmokebomb from './effects/explosion.smokebomb.js';
+import explosionSoul from './effects/explosion.soul.js';
+import explosionSupernova from './effects/explosion.supernova.js';
+import gatherDrill from './effects/gather.drill.js';
+import gatherEgg from './effects/gather.egg.js';
+import gatherFish from './effects/gather.fish.js';
+import gatherSeed from './effects/gather.seed.js';
+import gatherWater from './effects/gather.water.js';
+import hitArrow from './effects/hit.arrow.js';
+import hitAsteroid from './effects/hit.asteroid.js';
+import hitBackstab from './effects/hit.backstab.js';
+import hitBite from './effects/hit.bite.js';
+import hitBonk from './effects/hit.bonk.js';
+import hitBrick from './effects/hit.brick.js';
+import hitCharge from './effects/hit.charge.js';
+import hitClaw from './effects/hit.claw.js';
+import hitCounter from './effects/hit.counter.js';
+import hitDunk from './effects/hit.dunk.js';
+import hitElementfire from './effects/hit.elementfire.js';
+import hitElementice from './effects/hit.elementice.js';
+import hitElementshock from './effects/hit.elementshock.js';
+import hitEmp from './effects/hit.emp.js';
+import hitFur from './effects/hit.fur.js';
+import hitGhost from './effects/hit.ghost.js';
+import hitGlass from './effects/hit.glass.js';
+import hitGolf from './effects/hit.golf.js';
+import hitHomerun from './effects/hit.homerun.js';
+import hitLaser from './effects/hit.laser.js';
+import hitNote from './effects/hit.note.js';
+import hitPaddle from './effects/hit.paddle.js';
+import hitPie from './effects/hit.pie.js';
+import hitRacket from './effects/hit.racket.js';
+import hitRobot from './effects/hit.robot.js';
+import hitShieldwall from './effects/hit.shieldwall.js';
+import hitSlow from './effects/hit.slow.js';
+import hitSonic from './effects/hit.sonic.js';
+import hitSplashhit from './effects/hit.splashhit.js';
+import hitSweep from './effects/hit.sweep.js';
+import hitTackle from './effects/hit.tackle.js';
+import hitThrust from './effects/hit.thrust.js';
+import hitUpgradefail from './effects/hit.upgradefail.js';
+import hitWater from './effects/hit.water.js';
+import magicBarrier from './effects/magic.barrier.js';
+import magicCharge from './effects/magic.charge.js';
+import magicClone from './effects/magic.clone.js';
+import magicDrain from './effects/magic.drain.js';
+import magicGust from './effects/magic.gust.js';
+import magicHeallaura from './effects/magic.heallaura.js';
+import magicLeap from './effects/magic.leap.js';
+import magicMark from './effects/magic.mark.js';
+import magicMissile from './effects/magic.missile.js';
+import magicRaise from './effects/magic.raise.js';
+import magicRune from './effects/magic.rune.js';
+import magicShockwave from './effects/magic.shockwave.js';
+import magicStarfall from './effects/magic.starfall.js';
+import magicTransform from './effects/magic.transform.js';
+import magicUltimate from './effects/magic.ultimate.js';
+import magicWarcry from './effects/magic.warcry.js';
+import magicWave from './effects/magic.wave.js';
+import moveBlink from './effects/move.blink.js';
+import moveBlinkstrike from './effects/move.blinkstrike.js';
+import moveBreach from './effects/move.breach.js';
+import moveClimb from './effects/move.climb.js';
+import moveDig from './effects/move.dig.js';
+import moveDive from './effects/move.dive.js';
+import moveDodge from './effects/move.dodge.js';
+import moveEmerge from './effects/move.emerge.js';
+import moveFeathers from './effects/move.feathers.js';
+import moveGlide from './effects/move.glide.js';
+import moveGroundpound from './effects/move.groundpound.js';
+import moveHatch from './effects/move.hatch.js';
+import moveJetpack from './effects/move.jetpack.js';
+import moveLanding from './effects/move.landing.js';
+import moveLedge from './effects/move.ledge.js';
+import moveOrbit from './effects/move.orbit.js';
+import moveParachute from './effects/move.parachute.js';
+import movePounce from './effects/move.pounce.js';
+import moveRoll from './effects/move.roll.js';
+import moveRustle from './effects/move.rustle.js';
+import moveShadowstep from './effects/move.shadowstep.js';
+import moveShake from './effects/move.shake.js';
+import moveSkate from './effects/move.skate.js';
+import moveSlide from './effects/move.slide.js';
+import moveSurf from './effects/move.surf.js';
+import moveSweep from './effects/move.sweep.js';
+import moveSwing from './effects/move.swing.js';
+import moveWallkick from './effects/move.wallkick.js';
+import moveWarp from './effects/move.warp.js';
+import pickupBomb from './effects/pickup.bomb.js';
+import pickupFuel from './effects/pickup.fuel.js';
+import pickupLife from './effects/pickup.life.js';
+import pickupMultiball from './effects/pickup.multiball.js';
+import pickupShard from './effects/pickup.shard.js';
+import pickupSpeed from './effects/pickup.speed.js';
+import pickupTime from './effects/pickup.time.js';
+import pickupTreat from './effects/pickup.treat.js';
+import rewardBigcombo from './effects/reward.bigcombo.js';
+import rewardBirthday from './effects/reward.birthday.js';
+import rewardCardreveal from './effects/reward.cardreveal.js';
+import rewardCheer from './effects/reward.cheer.js';
+import rewardClean from './effects/reward.clean.js';
+import rewardCooked from './effects/reward.cooked.js';
+import rewardEncore from './effects/reward.encore.js';
+import rewardFinish from './effects/reward.finish.js';
+import rewardFireworkshow from './effects/reward.fireworkshow.js';
+import rewardGift from './effects/reward.gift.js';
+import rewardGood from './effects/reward.good.js';
+import rewardGreat from './effects/reward.great.js';
+import rewardLegendary from './effects/reward.legendary.js';
+import rewardPerfect from './effects/reward.perfect.js';
+import rewardRare from './effects/reward.rare.js';
+import rewardRecord from './effects/reward.record.js';
+import rewardSticker from './effects/reward.sticker.js';
+import rewardStreak from './effects/reward.streak.js';
+import rewardSummon from './effects/reward.summon.js';
+import rewardTrophy from './effects/reward.trophy.js';
+import rewardUnbox from './effects/reward.unbox.js';
+import rewardUpgrade from './effects/reward.upgrade.js';
+import rewardWheel from './effects/reward.wheel.js';
+import stateAngry from './effects/state.angry.js';
+import stateCharmed from './effects/state.charmed.js';
+import stateCloak from './effects/state.cloak.js';
+import stateCursed from './effects/state.cursed.js';
+import stateDance from './effects/state.dance.js';
+import stateDrunk from './effects/state.drunk.js';
+import stateFear from './effects/state.fear.js';
+import stateFocus from './effects/state.focus.js';
+import stateFreezing from './effects/state.freezing.js';
+import stateGlitch from './effects/state.glitch.js';
+import stateGroove from './effects/state.groove.js';
+import stateHalo from './effects/state.halo.js';
+import stateHasted from './effects/state.hasted.js';
+import stateHaunted from './effects/state.haunted.js';
+import stateInvulnerable from './effects/state.invulnerable.js';
+import stateLevitate from './effects/state.levitate.js';
+import stateLucky from './effects/state.lucky.js';
+import stateMarked from './effects/state.marked.js';
+import stateOverheat from './effects/state.overheat.js';
+import statePossessed from './effects/state.possessed.js';
+import statePurr from './effects/state.purr.js';
+import stateRally from './effects/state.rally.js';
+import stateSick from './effects/state.sick.js';
+import stateSleepy from './effects/state.sleepy.js';
+import stateSlowed from './effects/state.slowed.js';
+import stateSurprise from './effects/state.surprise.js';
+import stateThinking from './effects/state.thinking.js';
+import stateUltready from './effects/state.ultready.js';
+import stateZerog from './effects/state.zerog.js';
+import uiAchievement from './effects/ui.achievement.js';
+import uiBeat from './effects/ui.beat.js';
+import uiCarddeal from './effects/ui.carddeal.js';
+import uiCardflip from './effects/ui.cardflip.js';
+import uiChip from './effects/ui.chip.js';
+import uiCooldown from './effects/ui.cooldown.js';
+import uiCorrect from './effects/ui.correct.js';
+import uiCountdown from './effects/ui.countdown.js';
+import uiDice from './effects/ui.dice.js';
+import uiFill from './effects/ui.fill.js';
+import uiFocuslines from './effects/ui.focuslines.js';
+import uiFrozen from './effects/ui.frozen.js';
+import uiGameover from './effects/ui.gameover.js';
+import uiGo from './effects/ui.go.js';
+import uiHack from './effects/ui.hack.js';
+import uiHealed from './effects/ui.healed.js';
+import uiHurry from './effects/ui.hurry.js';
+import uiHurt from './effects/ui.hurt.js';
+import uiLevelstart from './effects/ui.levelstart.js';
+import uiLifelost from './effects/ui.lifelost.js';
+import uiLowhp from './effects/ui.lowhp.js';
+import uiMiss from './effects/ui.miss.js';
+import uiNew from './effects/ui.new.js';
+import uiNotify from './effects/ui.notify.js';
+import uiPoisoned from './effects/ui.poisoned.js';
+import uiPurchase from './effects/ui.purchase.js';
+import uiRays from './effects/ui.rays.js';
+import uiSparkle from './effects/ui.sparkle.js';
+import uiSpeedlines from './effects/ui.speedlines.js';
+import uiTapburst from './effects/ui.tapburst.js';
+import uiTapme from './effects/ui.tapme.js';
+import uiTransition from './effects/ui.transition.js';
+import uiVictory from './effects/ui.victory.js';
+import uiWrongtry from './effects/ui.wrongtry.js';
+import vehicleBackfire from './effects/vehicle.backfire.js';
+import vehicleDrift from './effects/vehicle.drift.js';
+import vehicleExplode from './effects/vehicle.explode.js';
+import vehicleJump from './effects/vehicle.jump.js';
+import vehicleOffroad from './effects/vehicle.offroad.js';
+import vehiclePuddle from './effects/vehicle.puddle.js';
+import vehicleRotorwash from './effects/vehicle.rotorwash.js';
+import vehicleScrape from './effects/vehicle.scrape.js';
+import vehicleThruster from './effects/vehicle.thruster.js';
+import weaponArrowrain from './effects/weapon.arrowrain.js';
+import weaponBoomerang from './effects/weapon.boomerang.js';
+import weaponCannon from './effects/weapon.cannon.js';
+import weaponCatapult from './effects/weapon.catapult.js';
+import weaponChargebow from './effects/weapon.chargebow.js';
+import weaponFlamesword from './effects/weapon.flamesword.js';
+import weaponFrostblade from './effects/weapon.frostblade.js';
+import weaponHolyspear from './effects/weapon.holyspear.js';
+import weaponLaunch from './effects/weapon.launch.js';
+import weaponMinigun from './effects/weapon.minigun.js';
+import weaponMusket from './effects/weapon.musket.js';
+import weaponPlasma from './effects/weapon.plasma.js';
+import weaponPoisondagger from './effects/weapon.poisondagger.js';
+import weaponRailgun from './effects/weapon.railgun.js';
+import weaponThunderhammer from './effects/weapon.thunderhammer.js';
+import weaponTorpedo from './effects/weapon.torpedo.js';
+import weaponTractorbeam from './effects/weapon.tractorbeam.js';
+import worldAltar from './effects/world.altar.js';
+import worldAnvil from './effects/world.anvil.js';
+import worldBanner from './effects/world.banner.js';
+import worldBloom from './effects/world.bloom.js';
+import worldBubblecolumn from './effects/world.bubblecolumn.js';
+import worldBurning from './effects/world.burning.js';
+import worldCapture from './effects/world.capture.js';
+import worldCauldron from './effects/world.cauldron.js';
+import worldChestidle from './effects/world.chestidle.js';
+import worldChimney from './effects/world.chimney.js';
+import worldCooking from './effects/world.cooking.js';
+import worldCrumble from './effects/world.crumble.js';
+import worldDatastream from './effects/world.datastream.js';
+import worldDiscoball from './effects/world.discoball.js';
+import worldDooropen from './effects/world.dooropen.js';
+import worldDripping from './effects/world.dripping.js';
+import worldEnchant from './effects/world.enchant.js';
+import worldFlag from './effects/world.flag.js';
+import worldForcefield from './effects/world.forcefield.js';
+import worldGrave from './effects/world.grave.js';
+import worldGrow from './effects/world.grow.js';
+import worldHologram from './effects/world.hologram.js';
+import worldKeyhole from './effects/world.keyhole.js';
+import worldLaserfence from './effects/world.laserfence.js';
+import worldPlanetring from './effects/world.planetring.js';
+import worldPressureplate from './effects/world.pressureplate.js';
+import worldRally from './effects/world.rally.js';
+import worldReactor from './effects/world.reactor.js';
+import worldSavepoint from './effects/world.savepoint.js';
+import worldSaw from './effects/world.saw.js';
+import worldScanner from './effects/world.scanner.js';
+import worldSecret from './effects/world.secret.js';
+import worldShore from './effects/world.shore.js';
+import worldSmelt from './effects/world.smelt.js';
+import worldSpawnportal from './effects/world.spawnportal.js';
+import worldSpeaker from './effects/world.speaker.js';
+import worldSpikes from './effects/world.spikes.js';
+import worldSprinkler from './effects/world.sprinkler.js';
+import worldSwitch from './effects/world.switch.js';
+import worldTeleporter from './effects/world.teleporter.js';
+import worldTowerup from './effects/world.towerup.js';
+import worldTrap from './effects/world.trap.js';
+import worldVolcano from './effects/world.volcano.js';
+import worldWaterfall from './effects/world.waterfall.js';
+import worldWave from './effects/world.wave.js';
+import worldWhirlpool from './effects/world.whirlpool.js';
+import worldWormhole from './effects/world.wormhole.js';
 
 export const PACK = {
   name: 'casual',
@@ -214,6 +505,40 @@ export const EFFECTS = [
   hitIce,
   hitHeavy,
   hitMetal,
+  hitArrow,
+  hitAsteroid,
+  hitBackstab,
+  hitBite,
+  hitBonk,
+  hitBrick,
+  hitCharge,
+  hitClaw,
+  hitCounter,
+  hitDunk,
+  hitElementfire,
+  hitElementice,
+  hitElementshock,
+  hitEmp,
+  hitFur,
+  hitGhost,
+  hitGlass,
+  hitGolf,
+  hitHomerun,
+  hitLaser,
+  hitNote,
+  hitPaddle,
+  hitPie,
+  hitRacket,
+  hitRobot,
+  hitShieldwall,
+  hitSlow,
+  hitSonic,
+  hitSplashhit,
+  hitSweep,
+  hitTackle,
+  hitThrust,
+  hitUpgradefail,
+  hitWater,
   explosionSmall,
   explosionBig,
   explosionPuff,
@@ -226,6 +551,23 @@ export const EFFECTS = [
   explosionToxic,
   explosionMagic,
   explosionWater,
+  explosionArtillery,
+  explosionBalloon,
+  explosionBarrel,
+  explosionBass,
+  explosionCandy,
+  explosionCatapult,
+  explosionChain,
+  explosionDust,
+  explosionGlitter,
+  explosionGunpowder,
+  explosionMine,
+  explosionPaint,
+  explosionShip,
+  explosionShockwave,
+  explosionSmokebomb,
+  explosionSoul,
+  explosionSupernova,
   pickupSparkle,
   pickupCoin,
   pickupGem,
@@ -237,6 +579,14 @@ export const EFFECTS = [
   pickupStar,
   pickupMana,
   pickupArmor,
+  pickupBomb,
+  pickupFuel,
+  pickupLife,
+  pickupMultiball,
+  pickupShard,
+  pickupSpeed,
+  pickupTime,
+  pickupTreat,
   rewardConfetti,
   rewardLevelup,
   rewardStarburst,
@@ -248,6 +598,29 @@ export const EFFECTS = [
   rewardJackpot,
   rewardGoal,
   rewardRankup,
+  rewardBigcombo,
+  rewardBirthday,
+  rewardCardreveal,
+  rewardCheer,
+  rewardClean,
+  rewardCooked,
+  rewardEncore,
+  rewardFinish,
+  rewardFireworkshow,
+  rewardGift,
+  rewardGood,
+  rewardGreat,
+  rewardLegendary,
+  rewardPerfect,
+  rewardRare,
+  rewardRecord,
+  rewardSticker,
+  rewardStreak,
+  rewardSummon,
+  rewardTrophy,
+  rewardUnbox,
+  rewardUpgrade,
+  rewardWheel,
   moveJump,
   moveFootstep,
   moveLand,
@@ -264,6 +637,35 @@ export const EFFECTS = [
   moveDoublejump,
   moveWallslide,
   moveBounce,
+  moveBlink,
+  moveBlinkstrike,
+  moveBreach,
+  moveClimb,
+  moveDig,
+  moveDive,
+  moveDodge,
+  moveEmerge,
+  moveFeathers,
+  moveGlide,
+  moveGroundpound,
+  moveHatch,
+  moveJetpack,
+  moveLanding,
+  moveLedge,
+  moveOrbit,
+  moveParachute,
+  movePounce,
+  moveRoll,
+  moveRustle,
+  moveShadowstep,
+  moveShake,
+  moveSkate,
+  moveSlide,
+  moveSurf,
+  moveSweep,
+  moveSwing,
+  moveWallkick,
+  moveWarp,
   magicHeal,
   magicIce,
   magicLightning,
@@ -286,6 +688,23 @@ export const EFFECTS = [
   magicRevive,
   magicNature,
   magicTime,
+  magicBarrier,
+  magicCharge,
+  magicClone,
+  magicDrain,
+  magicGust,
+  magicHeallaura,
+  magicLeap,
+  magicMark,
+  magicMissile,
+  magicRaise,
+  magicRune,
+  magicShockwave,
+  magicStarfall,
+  magicTransform,
+  magicUltimate,
+  magicWarcry,
+  magicWave,
   stateStun,
   statePoison,
   stateBurning,
@@ -312,6 +731,35 @@ export const EFFECTS = [
   stateMusic,
   stateSweat,
   stateHappy,
+  stateAngry,
+  stateCharmed,
+  stateCloak,
+  stateCursed,
+  stateDance,
+  stateDrunk,
+  stateFear,
+  stateFocus,
+  stateFreezing,
+  stateGlitch,
+  stateGroove,
+  stateHalo,
+  stateHasted,
+  stateHaunted,
+  stateInvulnerable,
+  stateLevitate,
+  stateLucky,
+  stateMarked,
+  stateOverheat,
+  statePossessed,
+  statePurr,
+  stateRally,
+  stateSick,
+  stateSleepy,
+  stateSlowed,
+  stateSurprise,
+  stateThinking,
+  stateUltready,
+  stateZerog,
   envSnow,
   envRain,
   envLeaves,
@@ -332,12 +780,43 @@ export const EFFECTS = [
   envAsh,
   envMeteors,
   envWind,
+  envAurora,
+  envChristmas,
+  envDrizzle,
+  envDustdevil,
+  envFeathers,
+  envHail,
+  envHalloween,
+  envHeat,
+  envLanterns,
+  envMagic,
+  envMist,
+  envNebula,
+  envOcean,
+  envPartylights,
+  envPollen,
+  envRainbowsparkle,
+  envSmoke,
+  envSpace,
+  envSpores,
+  envSunrays,
+  envUnderground,
+  envUnderwater,
   vehicleExhaust,
   vehicleNitro,
   vehicleCrash,
   vehicleDamaged,
   vehicleSiren,
   vehicleWake,
+  vehicleBackfire,
+  vehicleDrift,
+  vehicleExplode,
+  vehicleJump,
+  vehicleOffroad,
+  vehiclePuddle,
+  vehicleRotorwash,
+  vehicleScrape,
+  vehicleThruster,
   weaponMuzzle,
   weaponSmoke,
   weaponLaser,
@@ -345,9 +824,31 @@ export const EFFECTS = [
   weaponShell,
   weaponShotgun,
   weaponFlamethrower,
+  weaponArrowrain,
+  weaponBoomerang,
+  weaponCannon,
+  weaponCatapult,
+  weaponChargebow,
+  weaponFlamesword,
+  weaponFrostblade,
+  weaponHolyspear,
+  weaponLaunch,
+  weaponMinigun,
+  weaponMusket,
+  weaponPlasma,
+  weaponPoisondagger,
+  weaponRailgun,
+  weaponThunderhammer,
+  weaponTorpedo,
+  weaponTractorbeam,
   gatherWood,
   gatherStone,
   gatherHarvest,
+  gatherDrill,
+  gatherEgg,
+  gatherFish,
+  gatherSeed,
+  gatherWater,
   worldCampfire,
   worldBeacon,
   worldLootbeam,
@@ -360,6 +861,53 @@ export const EFFECTS = [
   worldCrystal,
   worldRipple,
   worldBoostpad,
+  worldAltar,
+  worldAnvil,
+  worldBanner,
+  worldBloom,
+  worldBubblecolumn,
+  worldBurning,
+  worldCapture,
+  worldCauldron,
+  worldChestidle,
+  worldChimney,
+  worldCooking,
+  worldCrumble,
+  worldDatastream,
+  worldDiscoball,
+  worldDooropen,
+  worldDripping,
+  worldEnchant,
+  worldFlag,
+  worldForcefield,
+  worldGrave,
+  worldGrow,
+  worldHologram,
+  worldKeyhole,
+  worldLaserfence,
+  worldPlanetring,
+  worldPressureplate,
+  worldRally,
+  worldReactor,
+  worldSavepoint,
+  worldSaw,
+  worldScanner,
+  worldSecret,
+  worldShore,
+  worldSmelt,
+  worldSpawnportal,
+  worldSpeaker,
+  worldSpikes,
+  worldSprinkler,
+  worldSwitch,
+  worldTeleporter,
+  worldTowerup,
+  worldTrap,
+  worldVolcano,
+  worldWaterfall,
+  worldWave,
+  worldWhirlpool,
+  worldWormhole,
   puzzleMatch,
   puzzleLine,
   puzzleShatter,
@@ -377,4 +925,38 @@ export const EFFECTS = [
   uiGlow,
   uiShine,
   uiCountup,
+  uiAchievement,
+  uiBeat,
+  uiCarddeal,
+  uiCardflip,
+  uiChip,
+  uiCooldown,
+  uiCorrect,
+  uiCountdown,
+  uiDice,
+  uiFill,
+  uiFocuslines,
+  uiFrozen,
+  uiGameover,
+  uiGo,
+  uiHack,
+  uiHealed,
+  uiHurry,
+  uiHurt,
+  uiLevelstart,
+  uiLifelost,
+  uiLowhp,
+  uiMiss,
+  uiNew,
+  uiNotify,
+  uiPoisoned,
+  uiPurchase,
+  uiRays,
+  uiSparkle,
+  uiSpeedlines,
+  uiTapburst,
+  uiTapme,
+  uiTransition,
+  uiVictory,
+  uiWrongtry,
 ];

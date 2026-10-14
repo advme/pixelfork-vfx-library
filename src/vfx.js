@@ -51,7 +51,7 @@ function register(effect) {
   delete S.warned['build:' + effect.name];
   return VFX;
 }
-const describe = (e) => ({ name: e.name, category: e.category, whenToUse: e.whenToUse, duration: e.duration, loop: !!e.loop, tint: e.tint, tags: e.tags || [] });
+const describe = (e) => ({ name: e.name, category: e.category, whenToUse: e.whenToUse, duration: e.duration, loop: !!e.loop, tint: e.tint, tags: e.tags || [], anchor: e.anchor || 'center' });
 
 const S = {
   mode: null,            // null | 'overlay' | 'scene' (a 3D scene is attached; overlays may exist too)
